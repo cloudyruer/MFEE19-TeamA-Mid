@@ -17,7 +17,7 @@
 
                 <!-- 001 Emma -->
                 <li class="nav-item  <?=$activeLi == 'emma' ? 'active' : ''?>">
-                    <a class="nav-link" href="001-emma.php">Emma</a>
+                    <a class="nav-link" href="001-emma-blog-list.php">Emma</a>
                 </li>
 
                 <!-- 002 Tommy -->
