@@ -59,7 +59,7 @@ $activeLi = 'leo';
         //送出表單（如果上述檢驗正確）
         if (isPass) {
             const fd = new FormData(document.form1);
-            fetch('033-leo-sports-type-cat-api-create.php', {
+            fetch('033-leo-sports-type-cat-create-api.php', {
                     method: 'POST',
                     body: fd
                 })

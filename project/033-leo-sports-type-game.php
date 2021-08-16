@@ -4,6 +4,9 @@ $title = '新增盃賽';
 $activeLi = 'leo';
 
 
+//所有的賽別
+$allSprtsCat = $pdo->query("SELECT * FROM sportsType where `sportsType`.`rank`=0")
+    ->fetchAll();
 
 
 ?>
@@ -34,11 +37,11 @@ $activeLi = 'leo';
         <div class="form-group">
             <label for="sports_type_cat">選擇賽別</label>
             <select class="form-control" id="sports_type_cat" name="sports_type_cat">
-                <option selected>請選擇</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
+                <option disabled selected>請選擇</option>
+                <?php foreach ($allSprtsCat as $r) : ?>
+                    <option value="<?= $r['sid'] ?>"><?= $r['name'] ?></option>
+
+                <?php endforeach; ?>
             </select>
             <small id="sports_type_cat_help" class="form-text text-muted">請填妥文字</small>
         </div>
@@ -56,6 +59,8 @@ $activeLi = 'leo';
     //reqular expression
 
     const sportsTypeCat = document.querySelector('#sports_type_cat');
+    const sportsTypeGame = document.querySelector('#sports_type_game');
+
 
     function checkForm() {
         // 每次重新送出表單，欄位的外觀要回復原來的狀態

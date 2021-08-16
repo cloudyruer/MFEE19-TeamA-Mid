@@ -120,7 +120,7 @@ if ($sportsCat == 0) {
                 <tr>
                     <td><?= $r['name'] ?></td>
                     <td><?= "" ?><a class="btn btn-secondary">編輯</a></td>
-                    <td><a href="033-leo-sports-type-api-delete.php?sid=<?= $r['sid'] ?>" class="btn btn-danger">刪除</a></td>
+                    <td><a href="033-leo-sports-type-delete-api.php?sid=<?= $r['sid'] ?>" class="btn btn-danger">刪除</a></td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
