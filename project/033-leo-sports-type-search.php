@@ -1,6 +1,6 @@
 <?php
 include __DIR__ . '/partials/init.php';
-$title = '賽事類別';
+$title = '賽事搜尋';
 $activeLi = 'leo';
 
 // leo 程式
