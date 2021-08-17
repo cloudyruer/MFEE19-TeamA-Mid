@@ -4,6 +4,7 @@ $title = '我是首頁的title';
 $activeLi = "";
 ?>
 <?php include __DIR__ . '/partials/html-head.php';?>
+<?php include __DIR__ . "/019-henry-css.php"; ?>
 <?php include __DIR__ . '/partials/navbar.php';?>
 <div class="container mt-3">
     <h2>What’s new? Team A</h2>
@@ -17,6 +18,8 @@ $activeLi = "";
     <a class="dropdown-item" href="#">似乎是...</a>
     <a class="dropdown-item" href="#">成功了呢 ಠ_ಠ </a>
   </div>
+</div>
+<?php include __DIR__ . "/019-henry-btn_page.php"; ?>
 </div>
 
 </div>
