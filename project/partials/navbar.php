@@ -69,10 +69,11 @@
                     <li class="nav-item">
                         <?php if (!empty($_SESSION['user']['avatar'])): ?>
                             <img src="imgs/<?=$_SESSION['user']['avatar']?>" alt="" width="50px">
+                            <!-- 這行會影響navbar頭貼，要註解掉 -->
                         <?php endif;?>
 
                         <?php if (empty($r['avatar'])) : ?>
-                            <img src="/project/imgs/default_avatar.jpeg" alt="" width="50px">
+                            <img src="./imgs/default_avatar.jpeg" alt="" width="50px">
                         <?php else : ?>
                             <img src="imgs/<?= $_SESSION['user']['avatar'] ?>" alt="" width="50px">
                         <?php endif; ?>

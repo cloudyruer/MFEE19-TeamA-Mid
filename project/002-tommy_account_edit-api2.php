@@ -21,12 +21,12 @@ $output = [
 
 
 // 資料格式檢查
-if (mb_strlen($_POST['account']) < 2) {
-    $output['error'] = '姓名長度太短';
-    $output['code'] = 410;
-    echo json_encode($output);
-    exit;
-}
+// if (mb_strlen($_POST['account']) < 2) {
+//     $output['error'] = '姓名長度太短';
+//     $output['code'] = 410;
+//     echo json_encode($output);
+//     exit;
+// }
 
 if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
     $output['error'] = 'email 格式錯誤';
@@ -60,13 +60,13 @@ if (!empty($_FILES) and !empty($_FILES['avatar'])) {
             // $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
             $sql = "UPDATE `members` SET 
-            `account`=?, `password`=?, `email`=?, `avatar`=?,
+            `password`=?, `email`=?, `avatar`=?,
             `mobile`=?, `address`=?, `birthday`=?, `nickname`=?
 
             WHERE id=?";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([
-                $_POST['account'],
+                // $_POST['account'],
                 $_POST['password'],
                 $_POST['email'],
                 $filename,
@@ -97,13 +97,13 @@ if (!empty($_FILES) and !empty($_FILES['avatar'])) {
 
 if (!$isSaved) {
     $sql = "UPDATE `members` SET 
-    `account`=?, `password`=?, `email`=?,
+    `password`=?, `email`=?,
     `mobile`=?, `address`=?, `birthday`=?, `nickname`=?
 
     WHERE id=?";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
-        $_POST['account'],
+        // $_POST['account'],
         $_POST['password'],
         $_POST['email'],
         $_POST['mobile'],

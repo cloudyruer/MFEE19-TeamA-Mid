@@ -12,6 +12,13 @@ $output = [
 ];
 //避免直接拜訪時的錯誤訊息
 // 資料格式檢查
+if(isset($_POST['account'])){
+    $output['error'] = '帳號已經用了！';
+    $output['code'] = 400;
+    echo json_encode($output, JSON_UNESCAPED_UNICODE);
+    exit; // 直接離開 (中斷) 程式
+}
+
 if(mb_strlen($_POST['account'])<2){
     $output['error'] = '姓名長度太短';
     $output['code'] = 410;

@@ -48,12 +48,12 @@ if (empty($r)) {
                         </div>
                         <div class="form-group">
                             <label for="account">Account </label>
-                            <input type="text" class="form-control" id="account" name="account" value="<?= htmlentities($r['account']) ?>">
+                            <input type="text" class="form-control" id="account" name="account" value="<?= htmlentities($r['account']) ?>" disabled>
                             <small class="form-text "></small>
                         </div>
                         <div class="form-group">
-                            <label for="password">Password </label>
-                            <input type="text" class="form-control" id="password" name="password" value="<?= htmlentities($r['password']) ?>">
+                            <!-- <label for="password">Password </label> -->
+                            <input type="hidden" class="form-control" id="password" name="password" value="<?= htmlentities($r['password']) ?>">
                             <small class="form-text "></small>
                         </div>
                         <div class="form-group">

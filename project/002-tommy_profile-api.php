@@ -24,6 +24,23 @@ if (empty($_POST['nickname'])) {
     exit;
 }
 
+// 比對密碼
+// $sql2 = "SELECT * FROM `members` WHERE `password`=?";
+// $stmt2 = $pdo->prepare($sql2);
+// $stmt2->execute([
+//     $_POST['password_o'],
+// ]);
+// $m = $stmt2->fetch();
+
+// if(! password_verify($_POST['password_o'], $m['password'])){
+//     $output['error'] = '密碼錯誤';
+//     $output['code'] = 405;
+//     echo json_encode($output, JSON_UNESCAPED_UNICODE);
+   
+//     $output['success'] = true;
+//     $output['code'] = 200;
+//     $_SESSION['user'] = $m;
+// }
 // 預設是沒有上傳資料，沒有上傳成功
 $isSaved = false;
 
@@ -49,13 +66,13 @@ if (!empty($_FILES) and !empty($_FILES['avatar'])) {
             // $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
             $sql = "UPDATE `members` SET 
-            `account`=?, `password`=?, `email`=?, `avatar`=?,
+            `password`=?, `email`=?, `avatar`=?,
             `mobile`=?, `address`=?, `birthday`=?, `nickname`=?
 
             WHERE id=?";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([
-                $_POST['account'],
+                // $_POST['account'],
                 $_POST['password'],
                 $_POST['email'],
                 $filename,
@@ -88,13 +105,13 @@ if (!empty($_FILES) and !empty($_FILES['avatar'])) {
 
 if (!$isSaved) {
     $sql = "UPDATE `members` SET 
-    `account`=?, `password`=?, `email`=?,
+    `password`=?, `email`=?,
     `mobile`=?, `address`=?, `birthday`=?, `nickname`=?
 
     WHERE id=?";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
-        $_POST['account'],
+        // $_POST['account'],
         $_POST['password'],
         $_POST['email'],
         $_POST['mobile'],
@@ -110,5 +127,6 @@ if (!$isSaved) {
         $output['success'] = true;
     }
 }
+
 
 echo json_encode($output);
