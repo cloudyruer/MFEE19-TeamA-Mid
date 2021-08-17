@@ -19,10 +19,12 @@
         display: flex;
     }
 
-    .button_warp_search form button {
-        width: 80px;
+    .button_warp_search form button,
+    .button_warp_search form a {
+        flex-shrink: 0;
         margin-left: 20px;
     }
+
 
     .btn-second {
         border: #4d9df3 1px solid;
@@ -53,5 +55,14 @@
 
     a.btn {
         color: white !important;
+    }
+
+    a.btn-outline-secondary {
+        color: black !important;
+
+    }
+
+    a.btn-outline-secondary:hover {
+        background-color: white;
     }
 </style>

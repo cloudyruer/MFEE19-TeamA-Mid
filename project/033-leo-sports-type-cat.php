@@ -34,7 +34,7 @@ $activeLi = 'leo';
         <div class="form-group">
             <label for="sports_type_cat">賽別名稱</label>
             <input type="text" class="form-control" id="sports_type_cat" name="sports_type_cat" required placeholder="請輸入中文名稱">
-            <small id="sports_type_cat_help" class="form-text text-muted">請填妥文字</small>
+            <small id="sports_type_cat_help" class="form-text text-muted"></small>
         </div>
 
         <button type="submit" class="btn btn-primary">確認新增</button>
@@ -42,8 +42,6 @@ $activeLi = 'leo';
 </div>
 
 <script>
-    //reqular expression
-
     const sportsTypeCat = document.querySelector('#sports_type_cat');
 
     function checkForm() {
@@ -59,7 +57,7 @@ $activeLi = 'leo';
         //送出表單（如果上述檢驗正確）
         if (isPass) {
             const fd = new FormData(document.form1);
-            fetch('033-leo-sports-type-cat-create-api.php', {
+            fetch('033-leo-sports-type-cat-createApi.php', {
                     method: 'POST',
                     body: fd
                 })
