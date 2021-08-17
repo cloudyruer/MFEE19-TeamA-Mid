@@ -1,4 +1,4 @@
-# Team A 期中專題
+# Team A 期中專題 (上次總整合: 0817)
 
 ## Database:
 
