@@ -114,6 +114,8 @@ if ($sportsCat == 0) {
                 <a class="nav-link" id="type<?= $r['sid'] ?>" href="?cat=<?= $r['sid'] ?>"><?= $r['name'] ?></a>
             <?php endforeach; ?>
         </nav>
+        <a class="btn btn-primary btn-info" href="033-leo-sports-type-cat-edit.php?sid=<?= $sportsCat ?>">編輯賽別</a>
+
     </div>
     <table class="table table-striped">
         <thead class=" thead-dark">
@@ -127,7 +129,7 @@ if ($sportsCat == 0) {
             <?php foreach ($rows as $r) : ?>
                 <tr>
                     <td><?= $r['name'] ?></td>
-                    <td><a class="btn btn-secondary" href="033-leo-sports-type-game-edit.php?sid=<?= $r['sid'] ?>">編輯</a></td>
+                    <td><a class="btn btn-info" href="033-leo-sports-type-game-edit.php?sid=<?= $r['sid'] ?>">編輯</a></td>
                     <td><a href="033-leo-sports-type-deleteApi.php?sid=<?= $r['sid'] ?>" class="btn btn-danger">刪除</a></td>
                 </tr>
             <?php endforeach; ?>
