@@ -61,7 +61,31 @@ if (empty($r)) {
                                    value="<?=htmlentities($r['nickname'])?>">
                             <small class="form-text "></small>
                         </div>
+                        <div class="form-group">
+                            <label for="email">email</label>
+                            <input type="text" class="form-control" id="email" name="email"
+                                   value="<?=htmlentities($r['email'])?>">
+                            <small class="form-text "></small>
+                        </div>
 
+                        <div class="form-group">
+                            <label for="birthday">birthday</label>
+                            <input type="text" class="form-control" id="birthday" name="birthday"
+                                   value="<?=htmlentities($r['birthday'])?>">
+                            <small class="form-text "></small>
+                        </div>
+                        <div class="form-group">
+                            <label for="mobile">mobile</label>
+                            <input type="text" class="form-control" id="mobile" name="mobile"
+                                   value="<?=htmlentities($r['mobile'])?>">
+                            <small class="form-text "></small>
+                        </div>
+                        <div class="form-group">
+                            <label for="create_at">create_at</label>
+                            <input type="text" class="form-control" id="create_at" name="create_at"
+                                   value="<?=htmlentities($r['create_at'])?>">
+                            <small class="form-text "></small>
+                        </div>
                         <button type="submit" class="btn btn-primary">修改</button>
                     </form>
 
