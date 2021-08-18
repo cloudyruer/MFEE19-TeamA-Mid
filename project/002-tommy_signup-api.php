@@ -12,7 +12,13 @@ $output = [
 ];
 //避免直接拜訪時的錯誤訊息
 // 資料格式檢查
-if(isset($_POST['account'])){
+
+$sql2 = "SELECT * FROM members WHERE account=?";
+$stmt2 = $pdo->prepare($sql2);
+$stmt2->execute([$_POST['account']]);
+$m = $stmt2->fetch();
+
+if(($_POST['account']) === ($m) ){
     $output['error'] = '帳號已經用了！';
     $output['code'] = 400;
     echo json_encode($output, JSON_UNESCAPED_UNICODE);

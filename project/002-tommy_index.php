@@ -8,29 +8,19 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 
-// $sql = "SELECT * FROM `members` WHERE id=" . intval($_SESSION['user']['id']);
-$sql = "SELECT `account_ranking`.*, `members`.*
-FROM `account_ranking`
-JOIN `members`
-    ON `account_ranking`.`members_id` = `members`.`id` WHERE `members`.id =". intval($_SESSION['user']['id']);
-
+$sql = "SELECT * FROM `members` WHERE id=" . intval($_SESSION['user']['id']);
 
 $r = $pdo->query($sql)->fetch();
 
-// SELECT o.members_sid, o.order_date, d.*, p.bookname
-// FROM `orders` o
-//     JOIN `order_details` d
-//         ON o.sid=d.order_sid
-//     JOIN `products` p
-//         ON p.sid=d.product_sid
-// WHERE o.sid=10
+$sql2 = "SELECT `account_ranking`.*, `members`.*
+FROM `account_ranking`
+JOIN `members`
+ON `account_ranking`.`members_id` = `members`.`id` WHERE `members`.id =". intval($_SESSION['user']['id']);
 
-// $sql2 = "SELECT * FROM members WHERE email=?";
-// $dpassword = password_verify($sql['password'], $r['password']);
-// $stmt = $pdo->prepare($sql);
-// $stmt->execute([$dpassword]);
-// $m = $stmt->fetch();
 
+// $sql2 = "SELECT * FROM `account_ranking` WHERE id=" . intval($_SESSION['user']['id']);
+
+$m = $pdo->query($sql2)->fetch();
 
 if (empty($r)) {
     header('Location: index_.php');
@@ -100,8 +90,8 @@ if (empty($r)) {
                             <small class="form-text "></small>
                         </div>
                         <!-- <div class="form-group">
-                            <label for="password_o">原來的密碼</label>
-                            <input type="text" class="form-control" id="password_o" name="password_o">
+                            <label for="password">原來的密碼</label>
+                            <input type="text" class="form-control" id="password" name="password">
                             <small class="form-text "></small>
                         </div> -->
                         <div class="form-group">

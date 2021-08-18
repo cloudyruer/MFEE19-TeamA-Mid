@@ -72,8 +72,7 @@ $stmt = $pdo->query($sql);
                     <div class="tying_container">
                         <div class="typing-demo">
                             <span class="w-title">W</span>elcome to Group 
-                            <span class="w-title">A</span>，Let’s begin the adventure
-                            <span class="w-title">!</span>
+                            <span class="w-title">A</span>，Let’s begin the adventure<span class="w-title">!</span>
                         </div>
                     </div>
                     <form name="form1" onsubmit="checkForm(); return false;">

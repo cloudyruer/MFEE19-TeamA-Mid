@@ -3,8 +3,16 @@ include __DIR__ . '/partials/init.php';
 
 header('Content-Type: application/json');
 
+
+
+// $sql2 = "SELECT * FROM members WHERE password=?";
+// $stmt2 = $pdo->prepare($sql2);
+// $stmt2->execute([$_POST['password']]);
+// $m = $stmt2->fetch();
+
+// var_dump($m);
+
 // 要存放圖檔的資料夾
-$folder = __DIR__ . '/imgs/';
 
 // 允許的檔案類型
 $imgTypes = [
@@ -25,14 +33,14 @@ if (empty($_POST['nickname'])) {
 }
 
 // 比對密碼
-// $sql2 = "SELECT * FROM `members` WHERE `password`=?";
-// $stmt2 = $pdo->prepare($sql2);
-// $stmt2->execute([
-//     $_POST['password_o'],
-// ]);
-// $m = $stmt2->fetch();
+// $sql = "SELECT * FROM members WHERE account=?";
+// $stmt = $pdo->prepare($sql);
+// $stmt->execute([$_POST['account']]);
+// $m = $stmt->fetch();
+// sprintf ($m);
+// // exit;
 
-// if(! password_verify($_POST['password_o'], $m['password'])){
+// if(!password_verify($_POST['password'], $m['password'])){
 //     $output['error'] = '密碼錯誤';
 //     $output['code'] = 405;
 //     echo json_encode($output, JSON_UNESCAPED_UNICODE);
