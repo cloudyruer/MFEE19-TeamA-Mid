@@ -1,11 +1,11 @@
 <?php
 include __DIR__ . '/partials/init.php';
-$title = '賽事類別';
+$title = '賽事列表';
 $activeLi = 'leo';
 
 // leo 程式
 
-// 搜尋功能
+// 搜尋功能 TODO:
 $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : "";
 if (!empty($keyword)) {
     header('Location: 033-leo-sports-type-search.php?keyword=' . $keyword);
@@ -31,11 +31,14 @@ $howManyList = 0;
 //算出總共總資料總共幾頁
 if ($sportsCat == 0) {
     //全部的資料
-    $howManyList = $pdo->query("SELECT count(1) FROM sportsType where `rank`>0")
+    $howManyList = $pdo->query(" SELECT count(1),`sportsGame`.*, `sportsType`.`name`
+    FROM `sportsGame`
+    JOIN `sportsType`
+        ON `sportsGame`.`gameName` = `sportsType`.`sid`;")
         ->fetchAll(); //拿到總共幾筆資料的statement
 } elseif ($sportsCat > 0) {
     //該賽別的資料
-    $howManyList = $pdo->query("SELECT count(1) FROM sportsType where `rank`=$sportsCat")
+    $howManyList = $pdo->query("SELECT count(1),`sportsGame`.*, `sportsType`.`name`, `sportsType`.`rank`FROM `sportsType` JOIN `sportsGame` ON `sportsGame`.`gameName` = `sportsType`.`sid` where `rank`=$sportsCat")
         ->fetchAll(); //拿到總共幾筆資料的statement
 }
 
@@ -62,11 +65,14 @@ if ($page > $howManyPage) {
 //取出資料庫中的資料
 if ($sportsCat == 0) {
     //全部的資料
-    $rows = $pdo->query("SELECT * FROM sportsType where `rank`>0 LIMIT $rowLimitStart,$perpage")
+    $rows = $pdo->query("SELECT `sportsGame`.*, `sportsType`.`name`
+    FROM `sportsGame`
+    JOIN `sportsType`
+        ON `sportsGame`.`gameName` = `sportsType`.`sid` LIMIT $rowLimitStart,$perpage;")
         ->fetchAll();
 } elseif ($sportsCat > 0) {
     //該賽別的資料
-    $rows = $pdo->query("SELECT * FROM sportsType  where `rank`=$sportsCat LIMIT $rowLimitStart,$perpage")
+    $rows = $pdo->query("SELECT `sportsGame`.*, `sportsType`.`name`, `sportsType`.`rank`FROM `sportsType` JOIN `sportsGame` ON `sportsGame`.`gameName` = `sportsType`.`sid` where `rank`=$sportsCat LIMIT $rowLimitStart,$perpage")
         ->fetchAll();
 }
 
@@ -80,10 +86,10 @@ if ($sportsCat == 0) {
 <!-- leo nav -->
 <ul class="nav nav-tabs mt-4 pl-5 pr-5">
     <li class="nav-item">
-        <a class="nav-link active" href="#">賽事類別</a>
+        <a class="nav-link" href="#">賽事類別</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="#">賽事</a>
+        <a class="nav-link active" href="#">賽事</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="#">球場類別</a>
@@ -94,15 +100,14 @@ if ($sportsCat == 0) {
 </ul>
 
 <div id="container">
-    <h1>賽事類別</h1>
+    <h1>賽事列表</h1>
     <div class="button_warp">
         <div>
-            <a class="btn btn-primary" href="./033-leo-sports-type-cat.php"> 新增賽別</a>
-            <a class="btn btn-primary btn-second" href="./033-leo-sports-type-game.php">新增盃賽</a>
+            <a class="btn btn-primary" href="./033-leo-sports-type-cat.php">新增賽事</a>
         </div>
         <div class="button_warp_search">
             <form>
-                <input class="form-control" type="" placeholder="請輸入盃賽關鍵字" name="keyword">
+                <input class="form-control" type="" placeholder="請輸入賽事關鍵字" name="keyword">
                 <button type="submit" class="btn btn-secondary">搜尋</button>
             </form>
         </div>
@@ -114,17 +119,15 @@ if ($sportsCat == 0) {
                 <a class="nav-link" id="type<?= $r['sid'] ?>" href="?cat=<?= $r['sid'] ?>"><?= $r['name'] ?></a>
             <?php endforeach; ?>
         </nav>
-
-        <a class="btn btn-primary btn-info" <?php if ($sportsCat == 0) {
-                                                echo "hidden";
-                                            };
-                                            ?> href="033-leo-sports-type-cat-edit.php?sid=<?= $sportsCat ?>">編輯賽別</a>
-
     </div>
     <table class="table table-striped">
         <thead class=" thead-dark">
             <tr>
                 <th scope="col">盃賽名稱</th>
+                <th scope="col">階段</th>
+                <th scope="col">比賽時間</th>
+                <th scope="col">對手</th>
+                <th scope="col">比賽場地</th>
                 <th scope="col">編輯</th>
                 <th scope="col">刪除</th>
             </tr>
@@ -133,8 +136,12 @@ if ($sportsCat == 0) {
             <?php foreach ($rows as $r) : ?>
                 <tr>
                     <td><?= $r['name'] ?></td>
-                    <td><a class="btn btn-info" href="033-leo-sports-type-game-edit.php?sid=<?= $r['sid'] ?>">編輯</a></td>
-                    <td><a href="033-leo-sports-type-deleteApi.php?sid=<?= $r['sid'] ?>" class="btn btn-danger">刪除</a></td>
+                    <td><?= $r['gameStatus'] ?></td>
+                    <td><?= $r['gameTime'] ?></td>
+                    <td><?= $r['player1'] ?> vs <?= $r['player2'] ?></td>
+                    <td><?= $r['gameStadium'] ?></td>
+                    <td><a class="btn btn-info" href="033-leo-sports-game-edit.php?sid=<?= $r['sid'] ?>">編輯</a></td>
+                    <td><a href="033-leo-sports-game-deleteApi.php?sid=<?= $r['sid'] ?>" class="btn btn-danger">刪除</a></td>
                 </tr>
             <?php endforeach; ?>
         </tbody>

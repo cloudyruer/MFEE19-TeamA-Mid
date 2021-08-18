@@ -59,7 +59,8 @@ $stmt = $pdo->query($sql);
             border-color: transparent
         }
     }
-    .w-title{
+
+    .w-title {
         font-size: 1.5rem;
     }
 </style>
@@ -71,7 +72,7 @@ $stmt = $pdo->query($sql);
                     <!-- <h5 class="card-title">註冊</h5> -->
                     <div class="tying_container">
                         <div class="typing-demo">
-                            <span class="w-title">W</span>elcome to Group 
+                            <span class="w-title">W</span>elcome to Group
                             <span class="w-title">A</span>，Let’s begin the adventure<span class="w-title">!</span>
                         </div>
                     </div>
