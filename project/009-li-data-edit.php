@@ -4,17 +4,20 @@
 
 $sid = isset($_GET['sid']) ? intval($_GET['sid']) : 0;
 
-// "SELECT * FROM `products` JOIN `stock` ON `stock`.`products_sid` = `sid` WHERE `sid`=$sid;
-// SELECT * FROM `products` JOIN `images` ON `images`.`products_sid` = `sid` WHERE `sid`=$sid;"
-
-
 $sql = "SELECT * FROM `products` WHERE sid=$sid ";
 
 $r = $pdo->query($sql)->fetch();
 
 $rStock = $pdo->query("SELECT * FROM `stock` WHERE `products_id`= $sid")->fetch();
 
+$brands = $pdo->query("SELECT * FROM `brands`")->fetchAll();
 
+$categoriesMain = $pdo->query("SELECT * FROM `categories` WHERE `parents_id` = 0")->fetchAll();
+
+$categoriesChild = $pdo->query("SELECT * FROM `categories` WHERE `parents_id` = 1")->fetchAll();
+
+$sqlImg = "SELECT * FROM `images` WHERE `products_sid` = $sid";
+$images = $pdo->query($sqlImg)->fetch();
 
 
 ?>
@@ -48,7 +51,8 @@ $rStock = $pdo->query("SELECT * FROM `stock` WHERE `products_id`= $sid")->fetch(
                     </div>
                     <div class="form-group">
                         <label for="images">商品圖片*</label>
-                            <input type="file" class="form-control" id="images" name="images" accept="image/*" multiple>
+                            <input type="file" class="form-control" id="images" name="images" accept="image/*" onchange="loadFile(event)">
+                                <img src="imgs/<?= $images['fileName'] ?>" alt="" width="300px" id="output" class="w-50 mt-3">
                             <small class="form-text"></small>
                     </div>
 
@@ -62,33 +66,29 @@ $rStock = $pdo->query("SELECT * FROM `stock` WHERE `products_id`= $sid")->fetch(
                         <label for="categoriesMain">商品主分類</label>
                         <select class="form-control" id="categoriesMain" name="categoriesMain">
                         <option disabled selected>請選擇</option>
-                        <option value="1">男鞋</option>
-                        <option value="2">女鞋</option>
-                        <option value="3">其他商品</option>
+                        <?php foreach($categoriesMain as $cm) : ?>
+                        <option value="<?= $cm['id'] ?>" <?php if ($cm['id'] == $r['categories_id']) {echo "selected";} ?>><?= $cm['name'] ?></option>
+                        <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="categoriesChild">商品子分類</label>
                         <select class="form-control" id="categoriesChild" name="categoriesChild">
                         <option disabled selected>請選擇</option>
-                        <option value="4">慢跑鞋</option>
-                        <option value="5">球類運動鞋</option>
-                        <option value="6">休閒鞋</option>
-                        <option value="7">登山鞋</option>
-                        <option value="8">靴子</option>
+                        <?php foreach($categoriesChild as $cc) : ?>
+                        <option value="<?= $cc['id'] ?>" <?php if ($cc['id'] == $r['categories_parents_id']) {echo "selected";} ?>><?= $cc['name'] ?></option>
+                        <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="brands">商品品牌</label>
                         <select class="form-control" id="brands" name="brands">
-                        <option disabled selected>請選擇</option>
-                        <option value="1">NIKE</option>
-                        <option value="2">PUMA</option>
-                        <option value="3">New Balance</option>
-                        <option value="4">Arc'teryx</option>
-                        <option value="5">SALOMON</option>
-                        <option value="6">adidas</option>
-                        </select>
+                        <option disabled>請選擇</option>
+                        <?php foreach ( $brands as $b) : ?>
+                        <option value="<?= $b['id'] ?>" 
+                        <?php if ($b['id'] == $r['brands_id']) {echo "selected";} ?>><?= $b['name'] ?></option>
+                        <?php endforeach; ?>
+                        </select> 
                     </div>
                     
                     <div class="form-group">
@@ -109,9 +109,9 @@ $rStock = $pdo->query("SELECT * FROM `stock` WHERE `products_id`= $sid")->fetch(
                     <div class="form-group">
                         <label for="launched">上下架</label>
                         <select class="form-control" id="launched" name="launched">
-                        <option disabled selected>請選擇</option>
-                        <option value="1">上架</option>
-                        <option value="0">下架</option>
+                        <option disabled>請選擇</option>
+                        <option value="1" <?php if ($r['launched'] ==1 ) {echo "selected";} ?>>上架</option>
+                        <option value="0" <?php if ($r['launched'] ==0 ) {echo "selected";} ?>>下架</option>
                         </select> 
                         <!-- 忘記一個</select>浪費快一小時... -->
                     </div>
@@ -138,6 +138,13 @@ $rStock = $pdo->query("SELECT * FROM `stock` WHERE `products_id`= $sid")->fetch(
 <?php include __DIR__. '/partials/scripts.php'; ?>
 <script>
     const name = document.querySelector('#name');
+    var loadFile = function(event) {
+    var output = document.getElementById('output');
+    output.src = URL.createObjectURL(event.target.files[0]);
+    output.onload = function() {
+      URL.revokeObjectURL(output.src) // free memory
+    }
+  };
 
     function checkForm(){
 
