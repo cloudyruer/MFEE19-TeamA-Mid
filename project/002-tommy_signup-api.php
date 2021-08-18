@@ -25,12 +25,15 @@ if ($m !== false) {
     exit; // 直接離開 (中斷) 程式
 }
 
+<<<<<<< HEAD
 // if (($_POST['account']) === ($m['account'])) {
 //     $output['error'] = '帳號已經用了！';
 //     $output['code'] = 400;
 //     echo json_encode($output, JSON_UNESCAPED_UNICODE);
 //     exit; // 直接離開 (中斷) 程式
 // }
+=======
+>>>>>>> ffd396d56fb391a4ad6820c6667086d40c2993c5
 
 if (mb_strlen($_POST['account']) < 2) {
     $output['error'] = '姓名長度太短';

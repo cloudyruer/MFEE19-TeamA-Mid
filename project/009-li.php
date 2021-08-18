@@ -12,9 +12,15 @@ $perPage = 7;
 
 // query string parameters
 $qs = [];
+$pageBtnQS = [];
+
 
 // 關鍵字查詢
 $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
+
+// 分類查詢
+$cate = isset($_GET['cate']) ? $_GET['cate'] : '';
+$cateP = isset($_GET['cateP']) ? $_GET['cateP'] : '';
 
 // 用戶決定查看第幾頁，預設值為 1
 $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
@@ -27,9 +33,21 @@ if (!empty($keyword)) {
   $qs['keyword'] = $keyword;
 }
 
+if (!empty($cate)) {
+    $where .= " AND `categories_parents_id`= $cate";
+    $pageBtnQS['cate'] = $cate;
+}
+
+if (!empty($cateP)) {
+  $where .= " AND `categories_id`= $cateP";
+  $pageBtnQS['cate'] = $cateP;
+}
+
+
 // 總共有幾筆
 $totalRows = $pdo->query("SELECT count(1) FROM (`products` LEFT JOIN `stock` ON `sid` = `stock`.`products_id` ) $where")
   ->fetch(PDO::FETCH_NUM)[0];
+
 
 // 總共有幾頁, 才能生出分頁按鈕
 $totalPages = ceil($totalRows / $perPage); // 正數是無條件進位
@@ -64,37 +82,89 @@ if ($totalRows != 0) {
   $rows = $pdo->query($sql)->fetchAll();
 }
 
-/*
-$rowsStock=[];
-$rowsStock = $pdo->query("SELECT * FROM `stock`, `products` WHERE `products`.`sid` = `products_id`")->fetch();
-*/
 
-// $sqlImg = "SELECT * FROM `images` WHERE ";
-// $rowsImg = $pdo->query($sqlImg)->fetch();
+$sqlImg = "SELECT * FROM `images`";
+$rowsImg = $pdo->query($sqlImg)->fetchAll();
+
+// ------------------選單資料--------------
+// 拿到第一層的選單資料
+// $sqlCate = "SELECT * FROM `categories`";
+// $rowsCate = $pdo->query($sqlCate)->fetchAll();
+
+// $cate1 = [];
+// foreach( $rowsCate as $rCate){
+//   if($rCate == 0){
+//     $cate1[] = $rCate;
+//   }
+// }
+// foreach($cate1 as $k => $second){
+//   foreach($rowsCate as $rCate){
+//     if($rCate['parents_id'] == $second['id']){
+//       $cate1['$k']['nodes'][] = $rCate;
+//     }
+//   }
+// }
+
+// ---------------------------先做再說--------------------------
+$sqlCate = "SELECT * FROM `categories`";
+$rowsCate = $pdo->query($sqlCate)->fetchAll();
+
+$dict = [];
+foreach( $rowsCate as &$rCate){
+    $dict[$rCate['id']] = $rCate;
+  }
+
+$tree = [];
+foreach($dict as $sid => $item){
+    if($item['parents_id']==0){
+        $tree[] = &$dict[$sid];
+    } else {
+        // 不是第一層，就一定會有上一層
+        $dict[$item['parents_id']]['nodes'][] = &$dict[$sid];
+    }
+}
+
 
 ?>
 
 <?php include __DIR__ . '/partials/html-head.php';?>
 <?php include __DIR__ . '/partials/navbar.php';?>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container">
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-             
-            </ul>
-           
-          </div>
-        </div>
-      </nav>
+  <div class="container">
+    <a class="navbar-brand" href="009-li.php">Menu</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu"  aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
+    <div class="collapse navbar-collapse" id="menu">
+        <ul class="navbar-nav mr-auto">
+            <?php foreach($tree as $c1):  ?>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#<?= $c1['id'] ?>" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <?= $c1['name'] ?>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="?cate=<?= $c2['id'] ?>">所有產品</a>
+                        <?php foreach($c1['nodes'] as $c2):  ?>
+                        <a class="dropdown-item" href="?cate=<?= $c2['id'] ?>"><?= $c2['name'] ?></a>
+                        <?php endforeach;  ?>
+                    </div>
+                </li>
+
+            <?php endforeach;  ?>
+        </ul>
+
+    </div>
+  </div>
+</nav>
 <div class="container mt-3">
-    <div class="row" style="margin: 1rem 0">
-        <div class="col">
-            <form action="009-li.php" class="form-inline my-2 my-lg-0 d-flex justify-content-end">
-                <input class="form-control mr-sm-2" type="search" name="keyword" placeholder="Search" aria-label="Search" value="<?=htmlentities($keyword)?> ">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
-        </div>
+  <div class="row" style="margin: 1rem 0">
+      <div class="col">
+          <form action="009-li.php" class="form-inline my-2 my-lg-0 d-flex justify-content-end">
+              <input class="form-control mr-sm-2" type="search" name="keyword" placeholder="Search" aria-label="Search" value="<?=htmlentities($keyword)?> ">
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          </form>
+      </div>
   </div>
   <div class="row">
         <div class="col">
@@ -168,7 +238,13 @@ $rowsStock = $pdo->query("SELECT * FROM `stock`, `products` WHERE `products`.`si
                 </button>
               </td>
               <td><?= $r['sid'] ?></td>
-              <td><img src="./imgs/<?= $r['number']?> (1).jpg" class="w-100" style="max-width: 100px;" alt=""></td>
+              <td>
+              <?php foreach($rowsImg as $ri): ?> 
+                <?php if ( $r['sid'] == $ri['products_sid']): ?>
+                <img src="./imgs/<?= htmlentities($ri['fileName'])?>" class="w-100" style="max-width: 100px;" alt="">
+                <?php endif; ?>
+                <?php endforeach; ?>
+             </td>
               <td><?= htmlentities($r['name']) ?></td>
               <td><?= htmlentities($r['number']) ?></td>
               <td><?= $r['price'] ?></td>

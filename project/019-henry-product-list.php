@@ -1,6 +1,6 @@
 <?php
 include __DIR__ . "/partials/init.php";
-$title = "資料列表";
+$title = "產品列表";
 //資料處理的部分盡量放前面
 //M、C放此區，V放下面
 
@@ -62,9 +62,13 @@ if($totalRows!==0){
 <?php include __DIR__ . "/partials/navbar.php"; ?>
 
 <div class="container">
-  <?php include __DIR__ . "/019-henry-btn_page.php"; ?>
+  <div class="row my-3" >
+    <a href="019-henry-product-list.php" id="btnMing" class="btn_pro-list">產品列表</a>
+    <a href="019-henry-shop-cart-list.php" id="btnMing" class="btn_cargo">購物車 <span class="badge badge-pill badge-info cart-count"></span></a>
+    <a href="019-henry-shop-list.php" id="btnMing" class="btn_shop-list">購物清單</a>
+
     <div class="col">
-      <form action="product-list.php" class="form-inline my-2 my-lg-0 d-flex justify-content-end">
+      <form action="019-henry-product-list.php" class="form-inline my-2 my-lg-0 d-flex justify-content-end">
         <input class="form-control mr-sm-2" name="keyword" type="search" placeholder="Search" aria-label="Search" value="<?= htmlentities($keyword) ?>">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
       </form>
@@ -122,16 +126,14 @@ if($totalRows!==0){
   </div>
 </div>
 
-<?php include __DIR__ . "/partials/scripts.php"; ?>
+<?php include __DIR__ . "/019-henry-scripts.php"; ?>
 <script>
     const btn = $('.add-to-cart-btn');
 
-    btn.click(function(){
+    btn.click(function() {
         const sid = $(this).closest('.product-unit').attr('data-sid');
-        //const qty = $(this).prev().val();
+        
         const qty = $(this).closest('.product-unit').find('.qty').val();
-
-        //console.log({sid, qty});
 
         $.get('019-henry-add-to-cart-api.php', {sid, qty}, function(data) {
             countCartObj(data);

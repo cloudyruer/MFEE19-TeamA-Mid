@@ -1,6 +1,29 @@
 <?php
     include __DIR__. '/partials/init.php';
     $title = '新增資料';
+
+    $brands = $pdo->query("SELECT * FROM brands")->fetchAll();
+
+    $categoriesMain = $pdo->query("SELECT * FROM categories WHERE `parents_id` = 0")->fetchAll();
+
+    // $sqlCC = sprintf("SELECT * FROM categories WHERE `parents_id` = %s " , $cm['id']) ;
+    // $categoriesChild = $pdo->query($sqlCC)->fetchAll();
+
+
+    // $categoriesChild = $pdo->query("SELECT * FROM categories")->fetchAll();
+
+    $categoriesChild1 = $pdo->query("SELECT * FROM categories WHERE `parents_id` = 1")->fetchAll();
+
+    $categoriesChild2 = $pdo->query("SELECT * FROM categories WHERE `parents_id` = 2")->fetchAll();
+
+    $categoriesChild3 = $pdo->query("SELECT * FROM categories WHERE `parents_id` = 3")->fetchAll();
+
+
+
+
+    // $sqlImg = "SELECT * FROM `images` WHERE `products_sid` = $sid";
+    // $images = $pdo->query($sqlImg)->fetch();
+    
 ?>
 <?php include __DIR__. '/partials/html-head.php'; ?>
 <?php include __DIR__. '/partials/navbar.php'; ?>
@@ -29,7 +52,8 @@
                     </div>
                     <div class="form-group">
                         <label for="images">商品圖片*</label>
-                            <input type="file" class="form-control" id="images" name="images" accept="image/*" multiple>
+                            <input type="file" class="form-control" id="images" name="images" accept="image/*" onchange="loadFile(event)">
+                            <img id="output" class="w-50 mt-3"/>
                             <small class="form-text"></small>
                     </div>
                     <div class="form-group">
@@ -40,34 +64,46 @@
                     <div class="form-group">
                         <label for="categoriesMain">商品主分類</label>
                         <select class="form-control" id="categoriesMain" name="categoriesMain">
-                        <option disabled selected="true">請選擇</option>
-                        <option value="1">男鞋</option>
-                        <option value="2">女鞋</option>
-                        <option value="3">其他商品</option>
+                        <option disabled selected>請選擇</option>
+                        <?php foreach($categoriesMain as $cm) : ?>
+                        <option value="<?= $cm['id'] ?>"><?= $cm['name'] ?></option>
+                        <?php endforeach; ?>
                         </select>
                     </div>
+
+                    <!-- 如何在這邊獲得上面的$cm['id']的值 -->
                     <div class="form-group">
                         <label for="categoriesChild">商品子分類</label>
                         <select class="form-control" id="categoriesChild" name="categoriesChild">
                         <option disabled selected>請選擇</option>
-                        <option value="4">慢跑鞋</option>
-                        <option value="5">球類運動鞋</option>
-                        <option value="6">休閒鞋</option>
-                        <option value="7">登山鞋</option>
-                        <option value="8">靴子</option>
+                        <?php if($cmid==1): ?>
+                        <?php foreach($categoriesChild1 as $cc) : ?>
+                        <option value="<?= $cc['id'] ?>"><?= $cc['name'] ?></option>
+                        <?php endforeach; ?>
+                        <?php endif; ?>
+
+                        <?php if($cmid==2): ?>
+                        <?php foreach($categoriesChild2 as $cc) : ?>
+                        <option value="<?= $cc['id'] ?>"><?= $cc['name'] ?></option>
+                        <?php endforeach; ?>
+                        <?php endif; ?>
+
+                        <?php if($cmid==3): ?>
+                        <?php foreach($categoriesChild3 as $cc) : ?>
+                        <option value="<?= $cc['id'] ?>"><?= $cc['name'] ?></option>
+                        <?php endforeach; ?>
+                        <?php endif; ?>
+
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="brands">商品品牌</label>
                         <select class="form-control" id="brands" name="brands">
                         <option disabled selected>請選擇</option>
-                        <option value="1">NIKE</option>
-                        <option value="2">PUMA</option>
-                        <option value="3">New Balance</option>
-                        <option value="4">Arc'teryx</option>
-                        <option value="5">SALOMON</option>
-                        <option value="6">adidas</option>
-                        </select>
+                        <?php foreach ( $brands as $b) : ?>
+                        <option value="<?= $b['id'] ?>"><?= $b['name'] ?></option>
+                        <?php endforeach; ?>
+                        </select> 
                     </div>
                    
                     
@@ -117,41 +153,43 @@
             </div>
         </div>
     </div>
-    <!-- <div class="row mt-3">
-        <div class="col-8">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title mt-3">商品規格</h5>
-                    <form name="form1">
-                    <label for="name">鞋子尺碼</label>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                        <label class="form-check-label" for="defaultCheck1">
-                            22.5
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                        <label class="form-check-label" for="defaultCheck2">
-                            25.5
-                        </label>
-                    </div>
-                    </form>
-
-               
-                </div>
-            </div>
-        </div>
-    </div> -->
-    <!-- <button type="submit" class="btn btn-primary mt-5">修改</button> -->
 
 <?php include __DIR__. '/partials/scripts.php'; ?>
 <script>
     
-    const name = document.querySelector('#name');
-    const size = document.querySelector('#size');
-    const number = document.querySelector('#number');
+const name = document.querySelector('#name');
+const size = document.querySelector('#size');
+const number = document.querySelector('#number');
 
+// ---------------照片預覽-----------------
+var loadFile = function(event) {
+    var output = document.getElementById('output');
+    output.src = URL.createObjectURL(event.target.files[0]);
+    output.onload = function() {
+      URL.revokeObjectURL(output.src) // free memory
+    }
+};
+// ---------------照片預覽-----------------
+
+
+//---------------分類選單溜--------------------
+
+
+//   $(document).on('change', '#categoriesMain', function(){
+//    var categories = $('#categoriesMain :selected').val();
+//    //注意:selected前面有個空格！
+//    $.ajax({
+//       url:"009-li-deal.php",				
+//       method:"POST",
+//       data:{
+//          categories:categories
+//       },					
+//       success:function(res){					
+//          //處理回吐的資料
+//          $('#categoriesChild').html(res);
+//       }
+//    })//end ajax
+// });
 
     function checkForm(){
 

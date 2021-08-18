@@ -33,36 +33,26 @@ if (empty($_POST['nickname'])) {
 }
 
 // 比對密碼
-// $sql = "SELECT * FROM members WHERE account=?";
-// $stmt = $pdo->prepare($sql);
-// $stmt->execute([$_POST['account']]);
-// $m = $stmt->fetch();
-// sprintf ($m);
-// // exit;
+$sql = "SELECT * FROM members WHERE account=?";
+$stmt = $pdo->prepare($sql);
+$stmt->execute([$_POST['account']]);
+$m = $stmt->fetch();
+// exit;
 
-// if(!password_verify($_POST['password'], $m['password'])){
-//     $output['error'] = '密碼錯誤';
-//     $output['code'] = 405;
-//     echo json_encode($output, JSON_UNESCAPED_UNICODE);
-   
-//     $output['success'] = true;
-//     $output['code'] = 200;
-//     $_SESSION['user'] = $m;
-// }
+if(!password_verify($_POST['password_o'], $m['password'])){
+    $output['error'] = '原來的密碼錯誤';
+    $output['code'] = 405;
+    echo json_encode($output, JSON_UNESCAPED_UNICODE);
+    exit;
+}
 // 預設是沒有上傳資料，沒有上傳成功
 $isSaved = false;
+
 
 // 如果有上傳檔案
 if (!empty($_FILES) and !empty($_FILES['avatar'])) {
 
     $ext = isset($imgTypes[$_FILES['avatar']['type']]) ? $imgTypes[$_FILES['avatar']['type']] : null; // 取得副檔名
-
-
-//     $hash = '$2y$10$Uhr03aiKJ/qROq8LdoeM/OBDmnpWUhSe33Ru0viNuwmXK4BU6/ZLu';
-
-// password_verify('slkdflkfk34', $hash)
-//     $password = password_verify($_POST['password'], PASSWORD_DEFAULT);
-
     // 如果是允許的檔案類型
     if (!empty($ext)) {
         $filename = sha1($_FILES['avatar']['name'] . rand()) . $ext;
@@ -71,17 +61,18 @@ if (!empty($_FILES) and !empty($_FILES['avatar'])) {
             $_FILES['avatar']['tmp_name'],
             $folder . $filename
         )) {
-            // $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+            $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
             $sql = "UPDATE `members` SET 
             `password`=?, `email`=?, `avatar`=?,
             `mobile`=?, `address`=?, `birthday`=?, `nickname`=?
+            
 
             WHERE id=?";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([
                 // $_POST['account'],
-                $_POST['password'],
+                $password,
                 $_POST['email'],
                 $filename,
                 $_POST['mobile'],
@@ -112,15 +103,18 @@ if (!empty($_FILES) and !empty($_FILES['avatar'])) {
 
 
 if (!$isSaved) {
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
     $sql = "UPDATE `members` SET 
     `password`=?, `email`=?,
-    `mobile`=?, `address`=?, `birthday`=?, `nickname`=?
+    `mobile`=?, `address`=?, `birthday`=?, `nickname`=? 
+    
+    
 
     WHERE id=?";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
         // $_POST['account'],
-        $_POST['password'],
+        $password,
         $_POST['email'],
         $_POST['mobile'],
         $_POST['address'],

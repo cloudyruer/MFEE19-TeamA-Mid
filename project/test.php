@@ -1,99 +1,138 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <!-- NOTE -->
-        <a class="navbar-brand" href="index_.php">Team &#923;</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+<?php
+include __DIR__ . '/partials/init.php';
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <!-- left side -->
-            <ul class="navbar-nav mr-auto">
-                <!-- NOTE temp 需要的話複製就好 不要動這個 li-->
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Member : </a>
-                </li>
-
-                <!-- 001 Emma -->
-                <li class="nav-item  <?=$activeLi == 'emma' ? 'active' : ''?>">
-                    <a class="nav-link" href="001-emma-blog-list.php">Emma</a>
-                </li>
-
-                <!-- 002 Tommy -->
-                <li class="nav-item  <?=$activeLi == 'tommy' ? 'active' : ''?>">
-                    <a class="nav-link" href="002-tommy.php">Tommy</a>
-                </li>
-
-                <!-- 009 li -->
-                <li class="nav-item  <?=$activeLi == 'li' ? 'active' : ''?>">
-                    <a class="nav-link" href="009-li.php">Li</a>
-                </li>
-
-                <!-- 019 Henry -->
-                <li class="nav-item  <?=$activeLi == 'henry' ? 'active' : ''?>">
-                    <a class="nav-link" href="019-henry.php">Henry</a>
-                </li>
-
-                <!-- 033 Leo -->
-                <li class="nav-item  <?=$activeLi == 'leo' ? 'active' : ''?>">
-                    <a class="nav-link" href="033-leo.php">Leo</a>
-                </li>
-
-            </ul>
-
-            <!-- right side -->
-            <ul class="navbar-nav">
-                <!-- after log in,  will show up after login -->
-                <?php if (isset($_SESSION['user'])): ?>
-                    <li class="nav-item active">
-                        <a class="nav-link" ><?=$_SESSION['user']['nickname']?></a>
-                    </li>
-
-                    <!-- NOTE  add $activeLi ternary-->
-                    <li class="nav-item">
-                        <a class="nav-link  <?=$activeLi == 'edit' ? 'active' : ''?>"
-                        href="profile-edit.php">編輯個人資料</a>
-                    </li>
-
-                    <!-- WARN the need of avatar?  -->
-                    <li class="nav-item">
-                        <?php if (!empty($_SESSION['user']['avatar'])): ?>
-                            <img src="imgs/<?=$_SESSION['user']['avatar']?>" alt="" width="50px">
-                        <?php endif;?>
-                    </li>
-
-                    <!-- log out -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="logout.php">登出</a>
-                    </li>
-
-                    <!-- NOTE temp if need, will show up after login -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">example</a>
-                    </li>
-
-                    <!-- 004 Joey -->
-                    <li class="nav-item  <?=$activeLi == 'joey' ? 'active' : ''?>">
-                        <a class="nav-link" href="004-joey.php">Joey</a>
-                    </li>
+header('Content-Type: application/json');
 
 
-                <?php else: ?>
-                <!-- before log in -->
-                    <!-- log in -->
-                    <li class="nav-item active">
-                        <a class="nav-link" href="login.php">登入</a>
-                    </li>
 
-                    <!-- register -->
-                    <!-- WARN no link -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">註冊</a>
-                    </li>
-                <?php endif;?>
-            </ul>
+// $sql2 = "SELECT * FROM members WHERE password=?";
+// $stmt2 = $pdo->prepare($sql2);
+// $stmt2->execute([$_POST['password']]);
+// $m = $stmt2->fetch();
 
-        </div>
-    </div>
-</nav>
+// var_dump($m);
+
+// 要存放圖檔的資料夾
+
+// 允許的檔案類型
+$imgTypes = [
+    'image/jpeg' => '.jpg',
+    'image/png' => '.png',
+];
+
+$output = [
+    'success' => false,
+    'error' => '資料欄位不足',
+    'code' => 0,
+    'postData' => $_POST,
+];
+
+if (empty($_POST['nickname'])) {
+    echo json_encode($output);
+    exit;
+}
+
+// 比對密碼
+// $sql = "SELECT * FROM members WHERE account=?";
+// $stmt = $pdo->prepare($sql);
+// $stmt->execute([$_POST['account']]);
+// $m = $stmt->fetch();
+// sprintf ($m);
+// // exit;
+
+// if(!password_verify($_POST['password'], $m['password'])){
+//     $output['error'] = '密碼錯誤';
+//     $output['code'] = 405;
+//     echo json_encode($output, JSON_UNESCAPED_UNICODE);
+   
+//     $output['success'] = true;
+//     $output['code'] = 200;
+//     $_SESSION['user'] = $m;
+// }
+// 預設是沒有上傳資料，沒有上傳成功
+$isSaved = false;
+
+// 如果有上傳檔案
+if (!empty($_FILES) and !empty($_FILES['avatar'])) {
+
+    $ext = isset($imgTypes[$_FILES['avatar']['type']]) ? $imgTypes[$_FILES['avatar']['type']] : null; // 取得副檔名
+
+
+//     $hash = '$2y$10$Uhr03aiKJ/qROq8LdoeM/OBDmnpWUhSe33Ru0viNuwmXK4BU6/ZLu';
+
+// password_verify('slkdflkfk34', $hash)
+//     $password = password_verify($_POST['password'], PASSWORD_DEFAULT);
+
+    // 如果是允許的檔案類型
+    if (!empty($ext)) {
+        $filename = sha1($_FILES['avatar']['name'] . rand()) . $ext;
+
+        if (move_uploaded_file(
+            $_FILES['avatar']['tmp_name'],
+            $folder . $filename
+        )) {
+            // $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+            $sql = "UPDATE `members` SET 
+            `password`=?, `email`=?, `avatar`=?,
+            `mobile`=?, `address`=?, `birthday`=?, `nickname`=?
+            WHERE id=?";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([
+                // $_POST['account'],
+                $_POST['password'],
+                $_POST['email'],
+                $filename,
+                $_POST['mobile'],
+                $_POST['address'],
+                $_POST['birthday'],
+                $_POST['nickname'],
+
+
+                $_SESSION['user']['id'],
+            ]);
+
+            if ($stmt->rowCount()) {
+                $isSaved = true;
+
+                $_SESSION['user']['avatar'] = $filename;
+                $_SESSION['user']['nickname'] = $_POST['nickname'];
+
+                $output['filename'] = $filename;
+                $output['error'] = '';
+                $output['success'] = true;
+
+                echo json_encode($output);
+                exit;
+            }
+        }
+    }
+}
+
+
+if (!$isSaved) {
+    $sql = "UPDATE `members` SET 
+    `password`=?, `email`=?,
+    `mobile`=?, `address`=?, `birthday`=?, `nickname`=?
+    WHERE id=?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        // $_POST['account'],
+        $_POST['password'],
+        $_POST['email'],
+        $_POST['mobile'],
+        $_POST['address'],
+        $_POST['birthday'],
+        $_POST['nickname'],
+        $_SESSION['user']['id'],
+    ]);
+
+    if ($stmt->rowCount()) {
+        $_SESSION['user']['nickname'] = $_POST['nickname'];
+        $output['error'] = '';
+        $output['success'] = true;
+    }
+}
+
+
+echo json_encode($output);

@@ -5,7 +5,7 @@
       border:1px solid #999;
     }
     
-    .btnMing {
+    #btnMing {
       /* display: inline-block; */
       border-radius: 5px;
       border: 2px solid #666;
@@ -16,7 +16,7 @@
       padding: 8px 16px;
       margin-left: 10px;
     }
-    .btnMing:hover {
+    #btnMing:hover {
       text-decoration: none;
       background: orange;
       color: #fff;
@@ -28,5 +28,8 @@
       border-radius: 10px;
       text-align: center;
       padding: 10px 0;
+    }
+    form .form-group small, .star {
+      color: red;
     }
 </style>
