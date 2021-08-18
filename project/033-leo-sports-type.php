@@ -109,9 +109,9 @@ if ($sportsCat == 0) {
     </div>
     <div class="typeWarp">
         <nav class="nav nav-pills">
-            <a class="nav-link" id="type0" href="?cat=0">全部</a>
+            <a class="nav-link" id="type0" href="?cat=0&page=1">全部</a>
             <?php foreach ($allSprtsCat as $r) : ?>
-                <a class="nav-link" id="type<?= $r['sid'] ?>" href="?cat=<?= $r['sid'] ?>"><?= $r['name'] ?></a>
+                <a class="nav-link" id="type<?= $r['sid'] ?>" href="?cat=<?= $r['sid'] ?>&page=1"><?= $r['name'] ?></a>
             <?php endforeach; ?>
         </nav>
 

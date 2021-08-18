@@ -1,12 +1,12 @@
 <?php
 include __DIR__ . '/partials/init.php';
 
-$sql = "SELECT * FROM `categories` ORDER BY `sequence`";
+$sql = "SELECT * FROM `sportsType` ORDER BY `rank`";
 $rows = $pdo->query($sql)->fetchAll();
 
 $cate1 = [];
 foreach ($rows as $r) {
-    if ($r['parent_sid'] == 0) {
+    if ($r['rank'] == 0) {
         $cate1[] = $r;
     }
 }
@@ -15,7 +15,7 @@ foreach ($rows as $r) {
 // 設定第二層
 foreach ($cate1 as &$c) {
     foreach ($rows as $r) {
-        if ($r['parent_sid'] == $c['sid']) {
+        if ($r['rank'] == $c['sid']) {
             $c['nodes'][] = $r;
         }
     }

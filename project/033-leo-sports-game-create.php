@@ -1,26 +1,26 @@
 <?php
 include __DIR__ . '/partials/init.php';
-$title = '編輯賽事';
+$title = '新增賽事';
 $activeLi = 'leo';
 
 //此段為編輯用
 //抓到前台要修改的資料編號
-$sid = isset($_GET['sid']) ? intval($_GET['sid']) : 0;
+// $sid = isset($_GET['sid']) ? intval($_GET['sid']) : 0;
 
-//結合sid撰寫sql的查詢語法
-$sql = "SELECT `sportsGame`.*, `sportsType`.`name`,`sportsType`.`rank`
-    FROM `sportsGame`
-    JOIN `sportsType`
-        ON `sportsGame`.`gameName` = `sportsType`.`sid` WHERE `sportsGame`.`sid`=$sid";
+// //結合sid撰寫sql的查詢語法
+// $sql = "SELECT `sportsGame`.*, `sportsType`.`name`,`sportsType`.`rank`
+//     FROM `sportsGame`
+//     JOIN `sportsType`
+//         ON `sportsGame`.`gameName` = `sportsType`.`sid` WHERE `sportsGame`.`sid`=$sid";
 
-//以query將sql語法回傳給sql，並取出第一筆資料
-$row = $pdo->query($sql)->fetch();
+// //以query將sql語法回傳給sql，並取出第一筆資料
+// $row = $pdo->query($sql)->fetch();
 
-//判斷有值跟沒值要執行什麼
-if (empty($row)) {
-    header('Location: 033-leo-sports-game.php');
-    exit;
-}
+// //判斷有值跟沒值要執行什麼
+// if (empty($row)) {
+//     header('Location: 033-leo-sports-game.php');
+//     exit;
+// }
 
 
 ?>
@@ -46,9 +46,8 @@ if (empty($row)) {
 </ul>
 
 <div id="container">
-    <h1>編輯賽事</h1>
+    <h1>新增賽事</h1>
     <form class="editForm" name="form1" onsubmit="checkForm(); return false;">
-        <input type="hidden" name="sid" value="<?= $row['sid'] ?>">
         <div class="form-group">
             <label for="sports_type_cat">選擇賽別</label>
             <select class="form-control" id="sports_type_cat" name="sports_type_cat">
@@ -63,27 +62,27 @@ if (empty($row)) {
         </div>
         <div class="form-group">
             <label for="sports_game_one">賽事階段</label>
-            <input type="text" class="form-control" id="sports_game_one" name="sports_game_one" required placeholder="請輸入中文名稱" value="<?= htmlentities($row['gameStatus']) ?>">
+            <input type="text" class="form-control" id="sports_game_one" name="sports_game_one" required placeholder="請輸入中文名稱">
             <small id="sports_type_game_one_help" class="form-text text-muted"></small>
         </div>
         <div class="form-group">
             <label for="sports_game_time">比賽時間</label>
-            <input type="date" class="form-control" id="sports_game_time" name="sports_game_time" value="<?= htmlentities($row['gameTime']) ?>" required>
+            <input type="date" class="form-control" id="sports_game_time" name="sports_game_time" required>
             <small id="" class="form-text text-muted"></small>
         </div>
         <div class="form-group">
             <label for="sports_game_p1">對手1</label>
-            <input type="text" class="form-control" id="sports_game_p1" name="sports_game_p1" value="<?= htmlentities($row['player1']) ?>">
+            <input type="text" class="form-control" id="sports_game_p1" name="sports_game_p1">
             <small id="" class="form-text text-muted"></small>
         </div>
         <div class="form-group">
             <label for="sports_game_p2">對手2</label>
-            <input type="text" class="form-control" id="sports_game_p2" value="<?= htmlentities($row['player2']) ?>" name="sports_game_p2">
+            <input type="text" class="form-control" id="sports_game_p2" name="sports_game_p2">
             <small id="" class="form-text text-muted"></small>
         </div>
         <div class="form-group">
             <label for="sports_game_stadium">場地</label>
-            <input type="text" class="form-control" id="sports_game_stadium" name="sports_game_stadium" value="<?= htmlentities($row['gameStadium']) ?>">
+            <input type="text" class="form-control" id="sports_game_stadium" name="sports_game_stadium">
             <small id="" class="form-text text-muted"></small>
         </div>
 
@@ -92,7 +91,7 @@ if (empty($row)) {
 </div>
 
 <script>
-    //賽別名稱與選擇盃賽的下拉選單 TODO:
+    //賽別名稱與選擇盃賽的下拉選單
     let data;
     const sportsDict = {};
     const sportsCat = document.querySelector('#sports_type_cat');
@@ -102,15 +101,11 @@ if (empty($row)) {
         putInCat()
         putInGame()
     });
-    let thisCat = <?= $row['rank']; ?>;
+    let thisCat = 1;
 
     function putInCat() {
         data.forEach((ar) => {
-            let selected = "";
-            if (ar.sid == thisCat) { //判斷這筆資料是哪個需要selected
-                selected = "selected"
-            }
-            sportsCat.innerHTML += `<option id=sportsCat${ar.sid} ${selected} value=${ar.sid}>${ar.name}</option>`
+            sportsCat.innerHTML += `<option id=sportsCat${ar.sid} value=${ar.sid}>${ar.name}</option>`
         });
     };
 
@@ -118,11 +113,7 @@ if (empty($row)) {
         data.forEach((ar) => {
             if (ar.sid == thisCat) {
                 ar.nodes.forEach(element => {
-                    let selected = "";
-                    if (element.name == "<?= $row['name']; ?>") { //判斷這筆資料是哪個需要selected
-                        selected = "selected"
-                    }
-                    sportsGame.innerHTML += `<option id=sportsCat${element.sid}  ${selected} value=${element.sid}>${element.name}</option>`
+                    sportsGame.innerHTML += `<option id=sportsCat${element.sid}  value=${element.sid}>${element.name}</option>`
                 });
             }
         });
@@ -146,7 +137,7 @@ if (empty($row)) {
         //送出表單（如果上述檢驗正確）
         if (isPass) {
             const fd = new FormData(document.form1);
-            fetch('033-leo-sports-game-editApi.php', {
+            fetch('033-leo-sports-game-createApi.php', {
                     method: 'POST',
                     body: fd
                 })

@@ -1,6 +1,6 @@
 <?php
 include __DIR__ . '/partials/init.php';
-$title = '賽事類別搜尋';
+$title = '賽事搜尋';
 $activeLi = 'leo';
 
 // leo 程式
@@ -8,7 +8,7 @@ $activeLi = 'leo';
 //抓到用戶搜尋的關鍵字
 $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : "";
 if (empty($keyword)) {
-    header('Location: 033-leo-sports-type.php');
+    header('Location: 033-leo-sports-game.php');
     exit;
 }
 
@@ -21,7 +21,10 @@ $perpage = 5;
 $howManyList = 0;
 //算出總共總資料總共幾頁
 
-$howManyList = $pdo->query("SELECT count(1) FROM sportsType  where `rank`>0 AND `name` LIKE '%$keyword%'")
+$howManyList = $pdo->query("SELECT count(1),`sportsGame`.*, `sportsType`.`name`
+FROM `sportsGame`
+JOIN `sportsType`
+    ON `sportsGame`.`gameName` = `sportsType`.`sid` AND `Name` LIKE '%$keyword%'")
     ->fetchAll(); //拿到總共幾筆資料的statement
 
 
@@ -43,7 +46,10 @@ $rowLimitStart = ($page - 1) * $perpage; //每一頁第一筆
 //     exit;
 // }
 
-$rows = $pdo->query("SELECT * FROM sportsType where `rank`>0 AND `name` LIKE '%$keyword%' LIMIT $rowLimitStart,$perpage")
+$rows = $pdo->query("SELECT `sportsGame`.*, `sportsType`.`name`
+FROM `sportsGame`
+JOIN `sportsType`
+    ON `sportsGame`.`gameName` = `sportsType`.`sid` AND `name` LIKE '%$keyword%' LIMIT $rowLimitStart,$perpage")
     ->fetchAll();
 
 $qs['keyword'] = $keyword;
@@ -57,10 +63,10 @@ $qs['keyword'] = $keyword;
 <!-- leo nav -->
 <ul class="nav nav-tabs mt-4 pl-5 pr-5">
     <li class="nav-item">
-        <a class="nav-link active" href="#">賽事類別</a>
+        <a class="nav-link " href="#">賽事類別</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="#">賽事</a>
+        <a class="nav-link active" href="#">賽事</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="#">球場類別</a>
@@ -71,14 +77,14 @@ $qs['keyword'] = $keyword;
 </ul>
 
 <div id="container">
-    <h1>賽事類別搜尋</h1>
+    <h1>賽事類別</h1>
     <div class="button_warp">
 
         <div class="button_warp_search">
-            <form action="033-leo-sports-type-search.php">
+            <form action="033-leo-sports-game-search.php">
                 <input class="form-control" type="" placeholder="請輸入盃賽關鍵字" name="keyword" value="<?= htmlentities($keyword) ?>">
                 <button type="submit" class="btn btn-secondary">搜尋</button>
-                <a href="033-leo-sports-type.php" class="btn btn-outline-secondary">取消搜尋</a>
+                <a href="033-leo-sports-game.php" class="btn btn-outline-secondary">取消搜尋</a>
 
             </form>
         </div>
@@ -89,6 +95,10 @@ $qs['keyword'] = $keyword;
         <thead class=" thead-dark">
             <tr>
                 <th scope="col">盃賽名稱</th>
+                <th scope="col">階段</th>
+                <th scope="col">比賽時間</th>
+                <th scope="col">對手</th>
+                <th scope="col">比賽場地</th>
                 <th scope="col">編輯</th>
                 <th scope="col">刪除</th>
             </tr>
@@ -97,8 +107,12 @@ $qs['keyword'] = $keyword;
             <?php foreach ($rows as $r) : ?>
                 <tr>
                     <td><?= $r['name'] ?></td>
-                    <td><a class="btn btn-secondary" href="033-leo-sports-type-game-edit.php?sid=<?= $r['sid'] ?>">編輯</a></td>
-                    <td><a href="033-leo-sports-type-deleteApi.php?sid=<?= $r['sid'] ?>" class="btn btn-danger">刪除</a></td>
+                    <td><?= $r['gameStatus'] ?></td>
+                    <td><?= $r['gameTime'] ?></td>
+                    <td><?= $r['player1'] ?> vs <?= $r['player2'] ?></td>
+                    <td><?= $r['gameStadium'] ?></td>
+                    <td><a class="btn btn-info" href="033-leo-sports-game-edit.php?sid=<?= $r['sid'] ?>">編輯</a></td>
+                    <td><a href="033-leo-sports-game-deleteApi.php?sid=<?= $r['sid'] ?>" class="btn btn-danger">刪除</a></td>
                 </tr>
             <?php endforeach; ?>
         </tbody>

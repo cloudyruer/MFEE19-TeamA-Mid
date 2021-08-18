@@ -18,14 +18,19 @@ $stmt2 = $pdo->prepare($sql2);
 $stmt2->execute([$_POST['account']]);
 $m = $stmt2->fetch();
 
-
-
-if (($_POST['account']) === ($m['account'])) {
+if ($m !== false) {
     $output['error'] = '帳號已經用了！';
     $output['code'] = 400;
     echo json_encode($output, JSON_UNESCAPED_UNICODE);
     exit; // 直接離開 (中斷) 程式
 }
+
+// if (($_POST['account']) === ($m['account'])) {
+//     $output['error'] = '帳號已經用了！';
+//     $output['code'] = 400;
+//     echo json_encode($output, JSON_UNESCAPED_UNICODE);
+//     exit; // 直接離開 (中斷) 程式
+// }
 
 if (mb_strlen($_POST['account']) < 2) {
     $output['error'] = '姓名長度太短';

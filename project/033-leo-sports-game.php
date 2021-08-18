@@ -4,11 +4,10 @@ $title = '賽事列表';
 $activeLi = 'leo';
 
 // leo 程式
-
 // 搜尋功能 TODO:
 $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : "";
 if (!empty($keyword)) {
-    header('Location: 033-leo-sports-type-search.php?keyword=' . $keyword);
+    header('Location: 033-leo-sports-game-search.php?keyword=' . $keyword);
     exit;
 }
 
@@ -41,8 +40,6 @@ if ($sportsCat == 0) {
     $howManyList = $pdo->query("SELECT count(1),`sportsGame`.*, `sportsType`.`name`, `sportsType`.`rank`FROM `sportsType` JOIN `sportsGame` ON `sportsGame`.`gameName` = `sportsType`.`sid` where `rank`=$sportsCat")
         ->fetchAll(); //拿到總共幾筆資料的statement
 }
-
-
 
 $totalList = $howManyList[0]["count(1)"]; //拿到總共幾筆資料的值
 
@@ -103,7 +100,7 @@ if ($sportsCat == 0) {
     <h1>賽事列表</h1>
     <div class="button_warp">
         <div>
-            <a class="btn btn-primary" href="./033-leo-sports-type-cat.php">新增賽事</a>
+            <a class="btn btn-primary" href="./033-leo-sports-game-create.php">新增賽事</a>
         </div>
         <div class="button_warp_search">
             <form>
@@ -114,9 +111,9 @@ if ($sportsCat == 0) {
     </div>
     <div class="typeWarp">
         <nav class="nav nav-pills">
-            <a class="nav-link" id="type0" href="?cat=0">全部</a>
+            <a class="nav-link" id="type0" href="?cat=0&page=1">全部</a>
             <?php foreach ($allSprtsCat as $r) : ?>
-                <a class="nav-link" id="type<?= $r['sid'] ?>" href="?cat=<?= $r['sid'] ?>"><?= $r['name'] ?></a>
+                <a class="nav-link" id="type<?= $r['sid'] ?>" href="?cat=<?= $r['sid'] ?>&page=1"><?= $r['name'] ?></a>
             <?php endforeach; ?>
         </nav>
     </div>
