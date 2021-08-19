@@ -120,7 +120,7 @@ if($totalRows!==0){
             <input type="text" class="qty text-center" width="20" value="0" size=5>
             <div class="add" id="btnMing">+</div>
           </div>
-          <div class="stock_tip my-2">
+          <div class="stock_tip my-2 displayHidden">
             此商品已售罄，限量是殘酷的！
           </div>
           <button type="button" class="btn btn-primary add-to-cart-btn"><i class="fas fa-cart-plus"></i></button>
@@ -145,17 +145,23 @@ if($totalRows!==0){
       if(num == 0) {
         //數量不能<0
         $(".qty").val(num);
-        
+        stock_tip()
       } else {
         num --;
         $(".qty").val(num);
-        
+        stock_tip()
       }
     });
     $(".add").click(()=> {
-      num++;
-      $(".qty").val(num);
-      stock_tip()
+      if(num == stock) {
+        $(".qty").val(num);
+        stock_tip()
+      } else {
+        num ++;
+        $(".qty").val(num);
+        stock_tip()
+      }
+      
     });
 
     $('.qty').change(()=> {
@@ -165,9 +171,13 @@ if($totalRows!==0){
 
     function stock_tip() {
       if (stock == 0) {
-        $('.stock_tip').addClass('displayHidden')
+        $('.stock_tip').removeClass('displayHidden')
       } else if (stock == +$(".qty").val()) {
+        $('.stock_tip').removeClass('displayHidden')
         $('.stock_tip').text('已達購買上限')
+      } else {
+        $('.stock_tip').addClass('displayHidden')
+        $('.stock_tip').text(' ')
       }
     } 
     stock_tip()
