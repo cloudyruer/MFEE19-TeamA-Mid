@@ -115,10 +115,9 @@ if ($totalRows !== 0) {
         <img src="imgs/<?= $r['product_img'] ?>.jpg" alt="">
         <p><?= $r['product_name'] ?></p>
         <p>$<?= $r['product_price'] ?></p>
-        <p>還剩 <span class="stock"><?= $r['stock'] ?></span> 雙</p>
+        <p>還剩 <span id="stock_productNumber<?= $r['sid'] ?>" id="stock<?= $r['sid'] ?>"><?= $r['stock'] ?></span> 雙</p>
         <form>
           <div class="form-group d-flex justify-content-around">
-
             <div class="minus" id="btnMing" data-productNumber="productNumber<?= $r['sid'] ?>">-</div>
             <input type="text" class="qty text-center" width="20" value="0" size=5 id="productNumber<?= $r['sid'] ?>">
             <div class="add" id="btnMing" data-productNumber="productNumber<?= $r['sid'] ?>">+</div>
@@ -142,60 +141,46 @@ if ($totalRows !== 0) {
   });
 
   let num = +$('.qty').val();
-  const stock = +$('.stock').text();
-
-
+  let stock = ''
+  // let stock;
 
 
   $(".minus").click(function minus() {
-    console.log(this.dataset.productnumber);
-    let = thisValue = this.dataset.productnumber
+    console.log(this.dataset.productumber);
+    let thisValue = this.dataset.productnumber
+    let stockId = "stock_" + thisValue
+    console.log(stockId);
+    stock = "#" + stockId.innertext;
+    console.log(stock);
+    stock += th
     if (num == 0) {
       //數量不能<0
-      $("#" + thisValue + ".qty").val(num);
+      $("#" + thisValue).val(num);
       stock_tip()
     } else {
       num--;
-      $("#" + thisValue + ".qty").val(num);
+      $("#" + thisValue).val(num);
       stock_tip()
     }
   });
   $(".add").click(function add() {
     console.log(this.dataset.productnumber);
-    let = thisValue = this.dataset.productnumber
+    let thisValue = this.dataset.productnumber
+    let stockId = "stock_" + thisValue
+    console.log(stockId);
+
+    stock = +$("#" + stockId).val();
+    console.log(stock);
+    // stock = this.dataset.stock
     if (num == stock) {
-      $("#" + thisValue + ".qty").val(num);
+      $("#" + thisValue).val(num);
       stock_tip()
     } else {
       num++;
-      $("#" + thisValue + ".qty").val(num);
+      $("#" + thisValue).val(num);
       stock_tip()
     }
   });
-
-  // $(".minus").click(() => {
-  //   if (num == 0) {
-  //     //數量不能<0
-  //     $(".qty").val(num);
-  //     stock_tip()
-  //   } else {
-  //     num--;
-  //     $(".qty").val(num);
-  //     stock_tip()
-  //   }
-  // });
-  // $(".add").click(() => {
-  //   if (num == stock) {
-  //     $(".qty").val(num);
-  //     stock_tip()
-  //   } else {
-  //     num++;
-  //     $(".qty").val(num);
-  //     stock_tip()
-  //   }
-
-  // });
-
   $('.qty').change(() => {
     num = $(".qty").val();
     $(".qty").val(num);
@@ -209,7 +194,7 @@ if ($totalRows !== 0) {
       $('.stock_tip').text('已達購買上限')
     } else {
       $('.stock_tip').addClass('displayHidden')
-      $('.stock_tip').text(' ')
+      $('.stock_tip').text('你看不到我')
     }
   }
   stock_tip()
@@ -221,6 +206,7 @@ if ($totalRows !== 0) {
   const btn = $('.add-to-cart-btn');
 
   btn.click(function() {
+
     const sid = $(this).closest('.product-unit').attr('data-sid');
 
     const qty = $(this).closest('.product-unit').find('.qty').val();
