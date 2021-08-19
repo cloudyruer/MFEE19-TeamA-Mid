@@ -58,6 +58,12 @@ if ($totalRows != 0) {
 <?php include __DIR__ . '/partials/html-head.php'; ?>
 <?php include __DIR__ . '/partials/navbar.php'; ?>
 <style>
+    .navbar_avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover
+    }
     table tbody i.fas.fa-trash-alt {
         color: darkred;
     }

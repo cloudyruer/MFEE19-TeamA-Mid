@@ -83,10 +83,29 @@ if ($totalRows != 0) {
 <?php include __DIR__ . '/partials/html-head.php'; ?>
 <?php include __DIR__ . '/partials/navbar.php'; ?>
 <style>
+    .navbar_avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover
+    }
     .basic_container {
         width: 100%;
     }
+    .orders_amount {
+        font-size: 2rem;
+    }
 
+    .ranking_img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover
+    }
+
+    .ranking_text {
+        font-size: 1.5rem;
+    }
     .mypage_outsidebar {
         width: 30%;
 

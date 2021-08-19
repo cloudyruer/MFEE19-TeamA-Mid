@@ -14,6 +14,7 @@ $output = [
 // 資料格式檢查
 if(mb_strlen($_POST['account'])<2){
     $output['error'] = '姓名長度太短';
+    // $output['errors'] = header('Location: index_.php');
     $output['code'] = 410;
     echo json_encode($output);
     exit;
@@ -21,6 +22,7 @@ if(mb_strlen($_POST['account'])<2){
 
 if(! filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
     $output['error'] = 'email 格式錯誤';
+    // $output['errors'] = header('Location: index_.php');
     $output['code'] = 420;
     echo json_encode($output);
     exit;

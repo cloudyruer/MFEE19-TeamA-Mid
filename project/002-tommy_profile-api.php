@@ -13,7 +13,7 @@ header('Content-Type: application/json');
 // var_dump($m);
 
 // 要存放圖檔的資料夾
-
+$folder = __DIR__ . '/imgs/';
 // 允許的檔案類型
 $imgTypes = [
     'image/jpeg' => '.jpg',

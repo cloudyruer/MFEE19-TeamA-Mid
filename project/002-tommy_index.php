@@ -31,17 +31,37 @@ if (empty($r)) {
 <?php include __DIR__ . '/partials/navbar.php'; ?>
 
 <style>
+    .navbar_avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover
+    }
     .basic_container {
         width: 100%;
+    }
+    .orders_amount {
+        font-size: 2rem;
+    }
+    .ranking_img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover
+    }
+    .ranking_text {
+        font-size: 1.5rem;
     }
 
     .mypage_outsidebar {
         width: 30%;
+        
 
     }
 
     .mypage_insidebar {
         border: 1px solid black;
+        border-radius: 10px;
         width: 100%;
         height: 300px;
     }
@@ -49,8 +69,17 @@ if (empty($r)) {
     .mypage_main {
         border: 1px solid black;
         width: 65%;
-        height: 752px;
+        border-radius: 10px;
     }
+    .avatar {
+
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        object-fit: cover
+
+    }
+
 </style>
 <!-- <li class="nav-item">
     <?php if (!empty($_SESSION['user']['avatar'])) : ?>
@@ -74,13 +103,13 @@ if (empty($r)) {
                             <label for="avatar">大頭貼</label>
                             <input type="file" class="form-control" id="avatar" name="avatar" accept="image/*" onchange="readURL(this)" targetID="preview_img">
                             <!-- <input type="text" class="form-control" id="clean" name="clean"?>"> -->
-                            <a href=""></a>
+                            <!-- <a href=""></a> -->
                             <?php if (empty($r['avatar'])) : ?>
                                 <!-- 預設的大頭貼 -->
-                                <img id="preview_img" src="./imgs/default_avatar.jpeg" alt="" width="300px">
+                                <img class="avatar mt-3" id="preview_img" src="./imgs/default_avatar.jpeg" alt="" >
                             <?php else : ?>
                                 <!-- 顯示原本的大頭貼 -->
-                                <img id="preview_img" src="imgs/<?= $r['avatar'] ?>" alt="" width="300px">
+                                <img class="avatar mt-3" id="preview_img" src="imgs/<?= $r['avatar'] ?>" alt="" >
                             <?php endif; ?>
 
                         </div>
@@ -95,12 +124,12 @@ if (empty($r)) {
                             <small class="form-text "></small>
                         </div>
                         <div class="form-group">
-                            <label for="password_o">原密碼</label>
+                            <label for="password_o">原密碼(密碼對了才能改檔案內容喔！)</label>
                             <input type="text" class="form-control" id="password_o" name="password_o">
                             <small class="form-text "></small>
                         </div>
                         <div class="form-group">
-                            <label for="password">新密碼</label>
+                            <label for="password">新密碼(如沒有要更改密碼，請填原密碼)</label>
                             <input type="text" class="form-control" id="password" name="password">
                             <small class="form-text "></small>
                         </div>
