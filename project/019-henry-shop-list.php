@@ -3,6 +3,7 @@ include __DIR__ . "/partials/init.php";
 $title = "購物清單";
 
 if (!isset($_SESSION["user"])) {
+  
   echo '<script type="text/javascript">';
   echo ' alert("請先登入會員")';  
   echo '</script>';

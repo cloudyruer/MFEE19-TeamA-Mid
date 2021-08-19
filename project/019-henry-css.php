@@ -15,6 +15,7 @@
       background: #fff;
       padding: 8px 16px;
       margin-left: 10px;
+      cursor: pointer;
     }
     #btnMing:hover {
       text-decoration: none;
@@ -34,5 +35,11 @@
     }
      #btnMing.product_edit {
       display: hidden;
+    }
+    .stock_tip {
+      color:red;
+    }
+    .displayHidden {
+      visibility:hidden;
     }
 </style>

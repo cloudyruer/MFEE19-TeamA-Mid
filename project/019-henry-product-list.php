@@ -112,16 +112,18 @@ if($totalRows!==0){
         <img src="imgs/<?= $r['product_img'] ?>.jpg" alt="">
         <p><?= $r['product_name'] ?></p>
         <p>$<?= $r['product_price'] ?></p>
-        <p>還剩 <?= $r['stock'] ?> 雙</p>
+        <p>還剩 <span class="stock"><?= $r['stock'] ?></span> 雙</p>
         <form>
-          <div class="form-group">
-              <select class="form-control qty" style="display: inline-block; width: auto">
-                  <?php for($i=1; $i<=10; $i++){ ?>
-                  <option value="<?= $i ?>"><?= $i ?></option>
-                  <?php } ?>
-              </select>
-              <button type="button" class="btn btn-primary add-to-cart-btn"><i class="fas fa-cart-plus"></i></button>
+          <div class="form-group d-flex justify-content-around">
+            
+            <div class="minus" id="btnMing">-</div>
+            <input type="text" class="qty text-center" width="20" value="0" size=5>
+            <div class="add" id="btnMing">+</div>
           </div>
+          <div class="stock_tip my-2">
+            此商品已售罄，限量是殘酷的！
+          </div>
+          <button type="button" class="btn btn-primary add-to-cart-btn"><i class="fas fa-cart-plus"></i></button>
         </form>
       </div>
     <?php endforeach;?>
@@ -130,6 +132,50 @@ if($totalRows!==0){
 
 <?php include __DIR__ . "/019-henry-scripts.php"; ?>
 <script>
+    // 數量欄位限制輸入數字
+    $(".qty").keyup(function () {
+      let num = /^\d+(\.\d{0,})?$/g;
+      if (!num.test(this.value)) this.value = "";
+    });
+
+    let num = +$('.qty').val();
+    const stock = +$('.stock').text();
+
+    $(".minus").click(()=> {
+      if(num == 0) {
+        //數量不能<0
+        $(".qty").val(num);
+        
+      } else {
+        num --;
+        $(".qty").val(num);
+        
+      }
+    });
+    $(".add").click(()=> {
+      num++;
+      $(".qty").val(num);
+      stock_tip()
+    });
+
+    $('.qty').change(()=> {
+      num = $(".qty").val();
+      $(".qty").val(num);
+    })
+
+    function stock_tip() {
+      if (stock == 0) {
+        $('.stock_tip').addClass('displayHidden')
+      } else if (stock == +$(".qty").val()) {
+        $('.stock_tip').text('已達購買上限')
+      }
+    } 
+    stock_tip()
+
+    
+    
+    
+
     const btn = $('.add-to-cart-btn');
 
     btn.click(function() {
