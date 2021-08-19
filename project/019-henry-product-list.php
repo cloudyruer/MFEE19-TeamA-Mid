@@ -115,7 +115,6 @@ if($totalRows!==0){
         <p>還剩 <span class="stock"><?= $r['stock'] ?></span> 雙</p>
         <form>
           <div class="form-group d-flex justify-content-around">
-            
             <div class="minus" id="btnMing">-</div>
             <input type="text" class="qty text-center" width="20" value="0" size=5>
             <div class="add" id="btnMing">+</div>
@@ -177,7 +176,7 @@ if($totalRows!==0){
         $('.stock_tip').text('已達購買上限')
       } else {
         $('.stock_tip').addClass('displayHidden')
-        $('.stock_tip').text(' ')
+        $('.stock_tip').text('你看不到我')
       }
     } 
     stock_tip()
