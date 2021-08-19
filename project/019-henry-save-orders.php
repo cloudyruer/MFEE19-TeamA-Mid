@@ -53,12 +53,7 @@ unset($_SESSION['cart']); // 清除購物車內容
 <?php include __DIR__ . '/partials/html-head.php';?>
 <?php include __DIR__ . '/partials/navbar.php';?>
 
-<div class="container">
-    <div class="alert alert-success" role="alert">
-        感謝訂購 <?= $order_sid ?>
-    </div>
 
-</div>
 <?php include __DIR__ . "/019-henry-scripts.php"; ?>
 
 <?php include __DIR__ . '/partials/html-foot.php'; ?>

@@ -2,18 +2,15 @@
 include __DIR__ . "/partials/init.php";
 $title = "購物清單";
 
-if (!isset($_SESSION["user"])) {
-  echo '<script type="text/javascript">';
-  echo ' alert("請先登入會員")';  
-  echo '</script>';
-  header("Location: login.php"); //如果沒登入沒辦法看到自己的購物清單
+if ($_SESSION["user"]['account'] !== 'pikachu') {
+  header("Location: 019-henry-product-list.php"); //只允許皮卡丘進入
   exit();
 }
 
 
-// -----------------------只能看到自己的訂單----------------------------//
-$sid = isset($_SESSION['user']['id']) ? intval($_SESSION['user']['id']) : 0;
-$sql = "SELECT * FROM `order_list` WHERE `user_id`= $sid";
+
+
+$sql = "SELECT * FROM `product_list` WHERE 1";
 $rows = $pdo->query($sql)->fetchALL(); 
 
 
@@ -44,13 +41,14 @@ $rows = $pdo->query($sql)->fetchALL();
       <table class="table table-striped table-bordered">
         <thead>
           <tr>
-            <th scope="col">刪除訂單</i></th>
-            <th scope="col">訂單編號</th>
-            <th scope="col">訂購人姓名</th>
-            <th scope="col">訂單金額</th>
-            <th scope="col">訂單狀態</th>
-            <th scope="col">取貨方式</th>
-            <th scope="col">取貨門市</th>
+            <th scope="col">刪除商品</i></th>
+            <th scope="col">商品序</i></th>
+            <th scope="col">商品圖片</th>
+            <th scope="col">品名</th>
+            <th scope="col">分類</i></th>
+            <th scope="col">品牌</th>
+            <th scope="col">價格</th>
+            <th scope="col">庫存</th>
             <th scope="col"><i class="fas fa-edit"></i></th>
           </tr>
         </thead>
@@ -69,13 +67,16 @@ $rows = $pdo->query($sql)->fetchALL();
               <!-- 避免被XSS攻擊，htmlentities比較好，直接顯示原始輸入資料，後續有法律問題可當作證據。此法有使用跳脫字元 -->
               <!-- <td><?= $r['name'] ?></td> -->
               <td><?= $r['sid'] ?></td>
-              <td><?= htmlentities($r['user_name']) ?></td>
-              <td><?= htmlentities($r['grand_total']) ?></td>
-              <td><?= htmlentities($r['order_status']) ?></td>
-              <td><?= htmlentities($r['pickup_way']) ?></td>
-              <td><?= htmlentities($r['pickup_store']) ?></td>
+              <td><img src="imgs/<?= htmlentities($r['product_img']) ?>.jpg" alt=""></td>
+              <td><?= htmlentities($r['product_name']) ?></td>
+              <td><?= htmlentities($r['category_id']) ?></td>
+              <td><?= htmlentities($r['product_brand']) ?></td>
+              
+              <td><?= htmlentities($r['product_price']) ?></td>
+              <td><?= htmlentities($r['stock']) ?></td>
+              
               <td>
-                <a href="data-edit.php?sid=<?= $r['sid'] ?>">
+                <a href="019-henry-product-edit.php?sid=<?= $r['sid'] ?>">
                   <i class="fas fa-edit"></i>
                 </a>
               </td>
@@ -91,7 +92,7 @@ $rows = $pdo->query($sql)->fetchALL();
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">退訂確認</h5>
+        <h5 class="modal-title" id="exampleModalLabel">刪除確認</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -100,8 +101,8 @@ $rows = $pdo->query($sql)->fetchALL();
         
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary modal-del-btn">忍痛放棄</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">我要保留</button>
+        <button type="button" class="btn btn-primary modal-del-btn">確定</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
       </div>
     </div>
   </div>
@@ -114,7 +115,7 @@ $rows = $pdo->query($sql)->fetchALL();
     // console.log(event.target);
     willDeleteId = event.target.closest('tr').dataset.sid;
     console.log(willDeleteId);
-    modal.find('.modal-body').html(`確定要放棄編號為 ${willDeleteId} 的訂單嗎？`)
+    modal.find('.modal-body').html(`確定要刪除編號為 ${willDeleteId} 的商品嗎？`)
   })
 
   modal.find('.modal-del-btn').on('click',function(event){

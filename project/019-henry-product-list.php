@@ -64,8 +64,9 @@ if($totalRows!==0){
 <div class="container">
   <div class="row my-3" >
     <a href="019-henry-product-list.php" id="btnMing" class="btn_pro-list">產品列表</a>
-    <a href="019-henry-shop-cart-list.php" id="btnMing" class="btn_cargo">購物車 <span class="badge badge-pill badge-info cart-count"></span></a>
+    <a href="019-henry-cargo.php" id="btnMing" class="btn_cargo">購物車 <span class="badge badge-pill badge-info cart-count"></span></a>
     <a href="019-henry-shop-list.php" id="btnMing" class="btn_shop-list">購物清單</a>
+    <a href="019-henry-product-stock.php" id="btnMing" class="product_edit">商品庫存</a>
 
     <div class="col">
       <form action="019-henry-product-list.php" class="form-inline my-2 my-lg-0 d-flex justify-content-end">
@@ -111,6 +112,7 @@ if($totalRows!==0){
         <img src="imgs/<?= $r['product_img'] ?>.jpg" alt="">
         <p><?= $r['product_name'] ?></p>
         <p>$<?= $r['product_price'] ?></p>
+        <p>還剩 <?= $r['stock'] ?> 雙</p>
         <form>
           <div class="form-group">
               <select class="form-control qty" style="display: inline-block; width: auto">

@@ -32,4 +32,7 @@
     form .form-group small, .star {
       color: red;
     }
+     #btnMing.product_edit {
+      display: hidden;
+    }
 </style>
