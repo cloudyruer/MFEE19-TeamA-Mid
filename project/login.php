@@ -38,6 +38,11 @@ if (isset($_SESSION['user'])) {
                         </div>
 
                         <button type="submit" class="btn btn-primary">登入</button>
+                        <!-- Tommy加的 -->
+                        <div class="Tommy_login mt-5">
+                            還沒有註冊嗎？點<a href="./002-tommy_signup.php">這裡</a>註冊
+                        </div>
+                        <!-- Tommy加的 -->
                     </form>
                 </div>
             </div>

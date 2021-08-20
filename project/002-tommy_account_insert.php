@@ -45,7 +45,7 @@ $stmt = $pdo->query($sql);
                         </div>
                         <div class="form-group">
                             <label for="password">password</label>
-                            <input type="text" class="form-control" id="password" name="password">
+                            <input type="password" class="form-control" id="password" name="password">
                             <small class="form-text"></small>
                         </div>
                         <div class="form-group">
@@ -94,28 +94,39 @@ $stmt = $pdo->query($sql);
 <script>
     const email_re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const mobile_re = /^09\d{2}-?\d{3}-?\d{3}$/;
+    const password_re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,15}$/;
 
-    const account = document.querySelector('#account');
+
     const email = document.querySelector('#email');
+    const mobile = document.querySelector('#mobile');
+    const password = document.querySelector('#password');
 
     function checkForm(){
         // 欄位的外觀要回復原來的狀態
-        account.nextElementSibling.innerHTML = '';
-        account.style.border = '1px #CCCCCC solid';
         email.nextElementSibling.innerHTML = '';
         email.style.border = '1px #CCCCCC solid';
+        mobile.nextElementSibling.innerHTML = '';
+        mobile.style.border = '1px #CCCCCC solid';
+        password.nextElementSibling.innerHTML = '';
+        password.style.border = '1px #CCCCCC solid';
 
         let isPass = true;
-        if(account.value.length < 2){
-            isPass = false;
-            account.nextElementSibling.innerHTML = '請填寫正確的帳號名';
-            account.style.border = '1px red solid';
-        }
-
-        if(! email_re.test(email.value)){
+        if (!email_re.test(email.value)) {
             isPass = false;
             email.nextElementSibling.innerHTML = '請填寫正確的 Email 格式';
             email.style.border = '1px red solid';
+        }
+
+        if (!mobile_re.test(mobile.value)) {
+            isPass = false;
+            mobile.nextElementSibling.innerHTML = '請填寫正確的 電話號碼 格式';
+            mobile.style.border = '1px red solid';
+        }
+        if (!password_re.test(password.value)) {
+            isPass = false;
+            password.nextElementSibling.innerHTML = 
+            '密碼必須包含大小寫字母和數字的組合，不能使用特殊字符，長度在6-15之間'
+            password.style.border = '1px red solid';
         }
 
         if(isPass){

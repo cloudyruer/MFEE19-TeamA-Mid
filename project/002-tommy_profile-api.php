@@ -45,6 +45,19 @@ if(!password_verify($_POST['password_o'], $m['password'])){
     echo json_encode($output, JSON_UNESCAPED_UNICODE);
     exit;
 }
+if (mb_strlen($_POST['account']) < 2) {
+    $output['error'] = '姓名長度太短';
+    $output['code'] = 410;
+    echo json_encode($output);
+    exit;
+}
+
+if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+    $output['error'] = 'email 格式錯誤';
+    $output['code'] = 420;
+    echo json_encode($output);
+    exit;
+}
 // 預設是沒有上傳資料，沒有上傳成功
 $isSaved = false;
 

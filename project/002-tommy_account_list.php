@@ -121,7 +121,7 @@ if ($totalRows != 0) {
             <table class="table table-striped table-bordered">
                 <thead>
                     <tr>
-                    <th scope="col"><i class="fas fa-trash-alt"></i></th>
+                        <th scope="col"><i class="fas fa-trash-alt"></i></th>
                         <th scope="col"><i class="fas fa-trash-alt"> ajax</i></th>
                         <th scope="col">id</th>
                         <th scope="col">account</th>

@@ -73,9 +73,9 @@
                         <?php endif;?>
 
                         <?php if (empty($r['avatar'])) : ?>
-                            <img class="navbar_avatar" src="./imgs/default_avatar.jpeg" alt="" width="50px">
+                            <img class="Tommy_navbar_avatar" src="./imgs/default_avatar.jpeg" alt="">
                         <?php else : ?>
-                            <img class="navbar_avatar" src="imgs/<?= $_SESSION['user']['avatar'] ?>" alt="" width="50px">
+                            <img class="Tommy_navbar_avatar" src="imgs/<?= $_SESSION['user']['avatar'] ?>" alt="">
                         <?php endif; ?>
                         <!----------- Tommy改的部分 -------------->
 
