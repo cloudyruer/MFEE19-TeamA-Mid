@@ -26,16 +26,15 @@ if(!empty($pKeys)) {
     exit;
 }
 
-$o_sql = "INSERT INTO `order_list`(`user_id`, `grand_total`,`order_status`,`user_name`,`user_phone`,`user_email`,`user_address`,`pickup_way`,`pickup_store`,`delivery_fee`,`discount`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+$o_sql = "INSERT INTO `order_list`(`user_id`, `grand_total`,`order_status`,`user_name`,`user_phone`,`user_email`,`pickup_store`,`pickup_way`,`user_address`,`created_at`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,NOW())";
 $o_stmt = $pdo->prepare($o_sql);
 $o_stmt->execute([
-    $_SESSION['user']['id'],
-    $total,
+    $_SESSION['user']['id'], $_POST['total'], $_POST['order_status'], $_POST['name'], $_POST['mobile'], $_POST['email'], $_POST['pickup_store'], $_POST['pickup_way'], $_POST['address']
 ]);
 
 $order_sid = $pdo->lastInsertId(); // 最近新增資料的 PK
 
-$od_sql = "INSERT INTO `order_details`(`order_number`, `product_id`, `price`, `quantity`) VALUES (?, ?, ?, ?)";
+$od_sql = "INSERT INTO `order_details`(`order_id`, `user_id`, `user_name`, `product_id`,`unit_price`,`quantity`,`shipping`,`discount`,`total_price`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 $od_stmt = $pdo->prepare($od_sql);
 
 foreach($_SESSION['cart'] as $p_sid=>$qty){
@@ -44,6 +43,7 @@ foreach($_SESSION['cart'] as $p_sid=>$qty){
         $p_sid,
         $data_ar[$p_sid]['price'],
         $qty,
+        //TODO:還要補齊對應欄位
     ]);
 }
 

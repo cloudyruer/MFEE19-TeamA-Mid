@@ -17,7 +17,7 @@ $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
 $page = isset($_GET["page"]) ? intval($_GET["page"]) : 1;
 
 $where = ' WHERE 1 '; //1等同於true 
-if(!empty($keyword)) {
+if (!empty($keyword)) {
   // $where .= "AND `name` LIKE '%{$keyword}%' ";//sql injection 漏洞
   $where .= sprintf("AND `product_name` LIKE %s ", $pdo->quote('%' . $keyword . '%')); //quote可做跳脫
 
@@ -34,7 +34,7 @@ $totalPages = ceil($totalRows / $perPage); //正數 無條件進位
 
 $rows = [];
 //有資料才能讀取該頁的資料
-if($totalRows!==0){
+if ($totalRows !== 0) {
   //讓 $page 的值在安全的範圍
   if ($page < 1) {
     header("Location: ?page=1");
@@ -47,7 +47,8 @@ if($totalRows!==0){
   }
 
   $sql = sprintf(
-    "SELECT * FROM product_list %s ORDER BY sid DESC LIMIT %s, %s", $where,
+    "SELECT * FROM product_list %s ORDER BY sid DESC LIMIT %s, %s",
+    $where,
     ($page - 1) * $perPage,
     $perPage
   ); //降冪：將最新的資料拿到最前面
@@ -62,11 +63,12 @@ if($totalRows!==0){
 <?php include __DIR__ . "/partials/navbar.php"; ?>
 
 <div class="container">
-  <div class="row my-3" >
+  <div class="row my-3">
     <a href="019-henry-product-list.php" id="btnMing" class="btn_pro-list">產品列表</a>
     <a href="019-henry-cargo.php" id="btnMing" class="btn_cargo">購物車 <span class="badge badge-pill badge-info cart-count"></span></a>
     <a href="019-henry-shop-list.php" id="btnMing" class="btn_shop-list">購物清單</a>
-    <a href="019-henry-product-stock.php" id="btnMing" class="product_edit">商品庫存</a>
+    <?php if($_SESSION['user']['account']=='pikachu') {
+    echo "<a href='019-henry-product-stock.php' id='btnMing' class='product_edit'>庫存商品</a>";}?>
 
     <div class="col">
       <form action="019-henry-product-list.php" class="form-inline my-2 my-lg-0 d-flex justify-content-end">
@@ -80,25 +82,27 @@ if($totalRows!==0){
       <nav aria-label="Page navigation example">
         <ul class="pagination d-flex justify-content-end">
           <li class="page-item <?= $page <= 1 ? "disabled" : "" ?>">
-            <a class="page-link" href="?<?php $qs['page']=$page - 1;echo http_build_query($qs) ?>">
+            <a class="page-link" href="?<?php $qs['page'] = $page - 1;
+                                        echo http_build_query($qs) ?>">
               <i class="fas fa-arrow-circle-left"></i>
             </a>
           </li>
-            <?php for ($i = $page - 5; $i <= $page + 5; $i++):
-              if ($i >= 1 and $i <= $totalPages): $qs['page'] = $i;
-            ?>
+          <?php for ($i = $page - 5; $i <= $page + 5; $i++) :
+            if ($i >= 1 and $i <= $totalPages) : $qs['page'] = $i;
+          ?>
               <li class="page-item <?= $i == $page ? "active" : "" ?>">
                 <a class="page-link" href="?<?= http_build_query($qs) ?>"><?= $i ?></a>
               </li>
-            <?php endif;
-            endfor; ?>
-            <!-- <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+          <?php endif;
+          endfor; ?>
+          <!-- <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
               <li class="page-item <?= $i == $page ? "active" : "" ?>">
                   <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
               </li>
             <?php endfor; ?> -->
           <li class="page-item <?= $page >= $totalPages ? "disabled" : "" ?>">
-            <a class="page-link" href="?<?php $qs['page']=$page + 1 ;echo http_build_query($qs)?>">
+            <a class="page-link" href="?<?php $qs['page'] = $page + 1;
+                                        echo http_build_query($qs) ?>">
               <i class="fas fa-arrow-circle-right"></i>
             </a>
           </li>
@@ -107,95 +111,96 @@ if($totalRows!==0){
     </div>
   </div>
   <div class="row justify-content-around">
-    <?php foreach($rows as $r): ?>
+    <?php foreach ($rows as $r) : ?>
       <div class="col-md-3 product-unit" data-sid="<?= $r['sid'] ?>">
         <img src="imgs/<?= $r['product_img'] ?>.jpg" alt="">
         <p><?= $r['product_name'] ?></p>
         <p>$<?= $r['product_price'] ?></p>
-        <p>還剩 <span class="stock"><?= $r['stock'] ?></span> 雙</p>
+        <p>還剩 <span id="stock_productNumber<?= $r['sid'] ?>" id="stock<?= $r['sid'] ?>"><?= $r['stock'] ?></span> 雙</p>
         <form>
           <div class="form-group d-flex justify-content-around">
-            <div class="minus" id="btnMing">-</div>
-            <input type="text" class="qty text-center" width="20" value="0" size=5>
-            <div class="add" id="btnMing">+</div>
+            <div class="minus" id="btnMing" data-productNumber="productNumber<?= $r['sid'] ?>">-</div>
+            <input type="text" class="qty text-center" width="20" value="0" size=5 id="productNumber<?= $r['sid'] ?>">
+            <div class="add" id="btnMing" data-productNumber="productNumber<?= $r['sid'] ?>">+</div>
           </div>
-          <div class="stock_tip my-2 displayHidden">
-            此商品已售罄，限量是殘酷的！
-          </div>
+          <div id="tip_productNumber<?= $r['sid'] ?>" class="my-2 stock_tip <?php if ($r['stock'] != 0) {echo "visibilityHidden";} ?>">此商品已售罄，限量是殘酷的！</div>
           <button type="button" class="btn btn-primary add-to-cart-btn"><i class="fas fa-cart-plus"></i></button>
         </form>
       </div>
-    <?php endforeach;?>
+    <?php endforeach; ?>
   </div>
 </div>
 
 <?php include __DIR__ . "/019-henry-scripts.php"; ?>
 <script>
-    // 數量欄位限制輸入數字
-    $(".qty").keyup(function () {
-      let num = /^\d+(\.\d{0,})?$/g;
-      if (!num.test(this.value)) this.value = "";
-    });
+  // 數量欄位限制輸入數字
+  $(".qty").keyup(function() {
+    let number = /^\d+(\.\d{0,})?$/g;
+    if (!number.test(this.value)) this.value = "";
+  });
 
-    let num = +$('.qty').val();
-    const stock = +$('.stock').text();
+  let stock,stockId,input,inputId,tipId 
+  
+  $(".minus").click(function minus() {
+    inputId = this.dataset.productnumber
+    input = +$('#'+inputId).val()
+    if (input === 0) {
+      //數量不能<0
+      $("#" + inputId).val(input);
+      stock_tip()
+    } else {
+      input--;
+      $("#" + inputId).val(input);
+      stock_tip()
+    }
+  });
 
-    $(".minus").click(()=> {
-      if(num == 0) {
-        //數量不能<0
-        $(".qty").val(num);
-        stock_tip()
-      } else {
-        num --;
-        $(".qty").val(num);
-        stock_tip()
-      }
-    });
-    $(".add").click(()=> {
-      if(num == stock) {
-        $(".qty").val(num);
-        stock_tip()
-      } else {
-        num ++;
-        $(".qty").val(num);
-        stock_tip()
-      }
-      
-    });
-
-    $('.qty').change(()=> {
-      num = $(".qty").val();
-      $(".qty").val(num);
-    })
-
-    function stock_tip() {
-      if (stock == 0) {
-        $('.stock_tip').removeClass('displayHidden')
-      } else if (stock == +$(".qty").val()) {
-        $('.stock_tip').removeClass('displayHidden')
-        $('.stock_tip').text('已達購買上限')
-      } else {
-        $('.stock_tip').addClass('displayHidden')
-        $('.stock_tip').text('你看不到我')
-      }
-    } 
-    stock_tip()
-
+  $(".add").click(function add() {
+    inputId = this.dataset.productnumber
+    stockId = 'stock_' + inputId
+    tipId = 'tip_' + inputId
     
+    stock = +$('#'+stockId).text()
+    input = +$('#'+inputId).val()
+    if (input === stock) {
+      $("#" + inputId).val(input);
+      stock_tip()
+    } else {
+      input++;
+      $("#" + inputId).val(input);
+      stock_tip()
+    }
+  });
+  // $('.qty').change(() => {
+  //   input = $(".qty").val();
+  //   $(".qty").val(input);
+  // })
+  
+
+  function stock_tip() {
+    if (stock === input) {
+      $('#'+tipId).removeClass('visibilityHidden')
+      $('#'+tipId).text('已達購買上限')
+    } else {
+      $('#'+tipId).addClass('visibilityHidden')
+      $('#'+tipId).text('你看不到我')
+    }
+  }
+  stock_tip()
+
+
+  const btn = $('.add-to-cart-btn');
+
+  btn.click(function() {
+    const sid = $(this).closest('.product-unit').attr('data-sid');
+    const qty = $(this).closest('.product-unit').find('.qty').val();
     
-    
-
-    const btn = $('.add-to-cart-btn');
-
-    btn.click(function() {
-        const sid = $(this).closest('.product-unit').attr('data-sid');
-        
-        const qty = $(this).closest('.product-unit').find('.qty').val();
-
-        $.get('019-henry-add-to-cart-api.php', {sid, qty}, function(data) {
-            countCartObj(data);
-        }, 'json');
-    });
-
+    $.get('019-henry-add-to-cart-api.php', {
+      sid,
+      qty
+    }, function(data) {
+      countCartObj(data);
+    }, 'json');
+  });
 </script>
 <?php include __DIR__ . "/partials/html-foot.php"; ?>

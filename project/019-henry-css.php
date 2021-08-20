@@ -33,13 +33,10 @@
     form .form-group small, .star {
       color: red;
     }
-     #btnMing.product_edit {
-      display: hidden;
-    }
     .stock_tip {
       color:red;
     }
-    .displayHidden {
+    .visibilityHidden {
       visibility:hidden;
     }
 </style>

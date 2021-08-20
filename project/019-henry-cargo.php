@@ -30,7 +30,7 @@ if(!empty($pKeys)) {
                 <thead>
                     <tr>
                         <th scope="col"><i class="fas fa-trash-alt"></i></th>
-                        <th scope="col">商品</th>
+                        <th scope="col">商品圖片</th>
                         <th scope="col">品名</th>
                         <th scope="col">價格</th>
                         <th scope="col">數量</th>
@@ -49,7 +49,7 @@ if(!empty($pKeys)) {
                         <td class="price" data-price="<?= $item['product_price'] ?>"></td>
                         <td>
                             <select class="form-control quantity" data-qty="<?= $item['quantity'] ?>" onchange="changeQty(event)">
-                                <?php for($i=1; $i<=20; $i++): ?>
+                                <?php for($i=1; $i<=100; $i++): ?>
                                     <option value="<?= $i ?>"><?= $i ?></option>
                                 <?php endfor; ?>
                             </select>
@@ -94,17 +94,32 @@ if(!empty($pKeys)) {
                         <small class="form-text"></small>
                     </div>
                     <div class="form-group">
-                        <label for="exampleFormControlSelect1">取件方式 <span class="star">*</span></label>
-                        <select class="form-control" id="exampleFormControlSelect1" name="pickup_way" required>
+                        <label for="pickup_way">取件方式 <span class="star">*</span></label>
+                        <select class="form-control" id="pickup_way" name="pickup_way" required>
                             <option value="" disabled selected>-- 請選擇 --</option>
-                            <option value="貨到付款">貨到付款</option>
+                            <option value="貨到付款">7-11取貨付款</option>
                             <option value="宅配到府">宅配到府</option>
                         </select>
                     </div>
-                    <!-- <div class="form-group">
-                        <label for="exampleFormControlSelect1">取貨門市 </span></label>
-                        <a href="https://emap.pcsc.com.tw/ecmap/default.aspx?eshopparid=899&eshopid=899&eshoppwd=a00013&tempvar=&sid=1&storecategory=3&showtype=1&url=/secure.rakuten.com.tw/checkout/callback">小7門市查詢</a>
-                    </div> -->
+                    <div class="form-group">
+                        <label for="order_status">付款方式 <span class="star">*</span></label>
+                        <select class="form-control" id="order_status" name="order_status" required>
+                            <option value="" disabled selected>-- 請選擇 --</option>
+                            <option value="等待結帳">宅配貨到付款</option>
+                            <option value="已經結帳">ATM轉帳</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="pickup_store">取貨門市 <span class="star">*</span></label>
+                        <select class="form-control" id="pickup_store" name="pickup_store" required>
+                            <option value="" disabled selected>-- 請選擇 --</option>
+                            <option value="板仁門市">板仁門市</option>
+                            <option value="仁金門市">仁金門市</option>
+                            <option value="學央門市">學央門市</option>
+                            <option value="竹盈門市">竹盈門市</option>
+                            <option value="景旭門市">景旭門市</option>
+                        </select>
+                    </div>
                     <button type="submit" class="btn btn-primary">結帳</button>
                     </form>
                 </div>
@@ -121,6 +136,10 @@ if(!empty($pKeys)) {
 </div>
 <?php include __DIR__ . "/019-henry-scripts.php"; ?>
 <script>
+console.log($('#totalGrand').val    ());
+$('#totalGrand').change(function(){
+    console.log($('#totalGrand').text());
+})
 
 const dallorCommas = function(n){
     return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
