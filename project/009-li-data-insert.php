@@ -12,12 +12,6 @@
 
     // $categoriesChild = $pdo->query("SELECT * FROM categories")->fetchAll();
 
-    $categoriesChild1 = $pdo->query("SELECT * FROM categories WHERE `parents_id` = 1")->fetchAll();
-
-    $categoriesChild2 = $pdo->query("SELECT * FROM categories WHERE `parents_id` = 2")->fetchAll();
-
-    $categoriesChild3 = $pdo->query("SELECT * FROM categories WHERE `parents_id` = 3")->fetchAll();
-
 
 
 
@@ -78,21 +72,6 @@
                             <label for="categoriesChild">商品子分類</label>
                             <select class="form-control" id="categoriesChild" name="categoriesChild">
                             <option disabled selected>請選擇</option>
-                            <!-- <?php // if($cmid==1): ?>
-                            <?php foreach($categoriesChild1 as $cc) : ?>
-                            <option value="<?= $cc['id'] ?>"><?= $cc['name'] ?></option>
-                            <?php endforeach; ?>
-                            <?php // endif; ?>
-                            <?php if($cmid==2): ?>
-                            <?php foreach($categoriesChild2 as $cc) : ?>
-                            <option value="<?= $cc['id'] ?>"><?= $cc['name'] ?></option>
-                            <?php endforeach; ?>
-                            <?php endif; ?>
-                            <?php if($cmid==3): ?>
-                            <?php foreach($categoriesChild3 as $cc) : ?>
-                            <option value="<?= $cc['id'] ?>"><?= $cc['name'] ?></option>
-                            <?php endforeach; ?>
-                            <?php endif; ?> -->
                             </select>
                         </div>
 
@@ -186,7 +165,7 @@ $(function() {
                     lv: $('#categoriesMain option:selected').val()
                 },
                 datatype: "json",
-                success: function(resuslt) {
+                success: function(result) {
                     //當第一層回到預設值時，第二層回到預設位置
                     if (result == "") {
                         $('#categoriesChild').val($('option:first').val());

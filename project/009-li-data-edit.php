@@ -14,7 +14,7 @@ $brands = $pdo->query("SELECT * FROM `brands`")->fetchAll();
 
 $categoriesMain = $pdo->query("SELECT * FROM `categories` WHERE `parents_id` = 0")->fetchAll();
 
-$categoriesChild = $pdo->query("SELECT * FROM `categories` WHERE `parents_id` = 1")->fetchAll();
+$categoriesChild = $pdo->query("SELECT * FROM `categories`")->fetchAll();
 
 $sqlImg = "SELECT * FROM `images` WHERE `products_sid` = $sid";
 $images = $pdo->query($sqlImg)->fetch();
@@ -145,6 +145,38 @@ $images = $pdo->query($sqlImg)->fetch();
       URL.revokeObjectURL(output.src) // free memory
     }
   };
+
+  //---------------分類選單溜--------------------
+$(function() {
+        $('#categoriesMain').change(function() {
+            //更動第一層時第二層清空
+            $('#categoriesChild').empty().append("<option value=''>請選擇</option>");
+            var i = 0;
+            $.ajax({
+                type: "GET",
+                url: "009-li-deal.php",
+                data: {
+                    lv: $('#categoriesMain option:selected').val()
+                },
+                datatype: "json",
+                success: function(result) {
+                    //當第一層回到預設值時，第二層要如何顯示之前的預設值呢?
+                    if (result == "") {
+                        $("#categoriesChild").append("<option value='" + result[i]['id'] + "'"  + ">" + result[i]['name'] + "</option>");
+                    }
+                    //依據第一層回傳的值去改變第二層的內容
+                    while (i < result.length) {
+                        $("#categoriesChild").append("<option value='" + result[i]['id'] + "'"  + ">" + result[i]['name'] + "</option>");
+                        i++;
+                    }
+                },
+                error: function(xhr, status, msg) {
+                    console.error(xhr);
+                    console.error(msg);
+                }
+            });
+        });
+    });
 
     function checkForm(){
 

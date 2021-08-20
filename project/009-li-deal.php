@@ -10,7 +10,6 @@ if ($lvnum != 0) {
     $query = "SELECT * FROM categories where parents_id= $lvnum";
     $result = $pdo->query($query)->fetchAll();
     foreach($result as $row) {
-        //關於mysql_fetch_*請參考php.net
         $jarray[] = $row;
     }
 } else {
