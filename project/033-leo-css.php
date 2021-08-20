@@ -6,6 +6,7 @@
     #container {
         max-width: 1080px;
         padding: 20px 20px;
+        margin: auto;
     }
 
     .button_warp {
@@ -70,5 +71,9 @@
 
     a.btn-outline-secondary:hover {
         background-color: white;
+    }
+
+    .infoHidden {
+        display: none;
     }
 </style>

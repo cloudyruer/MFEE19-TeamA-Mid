@@ -8,10 +8,14 @@ $activeLi = 'leo';
 $sid = isset($_GET['sid']) ? intval($_GET['sid']) : 0;
 
 //結合sid撰寫sql的查詢語法
-$sql = "SELECT `sportsGame`.*, `sportsType`.`name`,`sportsType`.`rank`
-    FROM `sportsGame`
-    JOIN `sportsType`
-        ON `sportsGame`.`gameName` = `sportsType`.`sid` WHERE `sportsGame`.`sid`=$sid";
+$sql = "SELECT `sportsGame`.`gameName`, `sportsGame`.`gameStatus`,`sportsGame`.`gameTime`,`sportsGame`.`gameStadium`,`sportsGame`.`player1`,`sportsGame`.`player2`,`sportsType`.`name`, `sportsType`.`rank`, `stadium`.`gymName`, `stadium`.`sid`
+FROM `sportsType` 
+JOIN `sportsGame` 
+ON `sportsGame`.`gameName` = `sportsType`.`sid` 
+JOIN `stadium`
+ON `sportsGame`.`gameStadium` = `stadium`.`sid`
+WHERE `sportsGame`.`sid`=$sid";
+
 
 //以query將sql語法回傳給sql，並取出第一筆資料
 $row = $pdo->query($sql)->fetch();
@@ -22,8 +26,12 @@ if (empty($row)) {
     exit;
 }
 
-
+//去抓球場資料塞在下面的場地下拉選單
+$stadiumRows = $pdo->query("SELECT * from `stadium` ")
+    ->fetchAll();
 ?>
+
+
 <?php include __DIR__ . '/partials/html-head.php'; ?>
 <?php include __DIR__ . '/partials/navbar.php'; ?>
 
@@ -32,23 +40,23 @@ if (empty($row)) {
 <!-- leo nav -->
 <ul class="nav nav-tabs mt-4 pl-5 pr-5">
     <li class="nav-item">
-        <a class="nav-link" href="#">賽事類別</a>
+        <a class="nav-link" href="./033-leo-sports-type.php">賽事類別</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link active" href="#">賽事</a>
+        <a class="nav-link active" href="./033-leo-sports-game.php">賽事</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="#">球場類別</a>
+        <a class="nav-link " href="./033-leo-stadium-type.php">球場類別</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="#">球場</a>
+        <a class="nav-link " href="./033-leo-stadium-list.php">球場</a>
     </li>
 </ul>
 
 <div id="container">
     <h1>編輯賽事</h1>
     <form class="editForm" name="form1" onsubmit="checkForm(); return false;">
-        <input type="hidden" name="sid" value="<?= $row['sid'] ?>">
+        <input type="hidden" name="sid" value="<?= $sid ?>">
         <div class="form-group">
             <label for="sports_type_cat">選擇賽別</label>
             <select class="form-control" id="sports_type_cat" name="sports_type_cat">
@@ -83,10 +91,14 @@ if (empty($row)) {
         </div>
         <div class="form-group">
             <label for="sports_game_stadium">場地</label>
-            <input type="text" class="form-control" id="sports_game_stadium" name="sports_game_stadium" value="<?= htmlentities($row['gameStadium']) ?>">
-            <small id="" class="form-text text-muted"></small>
+            <select class="form-control" id="sports_game_stadium" name="sports_game_stadium">
+                <?php foreach ($stadiumRows as $r) : ?>
+                    <option value="<?= $r["sid"] ?>" <?php if ($r['sid'] == $row['gameStadium']) {
+                                                            echo "selected";
+                                                        }; ?>><?= $r["gymName"] ?></option>
+                <?php endforeach; ?>
+            </select>
         </div>
-
         <button type="submit" class="btn btn-primary">確認新增</button>
     </form>
 </div>

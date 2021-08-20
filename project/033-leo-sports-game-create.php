@@ -3,26 +3,9 @@ include __DIR__ . '/partials/init.php';
 $title = '新增賽事';
 $activeLi = 'leo';
 
-//此段為編輯用
-//抓到前台要修改的資料編號
-// $sid = isset($_GET['sid']) ? intval($_GET['sid']) : 0;
-
-// //結合sid撰寫sql的查詢語法
-// $sql = "SELECT `sportsGame`.*, `sportsType`.`name`,`sportsType`.`rank`
-//     FROM `sportsGame`
-//     JOIN `sportsType`
-//         ON `sportsGame`.`gameName` = `sportsType`.`sid` WHERE `sportsGame`.`sid`=$sid";
-
-// //以query將sql語法回傳給sql，並取出第一筆資料
-// $row = $pdo->query($sql)->fetch();
-
-// //判斷有值跟沒值要執行什麼
-// if (empty($row)) {
-//     header('Location: 033-leo-sports-game.php');
-//     exit;
-// }
-
-
+//去抓球場資料塞在下面的場地下拉選單
+$rows = $pdo->query("SELECT * from `stadium` ")
+    ->fetchAll();
 ?>
 <?php include __DIR__ . '/partials/html-head.php'; ?>
 <?php include __DIR__ . '/partials/navbar.php'; ?>
@@ -32,16 +15,16 @@ $activeLi = 'leo';
 <!-- leo nav -->
 <ul class="nav nav-tabs mt-4 pl-5 pr-5">
     <li class="nav-item">
-        <a class="nav-link" href="#">賽事類別</a>
+        <a class="nav-link" href="./033-leo-sports-type.php">賽事類別</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link active" href="#">賽事</a>
+        <a class="nav-link active" href="./033-leo-sports-game.php">賽事</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="#">球場類別</a>
+        <a class="nav-link " href="./033-leo-stadium-type.php">球場類別</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="#">球場</a>
+        <a class="nav-link " href="./033-leo-stadium-list.php">球場</a>
     </li>
 </ul>
 
@@ -82,10 +65,13 @@ $activeLi = 'leo';
         </div>
         <div class="form-group">
             <label for="sports_game_stadium">場地</label>
-            <input type="text" class="form-control" id="sports_game_stadium" name="sports_game_stadium">
-            <small id="" class="form-text text-muted"></small>
-        </div>
 
+            <select class="form-control" id="sports_game_stadium" name="sports_game_stadium">
+                <?php foreach ($rows as $r) : ?>
+                    <option value="<?= $r["sid"] ?>"><?= $r["gymName"] ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
         <button type="submit" class="btn btn-primary">確認新增</button>
     </form>
 </div>

@@ -30,14 +30,23 @@ $howManyList = 0;
 //算出總共總資料總共幾頁
 if ($sportsCat == 0) {
     //全部的資料
-    $howManyList = $pdo->query(" SELECT count(1),`sportsGame`.*, `sportsType`.`name`
+    $howManyList = $pdo->query(" SELECT count(1),`sportsGame`.*, `sportsType`.`name`, `stadium`.`gymName`
     FROM `sportsGame`
     JOIN `sportsType`
-        ON `sportsGame`.`gameName` = `sportsType`.`sid`;")
+    ON `sportsGame`.`gameName` = `sportsType`.`sid`
+    JOIN `stadium`
+    ON `sportsGame`.`gameStadium` = `stadium`.`sid`;")
         ->fetchAll(); //拿到總共幾筆資料的statement
 } elseif ($sportsCat > 0) {
     //該賽別的資料
-    $howManyList = $pdo->query("SELECT count(1),`sportsGame`.*, `sportsType`.`name`, `sportsType`.`rank`FROM `sportsType` JOIN `sportsGame` ON `sportsGame`.`gameName` = `sportsType`.`sid` where `rank`=$sportsCat")
+    $howManyList = $pdo->query("
+    SELECT count(1),`sportsGame`.*, `sportsType`.`name`, `sportsType`.`rank`, `stadium`.`gymName`
+    FROM `sportsType` 
+    JOIN `sportsGame` 
+    ON `sportsGame`.`gameName` = `sportsType`.`sid` 
+    JOIN `stadium`
+    ON `sportsGame`.`gameStadium` = `stadium`.`sid`
+    where `rank`=$sportsCat")
         ->fetchAll(); //拿到總共幾筆資料的statement
 }
 
@@ -62,14 +71,23 @@ if ($page > $howManyPage) {
 //取出資料庫中的資料
 if ($sportsCat == 0) {
     //全部的資料
-    $rows = $pdo->query("SELECT `sportsGame`.*, `sportsType`.`name`
-    FROM `sportsGame`
+    $rows = $pdo->query("SELECT `sportsGame`.*, `sportsType`.`name`, `stadium`.`gymName`
+    FROM `sportsGame` 
     JOIN `sportsType`
-        ON `sportsGame`.`gameName` = `sportsType`.`sid` LIMIT $rowLimitStart,$perpage;")
+    ON `sportsGame`.`gameName` = `sportsType`.`sid`
+    JOIN `stadium`
+    ON `sportsGame`.`gameStadium` = `stadium`.`sid`
+    LIMIT $rowLimitStart,$perpage;")
         ->fetchAll();
 } elseif ($sportsCat > 0) {
     //該賽別的資料
-    $rows = $pdo->query("SELECT `sportsGame`.*, `sportsType`.`name`, `sportsType`.`rank`FROM `sportsType` JOIN `sportsGame` ON `sportsGame`.`gameName` = `sportsType`.`sid` where `rank`=$sportsCat LIMIT $rowLimitStart,$perpage")
+    $rows = $pdo->query("SELECT `sportsGame`.*, `sportsType`.`name`, `sportsType`.`rank`, `stadium`.`gymName`
+    FROM `sportsType` 
+    JOIN `sportsGame` 
+    ON `sportsGame`.`gameName` = `sportsType`.`sid` 
+    JOIN `stadium`
+    ON `sportsGame`.`gameStadium` = `stadium`.`sid`
+    where `rank`=$sportsCat LIMIT $rowLimitStart,$perpage")
         ->fetchAll();
 }
 
@@ -83,16 +101,16 @@ if ($sportsCat == 0) {
 <!-- leo nav -->
 <ul class="nav nav-tabs mt-4 pl-5 pr-5">
     <li class="nav-item">
-        <a class="nav-link" href="#">賽事類別</a>
+        <a class="nav-link" href="./033-leo-sports-type.php">賽事類別</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link active" href="#">賽事</a>
+        <a class="nav-link active" href="./033-leo-sports-game.php">賽事</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="#">球場類別</a>
+        <a class="nav-link " href="./033-leo-stadium-type.php">球場類別</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="#">球場</a>
+        <a class="nav-link" href="./033-leo-stadium-list.php">球場</a>
     </li>
 </ul>
 
@@ -136,7 +154,7 @@ if ($sportsCat == 0) {
                     <td><?= $r['gameStatus'] ?></td>
                     <td><?= $r['gameTime'] ?></td>
                     <td><?= $r['player1'] ?> vs <?= $r['player2'] ?></td>
-                    <td><?= $r['gameStadium'] ?></td>
+                    <td><?= $r['gymName'] ?></td>
                     <td><a class="btn btn-info" href="033-leo-sports-game-edit.php?sid=<?= $r['sid'] ?>">編輯</a></td>
                     <td><a href="033-leo-sports-game-deleteApi.php?sid=<?= $r['sid'] ?>" class="btn btn-danger">刪除</a></td>
                 </tr>

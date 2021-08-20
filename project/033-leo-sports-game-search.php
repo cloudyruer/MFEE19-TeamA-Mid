@@ -46,10 +46,13 @@ $rowLimitStart = ($page - 1) * $perpage; //每一頁第一筆
 //     exit;
 // }
 
-$rows = $pdo->query("SELECT `sportsGame`.*, `sportsType`.`name`
-FROM `sportsGame`
+$rows = $pdo->query("SELECT `sportsGame`.*, `sportsType`.`name`, `stadium`.`gymName`
+FROM `sportsGame` 
 JOIN `sportsType`
-    ON `sportsGame`.`gameName` = `sportsType`.`sid` AND `name` LIKE '%$keyword%' LIMIT $rowLimitStart,$perpage")
+ON `sportsGame`.`gameName` = `sportsType`.`sid`
+JOIN `stadium`
+ON `sportsGame`.`gameStadium` = `stadium`.`sid`
+LIMIT $rowLimitStart,$perpage;")
     ->fetchAll();
 
 $qs['keyword'] = $keyword;
@@ -63,16 +66,16 @@ $qs['keyword'] = $keyword;
 <!-- leo nav -->
 <ul class="nav nav-tabs mt-4 pl-5 pr-5">
     <li class="nav-item">
-        <a class="nav-link " href="#">賽事類別</a>
+        <a class="nav-link" href="./033-leo-sports-type.php">賽事類別</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link active" href="#">賽事</a>
+        <a class="nav-link active" href="./033-leo-sports-game.php">賽事</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="#">球場類別</a>
+        <a class="nav-link " href="./033-leo-stadium-type.php">球場類別</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="#">球場</a>
+        <a class="nav-link " href="./033-leo-stadium-list.php">球場</a>
     </li>
 </ul>
 
@@ -110,7 +113,7 @@ $qs['keyword'] = $keyword;
                     <td><?= $r['gameStatus'] ?></td>
                     <td><?= $r['gameTime'] ?></td>
                     <td><?= $r['player1'] ?> vs <?= $r['player2'] ?></td>
-                    <td><?= $r['gameStadium'] ?></td>
+                    <td><?= $r['gymName'] ?></td>
                     <td><a class="btn btn-info" href="033-leo-sports-game-edit.php?sid=<?= $r['sid'] ?>">編輯</a></td>
                     <td><a href="033-leo-sports-game-deleteApi.php?sid=<?= $r['sid'] ?>" class="btn btn-danger">刪除</a></td>
                 </tr>
