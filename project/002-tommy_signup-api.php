@@ -25,16 +25,6 @@ if ($m !== false) {
     exit; // 直接離開 (中斷) 程式
 }
 
-<<<<<<< HEAD
-// if (($_POST['account']) === ($m['account'])) {
-//     $output['error'] = '帳號已經用了！';
-//     $output['code'] = 400;
-//     echo json_encode($output, JSON_UNESCAPED_UNICODE);
-//     exit; // 直接離開 (中斷) 程式
-// }
-=======
->>>>>>> ffd396d56fb391a4ad6820c6667086d40c2993c5
-
 if (mb_strlen($_POST['account']) < 2) {
     $output['error'] = '姓名長度太短';
     $output['code'] = 410;
@@ -78,5 +68,16 @@ $output['rowCount'] = $stmt->rowCount(); // 新增的筆數
 if ($stmt->rowCount() == 1) {
     $output['success'] = true;
 }
+// $sql = "INSERT INTO `account_ranking`(`orders_amount`) VALUES (?)";
+
+// $stmt = $pdo->prepare($sql);
+// $stmt->execute([
+// $_POST['orders'],
+// ]);
+
+// $output['rowCount'] = $stmt->rowCount(); // 新增的筆數
+// if ($stmt->rowCount() == 1) {
+//     $output['success'] = true;
+// }
 
 echo json_encode($output);

@@ -33,16 +33,16 @@ if (empty($r)) {
                     <form name="form1" onsubmit="checkForm(); return false;">
                         <input type="hidden" name="id" value="<?= $r['id'] ?>">
                         <div class="form-group">
-                            <label for="avatar">大頭貼</label>
-                            <input type="file" class="form-control" id="avatar" name="avatar" accept="image/*" onchange="readURL(this)" targetID="preview_img">
+                            <!-- <label for="avatar">大頭貼</label> -->
+                            <input type="hidden" class="form-control" id="avatar" name="avatar" accept="image/*" onchange="readURL(this)" targetID="preview_img">
                             <!-- <input type="text" class="form-control" id="clean" name="clean"?>"> -->
                             <a href=""></a>
                             <?php if (empty($r['avatar'])) : ?>
                                 <!-- 預設的大頭貼 -->
-                                <img id="preview_img" src="./imgs/default_avatar.jpeg" alt="" width="300px">
+                                <!-- <img id="preview_img" src="./imgs/default_avatar.jpeg" alt="" width="300px"> -->
                             <?php else : ?>
                                 <!-- 顯示原本的大頭貼 -->
-                                <img id="preview_img" src="imgs/<?= $r['avatar'] ?>" alt="" width="300px">
+                                <!-- <img id="preview_img" src="imgs/<?= $r['avatar'] ?>" alt="" width="300px"> -->
                             <?php endif; ?>
 
                         </div>

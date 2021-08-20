@@ -12,12 +12,6 @@
 
     // $categoriesChild = $pdo->query("SELECT * FROM categories")->fetchAll();
 
-    $categoriesChild1 = $pdo->query("SELECT * FROM categories WHERE `parents_id` = 1")->fetchAll();
-
-    $categoriesChild2 = $pdo->query("SELECT * FROM categories WHERE `parents_id` = 2")->fetchAll();
-
-    $categoriesChild3 = $pdo->query("SELECT * FROM categories WHERE `parents_id` = 3")->fetchAll();
-
 
 
 
@@ -61,40 +55,26 @@
                         <textarea class="form-control" id="detail" name="detail" cols="30" rows="3"></textarea>
                         <small class="form-text"></small>
                     </div>
-                    <div class="form-group">
-                        <label for="categoriesMain">商品主分類</label>
-                        <select class="form-control" id="categoriesMain" name="categoriesMain">
-                        <option disabled selected>請選擇</option>
-                        <?php foreach($categoriesMain as $cm) : ?>
-                        <option value="<?= $cm['id'] ?>"><?= $cm['name'] ?></option>
-                        <?php endforeach; ?>
-                        </select>
-                    </div>
+                    <div>
+                    <?php // foreach($categoriesMain as $cm) : ?>
+                        <div class="form-group">
+                            <label for="categoriesMain">商品主分類</label>
+                            <select class="form-control" id="categoriesMain" name="categoriesMain" onchange="getID(this.value)">
+                            <option disabled selected>請選擇</option>
+                            <?php  foreach($categoriesMain as $cm) : ?>
+                            <option value="<?= $cm['id'] ?>"><?= $cm['name'] ?></option>
+                            <?php $cmid[] = $cm['id'] ?>
+                            <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <!-- 如何在這邊獲得上面的$cm['id']的值 -->
+                        <div class="form-group">
+                            <label for="categoriesChild">商品子分類</label>
+                            <select class="form-control" id="categoriesChild" name="categoriesChild">
+                            <option disabled selected>請選擇</option>
+                            </select>
+                        </div>
 
-                    <!-- 如何在這邊獲得上面的$cm['id']的值 -->
-                    <div class="form-group">
-                        <label for="categoriesChild">商品子分類</label>
-                        <select class="form-control" id="categoriesChild" name="categoriesChild">
-                        <option disabled selected>請選擇</option>
-                        <?php if($cmid==1): ?>
-                        <?php foreach($categoriesChild1 as $cc) : ?>
-                        <option value="<?= $cc['id'] ?>"><?= $cc['name'] ?></option>
-                        <?php endforeach; ?>
-                        <?php endif; ?>
-
-                        <?php if($cmid==2): ?>
-                        <?php foreach($categoriesChild2 as $cc) : ?>
-                        <option value="<?= $cc['id'] ?>"><?= $cc['name'] ?></option>
-                        <?php endforeach; ?>
-                        <?php endif; ?>
-
-                        <?php if($cmid==3): ?>
-                        <?php foreach($categoriesChild3 as $cc) : ?>
-                        <option value="<?= $cc['id'] ?>"><?= $cc['name'] ?></option>
-                        <?php endforeach; ?>
-                        <?php endif; ?>
-
-                        </select>
                     </div>
                     <div class="form-group">
                         <label for="brands">商品品牌</label>
@@ -173,23 +153,38 @@ var loadFile = function(event) {
 
 
 //---------------分類選單溜--------------------
+$(function() {
+        $('#categoriesMain').change(function() {
+            //更動第一層時第二層清空
+            $('#categoriesChild').empty().append("<option value=''>請選擇</option>");
+            var i = 0;
+            $.ajax({
+                type: "GET",
+                url: "009-li-deal.php",
+                data: {
+                    lv: $('#categoriesMain option:selected').val()
+                },
+                datatype: "json",
+                success: function(result) {
+                    //當第一層回到預設值時，第二層回到預設位置
+                    if (result == "") {
+                        $('#categoriesChild').val($('option:first').val());
+                    }
+                    //依據第一層回傳的值去改變第二層的內容
+                    while (i < result.length) {
+                        $("#categoriesChild").append("<option value='" + result[i]['id']+ "'>" + result[i]['name'] + "</option>");
+                        i++;
+                    }
+                },
+                error: function(xhr, status, msg) {
+                    console.error(xhr);
+                    console.error(msg);
+                }
+            });
+        });
+    });
 
 
-//   $(document).on('change', '#categoriesMain', function(){
-//    var categories = $('#categoriesMain :selected').val();
-//    //注意:selected前面有個空格！
-//    $.ajax({
-//       url:"009-li-deal.php",				
-//       method:"POST",
-//       data:{
-//          categories:categories
-//       },					
-//       success:function(res){					
-//          //處理回吐的資料
-//          $('#categoriesChild').html(res);
-//       }
-//    })//end ajax
-// });
 
     function checkForm(){
 

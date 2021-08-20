@@ -34,18 +34,18 @@ if (!empty($keyword)) {
 }
 
 if (!empty($cate)) {
-    $where .= " AND `categories_parents_id`= $cate";
+    $where .= " AND `categories_id`= $cate";
     $pageBtnQS['cate'] = $cate;
 }
 
 if (!empty($cateP)) {
-  $where .= " AND `categories_id`= $cateP";
+  $where .= " AND `categories_parents_id`= $cateP";
   $pageBtnQS['cate'] = $cateP;
 }
 
 
 // 總共有幾筆
-$totalRows = $pdo->query("SELECT count(1) FROM (`products` LEFT JOIN `stock` ON `sid` = `stock`.`products_id` ) $where")
+$totalRows = $pdo->query("SELECT count(1) FROM `products` $where")
   ->fetch(PDO::FETCH_NUM)[0];
 
 
@@ -72,7 +72,7 @@ if ($totalRows != 0) {
 // 原始: "SELECT * FROM products %s ORDER BY sid DESC LIMIT %s, %s",
 
   $sql = sprintf(
-    "SELECT * FROM (`products` LEFT JOIN `stock` ON `stock`.`products_id` = `sid`) %s ORDER BY `sid` DESC LIMIT %s, %s",
+    "SELECT * FROM `products`  %s ORDER BY `sid` DESC LIMIT %s, %s",
     $where,
     ($page - 1) * $perPage,
     $perPage
@@ -86,26 +86,7 @@ if ($totalRows != 0) {
 $sqlImg = "SELECT * FROM `images`";
 $rowsImg = $pdo->query($sqlImg)->fetchAll();
 
-// ------------------選單資料--------------
-// 拿到第一層的選單資料
-// $sqlCate = "SELECT * FROM `categories`";
-// $rowsCate = $pdo->query($sqlCate)->fetchAll();
 
-// $cate1 = [];
-// foreach( $rowsCate as $rCate){
-//   if($rCate == 0){
-//     $cate1[] = $rCate;
-//   }
-// }
-// foreach($cate1 as $k => $second){
-//   foreach($rowsCate as $rCate){
-//     if($rCate['parents_id'] == $second['id']){
-//       $cate1['$k']['nodes'][] = $rCate;
-//     }
-//   }
-// }
-
-// ---------------------------先做再說--------------------------
 $sqlCate = "SELECT * FROM `categories`";
 $rowsCate = $pdo->query($sqlCate)->fetchAll();
 
@@ -113,7 +94,8 @@ $dict = [];
 foreach( $rowsCate as &$rCate){
     $dict[$rCate['id']] = $rCate;
   }
-
+// echo json_encode($dict,JSON_UNESCAPED_UNICODE);
+// echo '------------------';
 $tree = [];
 foreach($dict as $sid => $item){
     if($item['parents_id']==0){
@@ -124,10 +106,31 @@ foreach($dict as $sid => $item){
     }
 }
 
+// echo json_encode($tree,JSON_UNESCAPED_UNICODE);
+
 
 ?>
 
 <?php include __DIR__ . '/partials/html-head.php';?>
+<style>
+    .addData{
+       /* width: 300px; */
+       /* height: 100px; */
+       color: black;
+       border: 1px solid #ccc;
+       color: #ccc;
+       margin-bottom: 30px;
+       justify-content: center;
+    }
+
+    .addData a{
+        width: 100%;
+        height: 100%;
+        color: #333;
+        justify-content: center !important;
+        align-items: center;
+    }
+</style>
 <?php include __DIR__ . '/partials/navbar.php';?>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container">
@@ -144,9 +147,9 @@ foreach($dict as $sid => $item){
                         <?= $c1['name'] ?>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="?cate=<?= $c2['id'] ?>">所有產品</a>
+                        <a class="dropdown-item" href="?cate=<?= $c1['id'] ?>">所有產品</a>
                         <?php foreach($c1['nodes'] as $c2):  ?>
-                        <a class="dropdown-item" href="?cate=<?= $c2['id'] ?>"><?= $c2['name'] ?></a>
+                        <a class="dropdown-item" href="?cateP=<?= $c2['id'] ?>"><?= $c2['name'] ?></a>
                         <?php endforeach;  ?>
                     </div>
                 </li>
@@ -158,18 +161,18 @@ foreach($dict as $sid => $item){
   </div>
 </nav>
 <div class="container mt-3">
-  <div class="row" style="margin: 1rem 0">
+  <div class="row" >
       <div class="col">
           <form action="009-li.php" class="form-inline my-2 my-lg-0 d-flex justify-content-end">
               <input class="form-control mr-sm-2" type="search" name="keyword" placeholder="Search" aria-label="Search" value="<?=htmlentities($keyword)?> ">
-              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+              <button class="btn btn-outline-success " type="submit">Search</button>
           </form>
       </div>
   </div>
-  <div class="row">
-        <div class="col">
-            <a class="nav-link d-flex justify-content-end" href="009-li-data-insert.php">新增資料</a>
-        </div>
+  <div class="row  justify-content-end">
+      <div class="addData d-flex" style="margin: 15px 15px;">
+          <a class="nav-link d-flex" href="009-li-data-insert.php">＋新增商品</a>
+      </div>
   </div>
   <div class="row">
     <div class="col-6">
@@ -219,9 +222,8 @@ foreach($dict as $sid => $item){
             <th scope="col">商品名稱</th>
             <th scope="col">商品編號</th>
             <th scope="col">價格</th>
-            <th scope="col">商品規格</th>
-            <th scope="col">商品數量</th>
             <th scope="col">上下架</th>
+            <th scope="col">庫存</th>
             <th scope="col">
               <!-- <i class="fas fa-edit"></i> -->
               編輯
@@ -239,32 +241,27 @@ foreach($dict as $sid => $item){
               </td>
               <td><?= $r['sid'] ?></td>
               <td>
-              <?php foreach($rowsImg as $ri): ?> 
-                <?php if ( $r['sid'] == $ri['products_sid']): ?>
+              <?php $flag = 0 ?>
+              <?php foreach($rowsImg as $ri): ?>
+                <?php if ( $r['sid'] == $ri['products_sid'] AND $flag == 0): ?>
                 <img src="./imgs/<?= htmlentities($ri['fileName'])?>" class="w-100" style="max-width: 100px;" alt="">
-                <?php endif; ?>
+                <?php $flag = 1 ?>
+                  <?php endif; ?>
                 <?php endforeach; ?>
              </td>
               <td><?= htmlentities($r['name']) ?></td>
               <td><?= htmlentities($r['number']) ?></td>
               <td><?= $r['price'] ?></td>
-              <td><?php if(empty($r['size'])){
-                echo '無資料';
-              }else{
-                echo $r['size'];
-              } ?>
-              </td>
-              <td>
-              <?php if(empty($r['stock'])){
-                echo '無資料';
-              }else{
-                echo $r['stock'];
-              } ?>
-              </td>
               <td><?= ($r['launched']== 1) ? "上架": "已下架" ?></td>
               <td>
+                <a href="009-li-stock.php?sid=<?= $r['sid'] ?>">
+                <i class="fas fa-archive" style="font-size: 22px; color: #BF7449;"></i>
+                </a>
+              </td>
+              
+              <td>
                 <a href="009-li-data-edit.php?sid=<?= $r['sid'] ?>">
-                  <i class="fas fa-edit"></i>
+                  <i class="fas fa-edit" style="font-size: 22px; color: #401D10;"></i>
                 </a>
               </td>
             </tr>

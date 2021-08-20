@@ -3,10 +3,16 @@ include __DIR__ . '/partials/init.php';
 $title = 'Hi Tommy!!';
 $activeLi = 'tommy';
 
+
 if (!isset($_SESSION['user'])) {
-    header('Location: index_.php');
+    echo "<script>alert('警告：你還沒登入，將在確認之後離開'); location.href = 'login.php';</script>";
     exit;
 }
+
+// if (!isset($_SESSION['user'])) {
+//     header('Location: index_.php');
+//     exit;
+// }
 
 $sql = "SELECT * FROM `members` WHERE id=" . intval($_SESSION['user']['id']);
 
@@ -17,10 +23,10 @@ FROM `account_ranking`
 JOIN `members`
 ON `account_ranking`.`members_id` = `members`.`id` WHERE `members`.id =". intval($_SESSION['user']['id']);
 
+$m = $pdo->query($sql2)->fetch();
 
 // $sql2 = "SELECT * FROM `account_ranking` WHERE id=" . intval($_SESSION['user']['id']);
 
-$m = $pdo->query($sql2)->fetch();
 
 if (empty($r)) {
     header('Location: index_.php');
@@ -31,12 +37,12 @@ if (empty($r)) {
 <?php include __DIR__ . '/partials/navbar.php'; ?>
 
 <style>
-    .navbar_avatar {
+    /* .navbar_avatar {
         width: 50px;
         height: 50px;
         border-radius: 50%;
         object-fit: cover
-    }
+    } */
     .basic_container {
         width: 100%;
     }
@@ -79,7 +85,9 @@ if (empty($r)) {
         object-fit: cover
 
     }
-
+    form .form-group small {
+        color: red;
+    }
 </style>
 <!-- <li class="nav-item">
     <?php if (!empty($_SESSION['user']['avatar'])) : ?>
@@ -119,18 +127,18 @@ if (empty($r)) {
                             <small class="form-text "></small>
                         </div>
                         <div class="form-group">
-                            <label for="account">Account </label>
+                            <label for="account">Account *帳號無法更改</label>
                             <input type="text" class="form-control" value="<?= htmlentities($r['account']) ?> " disabled>
                             <small class="form-text "></small>
                         </div>
                         <div class="form-group">
                             <label for="password_o">原密碼(密碼對了才能改檔案內容喔！)</label>
-                            <input type="text" class="form-control" id="password_o" name="password_o">
+                            <input type="password" class="form-control" id="password_o" name="password_o">
                             <small class="form-text "></small>
                         </div>
                         <div class="form-group">
                             <label for="password">新密碼(如沒有要更改密碼，請填原密碼)</label>
-                            <input type="text" class="form-control" id="password" name="password">
+                            <input type="password" class="form-control" id="password" name="password">
                             <small class="form-text "></small>
                         </div>
                         <div class="form-group">
@@ -185,30 +193,89 @@ if (empty($r)) {
 <?php include __DIR__ . '/partials/scripts.php'; ?>
 
 <script>
+
+    const email_re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const mobile_re = /^09\d{2}-?\d{3}-?\d{3}$/;
+    const password_re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,15}$/;
+
+    const email = document.querySelector('#email');
+    const mobile = document.querySelector('#mobile');
+    const password = document.querySelector('#password');
+
+
     function checkForm() {
+        // 欄位的外觀要回復原來的狀態
+        email.nextElementSibling.innerHTML = '';
+        email.style.border = '1px #CCCCCC solid';
+        mobile.nextElementSibling.innerHTML = '';
+        mobile.style.border = '1px #CCCCCC solid';
+        password.nextElementSibling.innerHTML = '';
+        password.style.border = '1px #CCCCCC solid';
 
-        const fd = new FormData(document.form1);
-        fetch('002-tommy_profile-api.php', {
-                method: 'POST',
-                body: fd
-            })
-            .then(r => r.json())
-            .then(obj => {
-                console.log(obj);
-                if (obj.success) {
-                    alert('修改成功');
-                    location.href = '002-tommy_index.php';
+        let isPass = true;
 
-                } else {
-                    alert(obj.error);
-                }
-            })
-            .catch(error => {
-                console.log('error:', error);
-            });
+        if (!email_re.test(email.value)) {
+            isPass = false;
+            email.nextElementSibling.innerHTML = '請填寫正確的 Email 格式';
+            email.style.border = '1px red solid';
+        }
 
-
+        if (!mobile_re.test(mobile.value)) {
+            isPass = false;
+            mobile.nextElementSibling.innerHTML = '請填寫正確的 電話號碼 格式';
+            mobile.style.border = '1px red solid';
+        }
+        if (!password_re.test(password.value)) {
+            isPass = false;
+            password.nextElementSibling.innerHTML = 
+            '密碼必須包含大小寫字母和數字的組合，不能使用特殊字符，長度在6-15之間'
+            password.style.border = '1px red solid';
+        }
+        if (isPass) {
+            const fd = new FormData(document.form1);
+            fetch('002-tommy_profile-api.php', {
+                    method: 'POST',
+                    body: fd
+                })
+                .then(r => r.json())
+                .then(obj => {
+                    console.log(obj);
+                    if (obj.success) {
+                        alert('修改成功')
+                        location.href = '002-tommy_index.php';
+                    } else {
+                        alert(obj.error);
+                    }
+                })
+                .catch(error => {
+                    console.log('error:', error);
+                });
+        }
     };
+    // function checkForm() {
+
+    //     const fd = new FormData(document.form1);
+    //     fetch('002-tommy_profile-api.php', {
+    //             method: 'POST',
+    //             body: fd
+    //         })
+    //         .then(r => r.json())
+    //         .then(obj => {
+    //             console.log(obj);
+    //             if (obj.success) {
+    //                 alert('修改成功');
+    //                 location.href = '002-tommy_index.php';
+
+    //             } else {
+    //                 alert(obj.error);
+    //             }
+    //         })
+    //         .catch(error => {
+    //             console.log('error:', error);
+    //         });
+
+
+    // };
 
     function readURL(input) {
 

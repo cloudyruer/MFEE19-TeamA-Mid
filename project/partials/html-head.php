@@ -11,4 +11,12 @@
     <!-- NOTE title -->
     <title> <?=isset($title) ? $title . ' - ' : ''?>Mid Project</title>
   </head>
+  <style>
+    .Tommy_navbar_avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover
+    }
+  </style>
   <body>

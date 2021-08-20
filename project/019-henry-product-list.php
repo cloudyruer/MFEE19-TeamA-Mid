@@ -139,6 +139,7 @@ if ($totalRows !== 0) {
     if (!number.test(this.value)) this.value = "";
   });
 
+<<<<<<< HEAD
   let stock,stockId,input,inputId,tipId 
   
   $(".minus").click(function minus() {
@@ -151,11 +152,34 @@ if ($totalRows !== 0) {
     } else {
       input--;
       $("#" + inputId).val(input);
+=======
+  let num = +$('.qty').val();
+  let stock = ''
+  // let stock;
+
+
+  $(".minus").click(function minus() {
+    console.log(this.dataset.productumber);
+    let thisValue = this.dataset.productnumber
+    let stockId = "stock_" + thisValue
+    console.log(stockId);
+    stock = "#" + stockId.innertext;
+    console.log(stock);
+    stock += th
+    if (num == 0) {
+      //數量不能<0
+      $("#" + thisValue).val(num);
+      stock_tip()
+    } else {
+      num--;
+      $("#" + thisValue).val(num);
+>>>>>>> 8dfcbb63a2743d033588a79cd8f4ae400ca6d6a8
       stock_tip()
     }
   });
 
   $(".add").click(function add() {
+<<<<<<< HEAD
     inputId = this.dataset.productnumber
     stockId = 'stock_' + inputId
     tipId = 'tip_' + inputId
@@ -176,14 +200,42 @@ if ($totalRows !== 0) {
   //   $(".qty").val(input);
   // })
   
+=======
+    console.log(this.dataset.productnumber);
+    let thisValue = this.dataset.productnumber
+    let stockId = "stock_" + thisValue
+    console.log(stockId);
+
+    stock = +$("#" + stockId).val();
+    console.log(stock);
+    // stock = this.dataset.stock
+    if (num == stock) {
+      $("#" + thisValue).val(num);
+      stock_tip()
+    } else {
+      num++;
+      $("#" + thisValue).val(num);
+      stock_tip()
+    }
+  });
+  $('.qty').change(() => {
+    num = $(".qty").val();
+    $(".qty").val(num);
+  })
+>>>>>>> 8dfcbb63a2743d033588a79cd8f4ae400ca6d6a8
 
   function stock_tip() {
     if (stock === input) {
       $('#'+tipId).removeClass('visibilityHidden')
       $('#'+tipId).text('已達購買上限')
     } else {
+<<<<<<< HEAD
       $('#'+tipId).addClass('visibilityHidden')
       $('#'+tipId).text('你看不到我')
+=======
+      $('.stock_tip').addClass('displayHidden')
+      $('.stock_tip').text('你看不到我')
+>>>>>>> 8dfcbb63a2743d033588a79cd8f4ae400ca6d6a8
     }
   }
   stock_tip()
@@ -192,6 +244,7 @@ if ($totalRows !== 0) {
   const btn = $('.add-to-cart-btn');
 
   btn.click(function() {
+
     const sid = $(this).closest('.product-unit').attr('data-sid');
     const qty = $(this).closest('.product-unit').find('.qty').val();
     

@@ -1,25 +1,16 @@
 <?php
 include __DIR__ . '/partials/init.php';
-$title = '球場類別';
+$title = '球場類別搜尋';
 $activeLi = 'leo';
 
 // leo 程式
-
 // 搜尋功能
+//抓到用戶搜尋的關鍵字
 $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : "";
-if (!empty($keyword)) {
-    header('Location: 033-leo-stadium-type-search.php?keyword=' . $keyword);
+if (empty($keyword)) {
+    header('Location: 033-leo-stadium-type.php');
     exit;
 }
-
-
-// 抓出本頁資料
-//決定查看賽別，預設值為0
-$sportsCat = isset($_GET['cat']) ? intval($_GET['cat']) : 0;
-
-//所有的賽別
-$allSprtsCat = $pdo->query("SELECT * FROM stadiumType where `stadiumType`.`rank`=0")
-    ->fetchAll();
 
 //用戶查看第幾頁，預設值為1
 $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
@@ -29,16 +20,9 @@ $perpage = 5;
 
 $howManyList = 0;
 //算出總共總資料總共幾頁
-if ($sportsCat == 0) {
-    //全部的資料
-    $howManyList = $pdo->query("SELECT count(1) FROM stadiumType where `rank`>0")
-        ->fetchAll(); //拿到總共幾筆資料的statement
-} elseif ($sportsCat > 0) {
-    //該賽別的資料
-    $howManyList = $pdo->query("SELECT count(1) FROM stadiumType where `rank`=$sportsCat")
-        ->fetchAll(); //拿到總共幾筆資料的statement
-}
 
+$howManyList = $pdo->query("SELECT count(1) FROM stadiumType  where `rank`>0 AND `name` LIKE '%$keyword%'")
+    ->fetchAll(); //拿到總共幾筆資料的statement
 
 
 $totalList = $howManyList[0]["count(1)"]; //拿到總共幾筆資料的值
@@ -50,25 +34,19 @@ $howManyPage = ceil($totalList / 5); //
 $rowLimitStart = ($page - 1) * $perpage; //每一頁第一筆
 
 // 讓 $page 的值在安全的範圍，避免用戶點到第0頁，或是超過資料筆數的頁面
-if ($page < 1) {
-    header('Location: ?page=1');
-    exit;
-}
-if ($page > $howManyPage) {
-    header('Location: ?page=' . $howManyPage);
-    exit;
-}
+// if ($page < 1) {
+//     header('Location: ?page=1');
+//     exit;
+// }
+// if ($page > $howManyPage) {
+//     header('Location: ?page=' . $howManyPage);
+//     exit;
+// }
 
-//取出資料庫中的資料
-if ($sportsCat == 0) {
-    //全部的資料
-    $rows = $pdo->query("SELECT * FROM stadiumType where `rank`>0 LIMIT $rowLimitStart,$perpage")
-        ->fetchAll();
-} elseif ($sportsCat > 0) {
-    //該賽別的資料
-    $rows = $pdo->query("SELECT * FROM stadiumType  where `rank`=$sportsCat LIMIT $rowLimitStart,$perpage")
-        ->fetchAll();
-}
+$rows = $pdo->query("SELECT * FROM stadiumType where `rank`>0 AND `name` LIKE '%$keyword%' LIMIT $rowLimitStart,$perpage")
+    ->fetchAll();
+
+$qs['keyword'] = $keyword;
 
 
 ?>
@@ -94,33 +72,19 @@ if ($sportsCat == 0) {
 </ul>
 
 <div id="container">
-    <h1>球場類別</h1>
+    <h1>球場類別搜尋</h1>
     <div class="button_warp">
-        <div>
-            <a class="btn btn-primary" href="./033-leo-stadium-type-cat.php"> 新增運動類別</a>
-            <a class="btn btn-primary btn-second" href="./033-leo-stadium-type-fun.php">新增設施類別</a>
-        </div>
+
         <div class="button_warp_search">
             <form>
-                <input class="form-control" type="" placeholder="請輸入球場類別關鍵字" name="keyword">
+                <input class="form-control" type="" placeholder="請輸入球場類別關鍵字" name="keyword" value="<?= htmlentities($keyword) ?>">
                 <button type="submit" class="btn btn-secondary">搜尋</button>
+                <a href="033-leo-stadium-type.php" class="btn btn-outline-secondary">取消搜尋</a>
+
             </form>
         </div>
     </div>
-    <div class="typeWarp">
-        <nav class="nav nav-pills">
-            <a class="nav-link" id="type0" href="?cat=0&page=1">全部</a>
-            <?php foreach ($allSprtsCat as $r) : ?>
-                <a class="nav-link" id="type<?= $r['sid'] ?>" href="?cat=<?= $r['sid'] ?>&page=1"><?= $r['name'] ?></a>
-            <?php endforeach; ?>
-        </nav>
 
-        <a class="btn btn-primary btn-info" <?php if ($sportsCat == 0) {
-                                                echo "hidden";
-                                            };
-                                            ?> href="033-leo-stadium-type-cat-edit.php?sid=<?= $sportsCat ?>">編輯運動類別名</a>
-
-    </div>
     <table class="table table-striped">
         <thead class=" thead-dark">
             <tr>
@@ -162,10 +126,11 @@ if ($sportsCat == 0) {
     </nav>
 </div>
 <script>
-    //決定哪個賽別要加上active
-    var pageCat = <?php echo $sportsCat ?>;
-    var whichNeedActive = document.getElementById("type" + pageCat)
-    whichNeedActive.classList += " active"
+    let noKeyWordAlert = <?= $totalList ?>;
+    console.log(noKeyWordAlert);
+    if (noKeyWordAlert == 0) {
+        alert('您所輸入的關鍵字無資料，請重新輸入')
+    }
 </script>
 <?php include __DIR__ . '/partials/scripts.php'; ?>
 <?php include __DIR__ . '/partials/html-foot.php'; ?>

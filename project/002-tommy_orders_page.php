@@ -182,10 +182,10 @@ if ($totalRows != 0) {
                 <div class="tb">
                 <?php foreach ($rows as $r) : ?>
                     <div class=" d-flex" data-id="<?= $r['id'] ?>">
-                        <div class="detail_td"><?= htmlentities($r['id']) ?></div>
-                        <div class="detail_td"><?= htmlentities($r['account']) ?></div>
-                        <div class="detail_td"><?= htmlentities($r['email']) ?></div>
-                        <div class="detail_td"><?= htmlentities($r['nickname']) ?></div>
+                        <div class="detail_td"><?= htmlentities($m['id']) ?></div>
+                        <div class="detail_td"><?= htmlentities($m['account']) ?></div>
+                        <div class="detail_td"><?= htmlentities($m['email']) ?></div>
+                        <div class="detail_td"><?= htmlentities($m['nickname']) ?></div>
                     
                     </div>
                 <?php endforeach; ?>
