@@ -8,7 +8,7 @@ $activeLi = 'li';
 
 
 // 固定每一頁最多幾筆
-$perPage = 7;
+$perPage = 5;
 
 // query string parameters
 $qs = [];
@@ -130,6 +130,19 @@ foreach($dict as $sid => $item){
         justify-content: center !important;
         align-items: center;
     }
+    .op5{
+      opacity: 0.3;
+      position: relative;
+    }
+    .op5::after{
+      content: '已下架';
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+    .black{
+      background-color: #222;
+   }
 </style>
 <?php include __DIR__ . '/partials/navbar.php';?>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -183,7 +196,7 @@ foreach($dict as $sid => $item){
         <ul class="pagination d-flex justify-content-end">
 
           <li class="page-item <?= $page <= 1 ? 'disabled' : '' ?>">
-            <a class="page-link" href="?page=<?php $qs['page'] = $page - 1;
+            <a class="page-link" href="?<?php $qs['page'] = $page - 1;
                                               echo http_build_query($qs)  ?>">
               <i class="fas fa-arrow-circle-left"></i>
             </a>
@@ -200,7 +213,7 @@ foreach($dict as $sid => $item){
           endfor; ?>
 
           <li class="page-item <?= $page >= $totalPages ? 'disabled' : '' ?>">
-            <a class="page-link" href="?page=<?php $qs['page'] = $page + 1;
+            <a class="page-link" href="?<?php $qs['page'] = $page + 1;
                                               echo http_build_query($qs)  ?>">
               <i class="fas fa-arrow-circle-right"></i>
             </a>
@@ -244,8 +257,15 @@ foreach($dict as $sid => $item){
               <?php $flag = 0 ?>
               <?php foreach($rowsImg as $ri): ?>
                 <?php if ( $r['sid'] == $ri['products_sid'] AND $flag == 0): ?>
-                <img src="./imgs/<?= htmlentities($ri['fileName'])?>" class="w-100" style="max-width: 100px;" alt="">
-                <?php $flag = 1 ?>
+                  <?php if(($r['launched'] > 0)): ?>
+                    <img src="./imgs/<?= htmlentities($ri['fileName'])?>" class="w-100" style="max-width: 100px;" alt="">
+                    <?php $flag = 1 ?>
+                  <?php else: ?>
+                    <div class="black" style="max-width: 100px;">
+                      <img src="./imgs/<?= htmlentities($ri['fileName'])?>" class="w-100 op5" style="max-width: 100px;" alt="">
+                    <?php $flag = 1 ?>
+                      <?php endif; ?>
+                    </div>
                   <?php endif; ?>
                 <?php endforeach; ?>
              </td>

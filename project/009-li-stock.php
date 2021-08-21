@@ -16,8 +16,11 @@ $sqlStock = "SELECT * FROM `stock` WHERE `products_id`= $sid";
 $rowsStock = $pdo->query($sqlStock)->fetchAll();
 
 
-$sql ="SELECT * FROM (`products` LEFT JOIN `stock` ON `stock`.`products_id` = `sid`) WHERE `sid` = $sid";
+$sql ="SELECT * FROM (`products`  JOIN `stock` ON `stock`.`products_id` = `sid`) WHERE `sid` = $sid";
 $rows = $pdo->query($sql)->fetchAll();
+
+$sql1 ="SELECT * FROM (`products` LEFT JOIN `stock` ON `stock`.`products_id` = `sid`) WHERE `sid` = $sid";
+$row = $pdo->query($sql1)->fetch();
 
 ?>
 
@@ -40,12 +43,52 @@ $rows = $pdo->query($sql)->fetchAll();
         justify-content: center !important;
         align-items: center;
     }
+    p{
+      margin: 0;
+    }
 </style>
 <?php include __DIR__ . '/partials/navbar.php';?>
 
-<div class="container mt-3">
+<div class="container mt-5">
   <div class="row">
-        <div class="col-3">
+    <div class="col-4">
+      <?php $flag = 0 ?>
+      <?php foreach($rowsImg as $ri): ?>
+        <?php if ( $sid == $ri['products_sid'] AND $flag == 0): ?>
+        <img src="./imgs/<?= htmlentities($ri['fileName'])?>" class="w-100"  alt="">
+        <?php $flag = 1 ?>
+          <?php endif; ?>
+      <?php endforeach; ?>
+    </div>
+    <div class="col-5">
+      <div class="title">
+        <?php if ( $_GET['sid'] == $row['sid'] ): ?>
+          <p>商品名稱：</p>
+          <h4><?= $row['name']; ?></h4>
+        <?php endif; ?>
+      </div>
+      <div class="detail mt-3">
+        <?php if ( $_GET['sid'] == $row['sid'] ): ?>
+          <!-- <p>商品介紹：</p> -->
+          <p><?= $row['detail']; ?></p>
+        <?php endif; ?>
+      </div>
+      <div class="price mt-3">
+        <?php if ( $_GET['sid'] == $row['sid'] ): ?>
+          <!-- <p>商品價格：</p> -->
+          <h5 style="color: orangered;">$<?= $row['price']; ?></h5>
+        <?php endif; ?>
+      </div>
+      <div class="launched mt-3">
+        <?php if ( $_GET['sid'] == $row['sid'] ): ?>
+          <!-- <p>商品價格：</p> -->
+          <p style="color: #aaa;"><?= ($row['launched']== 1) ? "上架": "已下架" ?></p>
+        <?php endif; ?>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-5">
+        <div class="col-3 ">
             <div class="addData d-flex" >
                 <a class="nav-link d-flex justify-content-end" href="009-li-stock-insert.php?sid=<?= $sid ?>">＋新增鞋碼資料</a>
             </div>
@@ -56,64 +99,47 @@ $rows = $pdo->query($sql)->fetchAll();
             </div>
         </div>
   </div>
-
+ 
   <div class="row">
     <div class="col">
       <table class="table table-striped table-bordered">
         <thead>
           <tr>
-            <th scope="col"><i class="fas fa-trash-alt"></i></th>
             <th scope="col">id</th>
-            <th scope="col">商品圖片</th>
-            <th scope="col">商品名稱</th>
             <th scope="col">鞋碼</th>
             <th scope="col">庫存</th>
-            <th scope="col">
-              <!-- <i class="fas fa-edit"></i> -->
-              編輯
-            </th>
+            <th scope="col">編輯</th>
+            <th scope="col">刪除</th>
           </tr>
         </thead>
         <tbody>
           <?php foreach ($rows as $r) : ?>
-            <tr data-sid="<?= $r['id'] ?>">
-              <td>
-                <!-- Button trigger modal -->
-                <button type="button" class="btn btn-outline-warning del1btn" data-toggle="modal" data-target="#exampleModal">
-                  <i class="fas fa-trash-alt"></i>
-                </button>
-              </td>
+            <tr data-sid="<?= $r['id'] ?>">          
               <td><?= $r['id'] ?></td>
-              <td>
-              <?php $flag = 0 ?>
-              <?php foreach($rowsImg as $ri): ?>
-                <?php if ( $r['sid'] == $ri['products_sid'] AND $flag == 0): ?>
-                <img src="./imgs/<?= htmlentities($ri['fileName'])?>" class="w-100" style="max-width: 150px;" alt="">
-                <?php $flag = 1 ?>
-                  <?php endif; ?>
-                <?php endforeach; ?>
-             </td>
-              <td><?= htmlentities($r['name']) ?></td>
               <td><?php if(empty($r['size'])){
-                echo '無資料';
-              }else{
-                echo $r['size'];
-              } ?>
+                  echo '';
+                }else{
+                  echo $r['size'];
+                } ?>
               </td>
               <td>
               <?php if(empty($r['stock'])){
-                echo '無資料';
-              }else{
-                echo $r['stock'];
-              } ?>
+                  echo '';
+                }else{
+                  echo $r['stock'];
+                } ?>
               </td>
-
-              
               <td>
                 <a href="009-li-stock-edit.php?id=<?= $r['id'] ?>&sid=<?= $r['sid'] ?>">
                 <!-- 忘記&的做法ㄌ... -->
                   <i class="fas fa-edit"></i>
                 </a>
+              </td>
+              <td>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-outline-warning del1btn" data-toggle="modal" data-target="#exampleModal">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
               </td>
             </tr>
           <?php endforeach; ?>

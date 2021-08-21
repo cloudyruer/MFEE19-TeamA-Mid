@@ -52,16 +52,16 @@ $stmt->execute([
 
 $sid = $pdo->lastInsertId();
 
-$sqlStock = " UPDATE `stock` SET
-`size`=?, `stock`=?  
-WHERE `products_id`=?";
+// $sqlStock = " UPDATE `stock` SET
+// `size`=?, `stock`=?  
+// WHERE `products_id`=?";
 
-$stmtStock = $pdo->prepare($sqlStock);
-$stmtStock->execute([    
-    $_POST['size'],
-    $_POST['stock'],
-    $_POST['sid'],
-]);
+// $stmtStock = $pdo->prepare($sqlStock);
+// $stmtStock->execute([    
+//     $_POST['size'],
+//     $_POST['stock'],
+//     $_POST['sid'],
+// ]);
 
 // 要存放圖檔的資料夾
 $folder = __DIR__. '/imgs/';

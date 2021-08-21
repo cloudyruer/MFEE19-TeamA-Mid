@@ -111,16 +111,7 @@
                         </select> 
                         <!-- 忘記一個</select>浪費快一小時... -->
                     </div>
-                    <div class="form-group">
-                        <label for="size">鞋碼</label>
-                        <input type="text" class="form-control" id="size" name="size">
-                        <small class="form-text"></small>
-                    </div>
-                    <div class="form-group">
-                        <label for="stock">庫存</label>
-                        <input type="text" class="form-control" id="stock" name="stock">
-                        <small class="form-text"></small>
-                    </div>
+                    
                     
 
                     <button type="submit" class="btn btn-primary mt-5">新增</button>
