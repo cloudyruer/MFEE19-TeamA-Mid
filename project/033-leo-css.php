@@ -76,4 +76,9 @@
     .infoHidden {
         display: none;
     }
+
+    td img {
+        width: 400px;
+
+    }
 </style>

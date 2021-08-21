@@ -32,10 +32,10 @@ if (empty($row)) {
         <a class="nav-link " href="./033-leo-sports-type.php">賽事類別</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link active" href="./033-leo-sports-game.php">賽事</a>
+        <a class="nav-link " href="./033-leo-sports-game.php">賽事</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link " href="./033-leo-stadium-type.php">球場類別</a>
+        <a class="nav-link active" href="./033-leo-stadium-type.php">球場類別</a>
     </li>
     <li class="nav-item">
         <a class="nav-link " href="./033-leo-stadium-list.php">球場</a>

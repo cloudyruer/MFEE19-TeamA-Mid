@@ -14,16 +14,16 @@ $activeLi = 'leo';
 <!-- leo nav -->
 <ul class="nav nav-tabs mt-4 pl-5 pr-5">
     <li class="nav-item">
-        <a class="nav-link" href="#">賽事類別</a>
+        <a class="nav-link " href="./033-leo-sports-type.php">賽事類別</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="#">賽事</a>
+        <a class="nav-link " href="./033-leo-sports-game.php">賽事</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="#">球場類別</a>
+        <a class="nav-link " href="./033-leo-stadium-type.php">球場類別</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link active" href="#">球場</a>
+        <a class="nav-link active" href="./033-leo-stadium-list.php">球場</a>
     </li>
 </ul>
 
@@ -73,10 +73,18 @@ $activeLi = 'leo';
                 <option value="室內">室內</option>
             </select>
         </div>
-        <div class="form-group">
+        <!-- <div class="custom-file">
             <label for="stadium_list_photo">球場照片</label>
-            <input type="file" accept="image/*" class="form-control" id="stadium_list_photo" name="stadium_list_photo">
+            <input type="file" accept="image/*" class="custom-file-input" id="stadium_list_photo" name="stadium_list_photo">
+        </div> -->
+
+        <div class="form-group">
+            <label for="">Google 網址</label>
+            <input type="text" class="form-control" id="" name="googlemapurl" placeholder="請在google將場館的網址複製後貼上">
+            <div class=" mt-2"> <a class="btn btn-secondary" href="https://www.google.com/maps/" target="_blank">Google Map</a> <button type="button" id="changeToLatIng" class="btn btn-secondary">轉換為經緯度</button></div>
+
         </div>
+
         <div class="form-group">
             <label for="stadium_list_lat">經度</label>
             <input type="text" class="form-control" id="stadium_list_lat" name="stadium_list_lat">
@@ -85,11 +93,33 @@ $activeLi = 'leo';
             <label for="stadium_list_lng">緯度</label>
             <input type="text" class="form-control" id="stadium_list_lng" name="stadium_list_lng">
         </div>
+        <div class="form-group">
+            <p>球場照片</p>
+            <div class="custom-file ">
+                <input type="file" accept="image/*" class="custom-file-input" id="stadium_list_photo" name="stadium_list_photo">
+                <label class="custom-file-label" for="stadium_list_photo">請上傳照片</label>
+            </div>
+        </div>
+
         <button type="submit" class="btn btn-primary">確認新增</button>
     </form>
 </div>
+<?php include __DIR__ . '/partials/scripts.php'; ?>
 
 <script>
+    //google網址經緯度處理
+    $(function() {
+        $('#changeToLatIng').on('click', function() {
+            var url = $('input[name=googlemapurl]').val();
+            var regex = new RegExp('@(.*),(.*),');
+            var lat_long_match = url.match(regex);
+            var lat = lat_long_match[1];
+            var long = lat_long_match[2];
+
+            $('input[name=stadium_list_lat]').val(lat);
+            $('input[name=stadium_list_lng]').val(long);
+        });
+    });
     //賽別名稱與選擇盃賽的下拉選單
     let data;
     const sportsDict = {};
@@ -202,5 +232,4 @@ $activeLi = 'leo';
         }
     }
 </script>
-<?php include __DIR__ . '/partials/scripts.php'; ?>
 <?php include __DIR__ . '/partials/html-foot.php'; ?>
