@@ -113,9 +113,9 @@ if ($stmt->rowCount() == 1) {
 
 unset($_SESSION['cart']); // 清除購物車內容
 
-echo json_encode([
-  "rowCount" => $stmt->rowCount(), //新增的筆數。如果方法是select，是讀取的筆數
-  "postData" => $_POST,
-]);
+// echo json_encode([
+//   "rowCount" => $stmt->rowCount(), //新增的筆數。如果方法是select，是讀取的筆數
+//   "postData" => $_POST,
+// ]);
 
 echo json_encode($output);
