@@ -20,10 +20,11 @@ $output = [
 ];
 
 //避免看到notice
-if(empty($_POST['product_name']) or empty($_POST["product_price"]) or empty($_POST["category_id"])) {
-    $output['code'] = 390;
-    echo json_encode($output);
-    exit();
+if (empty($_POST["product_id"])) {
+  $output["error"] = "請輸入商品序";
+  $output["code"] = 400;
+  echo json_encode($output);
+  exit();
 }
 
 if (empty($_POST["product_name"])) {
@@ -33,6 +34,26 @@ if (empty($_POST["product_name"])) {
   exit();
 }
 
+if (empty($_POST["product_brand"])) {
+  $output["error"] = "請輸入品牌";
+  $output["code"] = 420;
+  echo json_encode($output);
+  exit();
+}
+
+if (empty($_POST["product_price"])) {
+  $output["error"] = "請輸入價格";
+  $output["code"] = 430;
+  echo json_encode($output);
+  exit();
+}
+
+if (empty($_POST["stock"])) {
+  $output["error"] = "請輸入庫存";
+  $output["code"] = 440;
+  echo json_encode($output);
+  exit();
+}
 
 // 預設是沒有上傳資料，沒有上傳成功
 //設定兩條路：1.大頭貼、暱稱都修改 2.只選一個修改
@@ -66,11 +87,9 @@ if(! empty($_FILES) and !empty($_FILES['product_img'])){
                 $output['code'] = 200;
                 $output['error'] = '';
                 $output['success'] = true;
-              
                 echo json_encode($output);
                 exit();
             }
-
         }
     }
 

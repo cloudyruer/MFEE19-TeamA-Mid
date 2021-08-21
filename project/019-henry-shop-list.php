@@ -105,16 +105,12 @@ $rows = $pdo->query($sql)->fetchALL();
   const myTable = document.querySelector('table');
   const modal = $('.modal1');
   $('.del1btn').on('click', function(event) {
-    // console.log(event.target);
     willDeleteId = event.target.closest('tr').dataset.sid;
-    console.log(willDeleteId);
     modal.find('.modal-body').html(`確定要放棄編號為 ${willDeleteId} 的訂單嗎？`)
   })
 
   modal.find('.modal-del-btn').on('click', function(event) {
-    console.log(`019-henry-order-delete.php?sid=${willDeleteId}`);
     location.href = `019-henry-order-delete.php?sid=${willDeleteId}`;
-
   })
 
   //一開始顯示時觸發

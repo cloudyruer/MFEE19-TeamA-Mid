@@ -45,7 +45,6 @@ $rows = $pdo->query($sql)->fetchALL();
             <th scope="col">商品序</i></th>
             <th scope="col">商品圖片</th>
             <th scope="col">品名</th>
-            <th scope="col">分類</i></th>
             <th scope="col">品牌</th>
             <th scope="col">價格</th>
             <th scope="col">庫存</th>
@@ -55,23 +54,15 @@ $rows = $pdo->query($sql)->fetchALL();
         <tbody>
           <?php foreach ($rows as $r): ?>
             <tr data-sid="<?= $r['sid'] ?>">
-              <!-- 在html5，如果要自訂屬性，要寫data-*。這樣瀏覽器與其他開發人員都能識別，也不會覆蓋掉其他預設屬性 -->
-              <!-- https://ithelp.ithome.com.tw/articles/10221029 -->
               <td>
-                <!-- onclick會先觸發 -->
                 <button type="button" class="btn btn-outline-warning del1btn" data-toggle="modal" data-target="#exampleModal">
                   <i class="fas fa-trash-alt"></i>
                 </button>
               </td>
-             
-              <!-- 避免被XSS攻擊，htmlentities比較好，直接顯示原始輸入資料，後續有法律問題可當作證據。此法有使用跳脫字元 -->
-              <!-- <td><?= $r['name'] ?></td> -->
               <td><?= $r['sid'] ?></td>
               <td><img src="imgs/<?= htmlentities($r['product_img']) ?>.jpg" alt=""></td>
               <td><?= htmlentities($r['product_name']) ?></td>
-              <td><?= htmlentities($r['category_id']) ?></td>
               <td><?= htmlentities($r['product_brand']) ?></td>
-              
               <td><?= htmlentities($r['product_price']) ?></td>
               <td><?= htmlentities($r['stock']) ?></td>
               
@@ -114,19 +105,12 @@ $rows = $pdo->query($sql)->fetchALL();
   $('.del1btn').on('click',function(event){
     // console.log(event.target);
     willDeleteId = event.target.closest('tr').dataset.sid;
-    console.log(willDeleteId);
     modal.find('.modal-body').html(`確定要刪除編號為 ${willDeleteId} 的商品嗎？`)
   })
 
   modal.find('.modal-del-btn').on('click',function(event){
-    console.log(`019-henry-order-delete.php?sid=${willDeleteId}`);
-    location.href = `019-henry-order-delete.php?sid=${willDeleteId}`;
-
+    location.href = `019-henry-product-delete.php?sid=${willDeleteId}`;
   })
 
-  //一開始顯示時觸發
-  // modal.on('show.bs.modal',function(event){
-  //   console.log(event.target);
-  // })
 </script>
 <?php include __DIR__ . "/partials/html-foot.php"; ?>

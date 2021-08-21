@@ -1,17 +1,17 @@
 <?php
-  //資料表要增加一個存放圖片
-  //ALTER TABLE `members` ADD `avater` VARCHAR(255) NULL DEFAULT '' AFTER `id`;
 
   include __DIR__ . "/partials/init.php";
   $title = "修改商品資料";
 
 
   if ($_SESSION["user"]['account'] !== 'pikachu') {
-  header("Location: 019-henry-product-list.php"); //只允許皮卡丘進入
-  exit();
-}
+    header("Location: 019-henry-product-list.php"); //只允許皮卡丘進入
+    exit();
+  }
 
-  $sql = "SELECT * FROM `product_list` WHERE 1";
+  $sid = isset($_GET['sid']) ? intval($_GET['sid']) : 0;
+
+  $sql = "SELECT * FROM `product_list` WHERE sid=$sid";
   $r = $pdo->query($sql)->fetch(); 
   echo json_encode($r);
   if(empty($r)){
@@ -47,8 +47,8 @@
               <?php endif; ?>
             </div>
             <div class="form-group">
-              <label for="category_id">商品序 <span class="star">*</span></label>
-              <input type="text" class="form-control" id="category_id" name="category_id" value="<?= htmlentities($r['category_id']) ?>">
+              <label for="product_id">商品序 <span class="star">*</span></label>
+              <input type="text" class="form-control" id="product_id" name="product_id" value="<?= htmlentities($r['product_id']) ?>">
             </div>
             
             <div class="form-group">

@@ -46,9 +46,9 @@ if(!empty($pKeys)) {
                         <td><a href="#" onclick="removeProductItem(event)"><i class="fas fa-trash-alt"></i></a></td>
                         <td><img src="imgs/<?= $item['product_img'] ?>.jpg" alt=""></td>
                         <td><?= $item['product_name'] ?></td>
-                        <td class="price" data-price="<?= $item['product_price'] ?>"></td>
+                        <td class="price" data-price="<?= $item['product_price'] ?>" id="price<?= $sid ?>"></td>
                         <td>
-                            <select class="form-control quantity" data-qty="<?= $item['quantity'] ?>" onchange="changeQty(event)">
+                            <select class="form-control quantity" data-qty="<?= $item['quantity'] ?>" id="qty<?= $sid ?>" onchange="changeQty(event)">
                                 <?php for($i=1; $i<=100; $i++): ?>
                                     <option value="<?= $i ?>"><?= $i ?></option>
                                 <?php endfor; ?>
@@ -64,7 +64,7 @@ if(!empty($pKeys)) {
                 <p>消費金額: <span id="sum-of-sub-total"></span></p>
                 <p>其他折扣: <span id="discount"></span> <span id="discount-tip"></span></p>
                 <p>運費: <span id="shipping"></span> <span id="shipping-tip"></span></p>
-                <p>總計: <span id="totalGrand"></span></p>
+                <p>總計: NT$ <span id="totalGrand"></span></p>
             </div>
             
             
@@ -120,6 +120,10 @@ if(!empty($pKeys)) {
                             <option value="景旭門市">景旭門市</option>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label for="total_price">總金額</span></label>
+                        <input type="text" class="form-control" id="total_price" name="total_price" value="">
+                    </div>
                     <button type="submit" class="btn btn-primary">結帳</button>
                     </form>
                 </div>
@@ -136,10 +140,6 @@ if(!empty($pKeys)) {
 </div>
 <?php include __DIR__ . "/019-henry-scripts.php"; ?>
 <script>
-console.log($('#totalGrand').val    ());
-$('#totalGrand').change(function(){
-    console.log($('#totalGrand').text());
-})
 
 const dallorCommas = function(n){
     return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -188,7 +188,7 @@ function calPrices() {
         // let price = $(el).find('.price').attr('data-price') * 1;
 
         const $price = $(el).find('.price'); // 價格的 <td>
-        $price.text( 'NT$ ' + $price.attr('data-price') );
+        $price.text( 'NT$ ' + dallorCommas($price.attr('data-price')) );
 
         const $qty =  $(el).find('.quantity'); // <select> combo box
         // 如果有的話才設定
@@ -209,27 +209,32 @@ function calPrices() {
     if(total>=6000) {
         $('#sum-of-sub-total').text( 'NT$ ' + dallorCommas(total))
         $('#discount').text( '-NT$ ' + dallorCommas(total*0.1))
-        $('#discount-tip').text(' (消費金額已達6000 享9折優惠)')
+        $('#discount-tip').text(' (消費金額已達6,000，享9折優惠)')
         discount = total * 0.1
     } else {
-        $('#discount-tip').text(`( 再消費$NT ${6000-total}，享9折優惠 )`)
+        let rest = 6000 - total
+        let dollarCommas = dallorCommas(rest)
+        $('#discount-tip').text(`( 再消費$NT ${dollarCommas}，享9折優惠 )`)
         $('#discount').text( '-NT$ 0' )
         discount = 0
     }
     // ----------------運費計算-----------------//
     if(total>=5000) {
         $('#shipping').text( 'NT$ 0' )
-        $('#shipping-tip').text(' (消費金額已達5000，享免運優惠)')
+        $('#shipping-tip').text(' (消費金額已達5,000，享免運優惠)')
         shipping = 0;
     } else {
+        let rest = 6000 - total
+        let dollarCommas = dallorCommas(rest)
         $('#shipping').text( 'NT$ 300')
-        $('#shipping-tip').text(`( 再消費$NT ${5000-total}，享免運優惠 )`)
+        $('#shipping-tip').text(`( 再消費$NT ${dollarCommas}，享免運優惠 )`)
         shipping = 300;
     }
     // ----------------總額計算-----------------//
     total += shipping - discount
-    $('#totalGrand').text( 'NT$ ' + dallorCommas(total));
-
+    $('#totalGrand').text(dallorCommas(total));
+    
+    $('#total_price').val(total)
 }
 calPrices();
 
