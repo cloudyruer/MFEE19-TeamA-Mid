@@ -44,7 +44,7 @@ if(!empty($pKeys)) {
                         ?>
                     <tr class="p-item" data-sid="<?= $sid ?>">
                         <td><a href="#" onclick="removeProductItem(event)"><i class="fas fa-trash-alt"></i></a></td>
-                        <td><img src="imgs/<?= $item['product_img'] ?>.jpg" alt=""></td>
+                        <td><img src="imgs/<?= $item['product_img'] ?>" alt=""></td>
                         <td><?= $item['product_name'] ?></td>
                         <td class="price" data-price="<?= $item['product_price'] ?>" id="price<?= $sid ?>"></td>
                         <td>
@@ -128,20 +128,21 @@ if(!empty($pKeys)) {
                     </form>
                 </div>
             </div>
-            
-
-            <?php if(isset($_SESSION['user'])): ?>
+            <?php if(!isset($_SESSION['user'])): ?>
+                <div class="alert alert-danger" role="alert">請先登入會員再結帳</div>
+            <?php endif; ?>
+            <!-- <?php if(isset($_SESSION['user'])): ?>
                 <a href="019-henry-save-orders.php" class="btn btn-success">結帳</a>
             <?php else: ?>
                 <div class="alert alert-danger" role="alert">請先登入會員再結帳</div>
-            <?php endif; ?>
+            <?php endif; ?> -->
         </div>
     </div>
 </div>
 <?php include __DIR__ . "/019-henry-scripts.php"; ?>
 <script>
 
-const dallorCommas = function(n){
+const dollarCommas = function(n){
     return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 };
 
@@ -188,7 +189,7 @@ function calPrices() {
         // let price = $(el).find('.price').attr('data-price') * 1;
 
         const $price = $(el).find('.price'); // 價格的 <td>
-        $price.text( 'NT$ ' + dallorCommas($price.attr('data-price')) );
+        $price.text( 'NT$ ' + dollarCommas($price.attr('data-price')) );
 
         const $qty =  $(el).find('.quantity'); // <select> combo box
         // 如果有的話才設定
@@ -199,22 +200,22 @@ function calPrices() {
 
         const $sub_total = $(el).find('.sub-total');
 
-        $sub_total.text('NT$ ' + dallorCommas($price.attr('data-price') * $qty.val()));
+        $sub_total.text('NT$ ' + dollarCommas($price.attr('data-price') * $qty.val()));
         total += $price.attr('data-price') * $qty.val();
     });
     // ----------------小計總和-----------------//
-    $('#sum-of-sub-total').text( 'NT$ ' + dallorCommas(total));
+    $('#sum-of-sub-total').text( 'NT$ ' + dollarCommas(total));
     // ----------------折扣計算-----------------//
     
     if(total>=6000) {
-        $('#sum-of-sub-total').text( 'NT$ ' + dallorCommas(total))
-        $('#discount').text( '-NT$ ' + dallorCommas(total*0.1))
+        $('#sum-of-sub-total').text( 'NT$ ' + dollarCommas(total))
+        $('#discount').text( '-NT$ ' + dollarCommas(total*0.1))
         $('#discount-tip').text(' (消費金額已達6,000，享9折優惠)')
         discount = total * 0.1
     } else {
         let rest = 6000 - total
-        let dollarCommas = dallorCommas(rest)
-        $('#discount-tip').text(`( 再消費$NT ${dollarCommas}，享9折優惠 )`)
+        let dollarComma = dollarCommas(rest)
+        $('#discount-tip').text(`( 再消費$NT ${dollarComma}，享9折優惠 )`)
         $('#discount').text( '-NT$ 0' )
         discount = 0
     }
@@ -225,14 +226,14 @@ function calPrices() {
         shipping = 0;
     } else {
         let rest = 6000 - total
-        let dollarCommas = dallorCommas(rest)
+        let dollarComma = dollarCommas(rest)
         $('#shipping').text( 'NT$ 300')
-        $('#shipping-tip').text(`( 再消費$NT ${dollarCommas}，享免運優惠 )`)
+        $('#shipping-tip').text(`( 再消費$NT ${dollarComma}，享免運優惠 )`)
         shipping = 300;
     }
     // ----------------總額計算-----------------//
     total += shipping - discount
-    $('#totalGrand').text(dallorCommas(total));
+    $('#totalGrand').text(dollarCommas(total));
     
     $('#total_price').val(total)
 }

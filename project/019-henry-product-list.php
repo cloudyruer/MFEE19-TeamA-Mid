@@ -113,7 +113,7 @@ if ($totalRows !== 0) {
   <div class="row justify-content-around">
     <?php foreach ($rows as $r) : ?>
       <div class="col-md-3 product-unit" data-sid="<?= $r['sid'] ?>">
-        <img src="imgs/<?= $r['product_img'] ?>.jpg" alt="">
+        <img src="imgs/<?= $r['product_img'] ?>" alt="">
         <p><?= $r['product_name'] ?></p>
         <p>$<?= $r['product_price'] ?></p>
         <p>還剩 <span id="stock_productNumber<?= $r['sid'] ?>" id="stock<?= $r['sid'] ?>"><?= $r['stock'] ?></span> 雙</p>
@@ -171,10 +171,12 @@ if ($totalRows !== 0) {
       stock_tip()
     }
   });
-  // $('.qty').change(() => {
-  //   input = $(".qty").val();
-  //   $(".qty").val(input);
-  // })
+  
+  $('#'+inputId).change(function(){
+    // input = $(".qty").val();
+    // $(".qty").val(input);
+    console.log('123');
+  })
   
 
   function stock_tip() {

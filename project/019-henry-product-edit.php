@@ -35,14 +35,15 @@
         <div class="card-body">
           <h5 class="card-title">修改商品資料</h5>
           <form name="form1" onsubmit="checkForm(); return false;">
+            <input type="hidden" name="sid" value="<?= $r['sid'] ?>">
             <div class="form-group">
               <label for="product_img">商品圖片</label>
-              <input type="file" class="form-control" id="product_img" name="product_img" accept="image/*">
+              <input type="file" class="form-control" id="product_img" name="product_img" accept="image/*" onchange="loadFile(event)">
               <?php if(empty( $r['product_img'])): ?>
                   <!-- 預設的大頭貼 -->
               <?php else: ?>
                   <!-- 顯示原本的大頭貼 -->
-                  <img src="imgs/<?= htmlentities($r['product_img']) ?>.jpg" alt="" width="100px" class="mt-2">
+                  <img src="imgs/<?= htmlentities($r['product_img']) ?>" alt="" width="100px" class="mt-2">
                   
               <?php endif; ?>
             </div>
@@ -76,6 +77,17 @@
 </div>
 <?php include __DIR__ . "/partials/scripts.php"; ?>
   <script>
+    var loadFile = function(event) {
+        
+        var output = document.getElementById('product_img');
+        
+        output.src = URL.createObjectURL(event.target.files[0]);
+        
+        output.onload = function() { 
+          console.log('123 ');
+          URL.revokeObjectURL(output.src) // free memory
+        }
+    };
     function checkForm(){
       //使用formdata上傳修改資料  不用再設定enctype="multipart/form-data"   會自動設定
       const fd = new FormData(document.form1);

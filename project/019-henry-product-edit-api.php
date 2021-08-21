@@ -67,7 +67,7 @@ if(! empty($_FILES) and !empty($_FILES['product_img'])){
     // 如果是允許的檔案類型
     if(! empty($ext)){
         $output['code'] = 2;
-        $filename = sha1( $_FILES['product_img']['name']. rand()). $ext;
+        $filename = $_FILES['product_img']['name'];
         //移動成功,true
         if(move_uploaded_file(
             $_FILES['product_img']['tmp_name'],
@@ -75,10 +75,11 @@ if(! empty($_FILES) and !empty($_FILES['product_img'])){
             
         )){
             $output['code'] = 3;
-            $sql = "UPDATE `product_list` SET `product_img`=? WHERE 1";
+            $sql = "UPDATE `product_list` SET `product_img`=? WHERE `product_list`.`sid` = ?";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([
-                $filename
+                $filename,
+                $_POST['sid']
             ]);
             //true代表新增成功
             if($stmt->rowCount()) {

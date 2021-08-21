@@ -60,7 +60,7 @@ $rows = $pdo->query($sql)->fetchALL();
                 </button>
               </td>
               <td><?= $r['sid'] ?></td>
-              <td><img src="imgs/<?= htmlentities($r['product_img']) ?>.jpg" alt=""></td>
+              <td><img src="imgs/<?= htmlentities($r['product_img']) ?>" alt=""></td>
               <td><?= htmlentities($r['product_name']) ?></td>
               <td><?= htmlentities($r['product_brand']) ?></td>
               <td><?= htmlentities($r['product_price']) ?></td>
@@ -103,7 +103,6 @@ $rows = $pdo->query($sql)->fetchALL();
   const myTable = document.querySelector('table');
   const modal = $('.modal1');
   $('.del1btn').on('click',function(event){
-    // console.log(event.target);
     willDeleteId = event.target.closest('tr').dataset.sid;
     modal.find('.modal-body').html(`確定要刪除編號為 ${willDeleteId} 的商品嗎？`)
   })
