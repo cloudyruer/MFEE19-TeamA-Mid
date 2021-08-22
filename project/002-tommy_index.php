@@ -1,8 +1,8 @@
 <?php
 include __DIR__ . '/partials/init.php';
 $title = 'Hi Tommy!!';
-$activeLi = 'tommy';
-
+// FIX
+$activeLi = 'edit';
 
 if (!isset($_SESSION['user'])) {
     echo "<script>alert('警告：你還沒登入，將在確認之後離開'); location.href = 'login.php';</script>";
@@ -21,20 +21,19 @@ $r = $pdo->query($sql)->fetch();
 $sql2 = "SELECT `account_ranking`.*, `members`.*
 FROM `account_ranking`
 JOIN `members`
-ON `account_ranking`.`members_id` = `members`.`id` WHERE `members`.id =". intval($_SESSION['user']['id']);
+ON `account_ranking`.`members_id` = `members`.`id` WHERE `members`.id =" . intval($_SESSION['user']['id']);
 
 $m = $pdo->query($sql2)->fetch();
 
 // $sql2 = "SELECT * FROM `account_ranking` WHERE id=" . intval($_SESSION['user']['id']);
-
 
 if (empty($r)) {
     header('Location: index_.php');
     exit;
 }
 ?>
-<?php include __DIR__ . '/partials/html-head.php'; ?>
-<?php include __DIR__ . '/partials/navbar.php'; ?>
+<?php include __DIR__ . '/partials/html-head.php';?>
+<?php include __DIR__ . '/partials/navbar.php';?>
 
 <style>
     /* .navbar_avatar {
@@ -61,7 +60,7 @@ if (empty($r)) {
 
     .mypage_outsidebar {
         width: 30%;
-        
+
 
     }
 
@@ -90,17 +89,17 @@ if (empty($r)) {
     }
 </style>
 <!-- <li class="nav-item">
-    <?php if (!empty($_SESSION['user']['avatar'])) : ?>
+    <?php if (!empty($_SESSION['user']['avatar'])): ?>
         <img src="./imgs/default_avatar.jpeg" alt="" width="300px">
-    <?php else : ?>
-        <img src="imgs/<?= $_SESSION['user']['avatar'] ?>" alt="" width="50px">
-    <?php endif; ?>
+    <?php else: ?>
+        <img src="imgs/<?=$_SESSION['user']['avatar']?>" alt="" width="50px">
+    <?php endif;?>
 </li> -->
 
 <div class="container mt-3">
 
     <div class="basic_container d-flex justify-content-between">
-        <?php include __DIR__ . '/002-tommy_mypage_bar.php'; ?>
+        <?php include __DIR__ . '/002-tommy_mypage_bar.php';?>
         <div class="mypage_main">
             <div class="card">
                 <div class="card-body">
@@ -112,23 +111,23 @@ if (empty($r)) {
                             <input type="file" class="form-control" id="avatar" name="avatar" accept="image/*" onchange="readURL(this)" targetID="preview_img">
                             <!-- <input type="text" class="form-control" id="clean" name="clean"?>"> -->
                             <!-- <a href=""></a> -->
-                            <?php if (empty($r['avatar'])) : ?>
+                            <?php if (empty($r['avatar'])): ?>
                                 <!-- 預設的大頭貼 -->
                                 <img class="avatar mt-3" id="preview_img" src="./imgs/default_avatar.jpeg" alt="" >
-                            <?php else : ?>
+                            <?php else: ?>
                                 <!-- 顯示原本的大頭貼 -->
-                                <img class="avatar mt-3" id="preview_img" src="imgs/<?= $r['avatar'] ?>" alt="" >
-                            <?php endif; ?>
+                                <img class="avatar mt-3" id="preview_img" src="imgs/<?=$r['avatar']?>" alt="" >
+                            <?php endif;?>
 
                         </div>
                         <div class="form-group">
                             <!-- <label for="account">Account </label> -->
-                            <input type="hidden" class="form-control" id="account" name="account" value="<?= htmlentities($r['account']) ?> ">
+                            <input type="hidden" class="form-control" id="account" name="account" value="<?=htmlentities($r['account'])?> ">
                             <small class="form-text "></small>
                         </div>
                         <div class="form-group">
                             <label for="account">Account *帳號無法更改</label>
-                            <input type="text" class="form-control" value="<?= htmlentities($r['account']) ?> " disabled>
+                            <input type="text" class="form-control" value="<?=htmlentities($r['account'])?> " disabled>
                             <small class="form-text "></small>
                         </div>
                         <div class="form-group">
@@ -143,38 +142,38 @@ if (empty($r)) {
                         </div>
                         <div class="form-group">
                             <!-- <label for="password">Password </label> -->
-                            <!-- <input type="hidden" class="form-control" id="password" name="password" value="<?= htmlentities($r['password']) ?>">
+                            <!-- <input type="hidden" class="form-control" id="password" name="password" value="<?=htmlentities($r['password'])?>">
                             <small class="form-text "></small> -->
                         </div>
                         <div class="form-group">
                             <label for="email">email</label>
-                            <input type="text" class="form-control" id="email" name="email" value="<?= htmlentities($r['email']) ?>">
+                            <input type="text" class="form-control" id="email" name="email" value="<?=htmlentities($r['email'])?>">
                             <small class="form-text "></small>
                         </div>
                         <div class="form-group">
                             <label for="mobile">mobile</label>
-                            <input type="text" class="form-control" id="mobile" name="mobile" value="<?= htmlentities($r['mobile']) ?>">
+                            <input type="text" class="form-control" id="mobile" name="mobile" value="<?=htmlentities($r['mobile'])?>">
                             <small class="form-text "></small>
                         </div>
                         <div class="form-group">
                             <label for="mobile">address</label>
-                            <input type="text" class="form-control" id="address" name="address" value="<?= htmlentities($r['address']) ?>">
+                            <input type="text" class="form-control" id="address" name="address" value="<?=htmlentities($r['address'])?>">
                             <small class="form-text "></small>
                         </div>
 
                         <div class="form-group">
                             <label for="birthday">birthday</label>
-                            <input type="date" class="form-control" id="birthday" name="birthday" value="<?= htmlentities($r['birthday']) ?>">
+                            <input type="date" class="form-control" id="birthday" name="birthday" value="<?=htmlentities($r['birthday'])?>">
                             <small class="form-text "></small>
                         </div>
                         <div class="form-group">
                             <label for="nickname">暱稱</label>
-                            <input type="text" class="form-control" id="nickname" name="nickname" value="<?= htmlentities($r['nickname']) ?>">
+                            <input type="text" class="form-control" id="nickname" name="nickname" value="<?=htmlentities($r['nickname'])?>">
                             <small class="form-text "></small>
                         </div>
                         <div class="form-group">
                             <!-- <label for="create_at">create_at</label> -->
-                            <input type="hidden" class="form-control" id="create_at" name="create_at" value="<?= htmlentities($r['create_at']) ?>">
+                            <input type="hidden" class="form-control" id="create_at" name="create_at" value="<?=htmlentities($r['create_at'])?>">
                             <small class="form-text "></small>
                         </div>
                         <button type="submit" class="btn btn-primary">修改</button>
@@ -190,7 +189,7 @@ if (empty($r)) {
 
     <!-- <h2>Hi Tommy!! <a href="002-tommy-api.php">Click me!</a> ☜(ﾟヮﾟ☜)</h2> -->
 </div>
-<?php include __DIR__ . '/partials/scripts.php'; ?>
+<?php include __DIR__ . '/partials/scripts.php';?>
 
 <script>
 
@@ -227,7 +226,7 @@ if (empty($r)) {
         }
         if (!password_re.test(password.value)) {
             isPass = false;
-            password.nextElementSibling.innerHTML = 
+            password.nextElementSibling.innerHTML =
             '密碼必須包含大小寫字母和數字的組合，不能使用特殊字符，長度在6-15之間'
             password.style.border = '1px red solid';
         }
@@ -306,4 +305,4 @@ if (empty($r)) {
     //     file.value = null;
     // });
 </script>
-<?php include __DIR__ . '/partials/html-foot.php'; ?>
+<?php include __DIR__ . '/partials/html-foot.php';?>
