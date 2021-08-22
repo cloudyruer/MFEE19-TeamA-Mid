@@ -1,6 +1,8 @@
 <?php
     include __DIR__. '/partials/init.php';
     $title = '修改資料';
+    $activeLi = 'li';
+
 
 $sid = isset($_GET['sid']) ? intval($_GET['sid']) : 0;
 

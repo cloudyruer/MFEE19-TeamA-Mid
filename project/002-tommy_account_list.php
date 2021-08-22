@@ -1,7 +1,7 @@
 <?php
 include __DIR__ . '/partials/init.php';
 $title = '資料列表';
-$activeLi = 'tommy';
+$activeLi = 'edit';
 
 // 固定每一頁最多幾筆
 $perPage = 5;

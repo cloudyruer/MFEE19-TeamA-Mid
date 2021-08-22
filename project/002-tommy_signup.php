@@ -14,6 +14,8 @@ $sql = "INSERT INTO `address_book`(
 
 $stmt = $pdo->query($sql);
 */
+$sql = "SELECT * FROM `members`  ORDER BY id DESC LIMIT 0 , 1";
+$r = $pdo->query($sql)->fetch();
 
 ?>
 <?php include __DIR__ . '/partials/html-head.php'; ?>
@@ -52,7 +54,9 @@ $stmt = $pdo->query($sql);
             border-color: transparent
         }
     }
-
+    input {
+        box-shadow: 0 0 4px black;
+    }
     .w-title {
         font-size: 1.5rem;
     }
@@ -77,8 +81,10 @@ $stmt = $pdo->query($sql);
                         </div>
                         <div class="form-group">
                             <label for="password">password</label>
-                            <input type="password" class="form-control" id="password" name="password">
+                            <input type="password" class="form-control mb-2" id="password" name="password">
                             <small class="form-text"></small>
+                            <input type="checkbox" onclick="Password_Function()">   Show Password
+
                         </div>
                         <div class="form-group">
                             <label for="email">email *</label>
@@ -110,11 +116,21 @@ $stmt = $pdo->query($sql);
                             <input type="text" class="form-control" id="nickname" name="nickname">
                             <small class="form-text "></small>
                         </div>
-                        <!-- <div class="form-group">
-                            <label for="orders_amount">nickname</label>
-                            <input type="hidden" class="form-control" id="orders_amount" name="orders_amount" value="">
+                        <div class="form-group">
+                            <!-- <label for="mem">nickname</label> -->
+                            <input type="hidden" class="form-control" id="members_id" name="members_id" value="<?= htmlentities($r['id']) ?>">
                             <small class="form-text "></small>
-                        </div> -->
+                        </div>
+                        <div class="form-group">
+                            <!-- <label for="mem">nickname</label> -->
+                            <input type="hidden" class="form-control" id="orders_amount" name="orders_amount" value="0">
+                            <small class="form-text "></small>
+                        </div>
+                        <div class="form-group">
+                            <!-- <label for="mem">nickname</label> -->
+                            <input type="hidden" class="form-control" id="ranking" name="ranking" value="1">
+                            <small class="form-text "></small>
+                        </div>
                         <button type="submit" class="btn btn-primary">註冊</button>
                         <div class="login mt-5">
                         已經有帳號了嗎？點<a href="./login.php">這裡</a>登入
@@ -198,7 +214,7 @@ $stmt = $pdo->query($sql);
                     console.log(obj);
                     if (obj.success) {
                         alert('註冊成功，請重新登入')
-                        location.href = 'index_.php';
+                        location.href = 'login.php';
                     } else {
                         alert(obj.error);
                     }
@@ -206,6 +222,15 @@ $stmt = $pdo->query($sql);
                 .catch(error => {
                     console.log('error:', error);
                 });
+        }
+    }
+
+    function Password_Function() {
+        var x = document.querySelector("#password");
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
         }
     }
 </script>

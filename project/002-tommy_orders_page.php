@@ -11,9 +11,12 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 
-$sql = "SELECT * FROM `members` WHERE id=" . intval($_SESSION['user']['id']);
+// $sql = "SELECT `orders`.*, `members`.*
+// FROM `orders`
+// JOIN `members`
+// ON `orders`.`members_id` = `members`.`id` WHERE `members`.id=" . intval($_SESSION['user']['id']);
 
-$r = $pdo->query($sql)->fetch();
+// $r = $pdo->query($sql)->fetch();
 
 $sql2 = "SELECT `account_ranking`.*, `members`.*
 FROM `account_ranking`
@@ -24,6 +27,8 @@ ON `account_ranking`.`members_id` = `members`.`id` WHERE `members`.id =". intval
 // $sql2 = "SELECT * FROM `account_ranking` WHERE id=" . intval($_SESSION['user']['id']);
 
 $m = $pdo->query($sql2)->fetch();
+
+
 
 if (empty($r)) {
     header('Location: index_.php');
@@ -50,8 +55,20 @@ if (!empty($keyword)) {
 
 
 // 總共有幾筆
-$totalRows = $pdo->query("SELECT count(1) FROM members $where ")
-    ->fetch(PDO::FETCH_NUM)[0];
+
+// SELECT `orders`.*, `members`.*
+// FROM `orders`
+// JOIN `members`
+// ON `orders`.`members_id` = `members`.`id`
+
+$totalRows = $pdo->query(" SELECT count(1),`orders`.*, `members`.`account`
+    FROM `orders`
+    JOIN `account`
+        ON `account`.`members` = `members`.`id` WHERE `members`.id = 1;")
+        ->fetch(PDO::FETCH_NUM)[0];
+
+// $totalRows = $pdo->query("SELECT count(1) FROM members $where ")
+//     ->fetch(PDO::FETCH_NUM)[0];
 // 總共有幾頁, 才能生出分頁按鈕
 $totalPages = ceil($totalRows / $perPage); // 正數是無條件進位
 
@@ -181,11 +198,13 @@ if ($totalRows != 0) {
 
                 <div class="tb">
                 <?php foreach ($rows as $r) : ?>
-                    <div class=" d-flex" data-id="<?= $r['id'] ?>">
-                        <div class="detail_td"><?= htmlentities($m['id']) ?></div>
-                        <div class="detail_td"><?= htmlentities($m['account']) ?></div>
-                        <div class="detail_td"><?= htmlentities($m['email']) ?></div>
-                        <div class="detail_td"><?= htmlentities($m['nickname']) ?></div>
+                    <div class=" d-flex" data-id="<?= $r['members_id'] ?>">
+                        <div class="detail_td"><?= htmlentities($r['members_id']) ?></div>
+                        <div class="detail_td"><?= htmlentities($r['account']) ?></div>
+                        <div class="detail_td"><?= htmlentities($r['order_date']) ?></div>
+                        <div class="detail_td"><?= htmlentities($r['amount']) ?></div>
+                        <div class="detail_td"><?= htmlentities($r['orders_amount']) ?></div>
+
                     
                     </div>
                 <?php endforeach; ?>

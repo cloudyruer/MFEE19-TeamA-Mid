@@ -1,7 +1,7 @@
 <?php
 include __DIR__ . '/partials/init.php';
 $title = '修改資料';
-
+$activeLi = 'edit';
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 $sql = "SELECT * FROM `members` WHERE id=$id";

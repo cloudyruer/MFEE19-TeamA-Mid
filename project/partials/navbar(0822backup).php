@@ -17,23 +17,31 @@
 
                 <!-- 001 Emma -->
                 <li class="nav-item  <?=$activeLi == 'emma' ? 'active' : ''?>">
-                    <a class="nav-link" href="001-emma-blog-list.php">Blog</a>
+                    <a class="nav-link" href="001-emma-blog-list.php">Emma</a>
+                </li>
+
+                <!-- 002 Tommy -->
+                <li class="nav-item  <?=$activeLi == 'tommy' ? 'active' : ''?>">
+                    <a class="nav-link" href="002-tommy.php">Tommy</a>
+                </li>
+
+                <li class="nav-item  <?=$activeLi == 'tommy' ? 'active' : ''?>">
+                    <a class="nav-link" href="002-tommy_index.php">Tommy</a>
                 </li>
 
                 <!-- 009 li -->
                 <li class="nav-item  <?=$activeLi == 'li' ? 'active' : ''?>">
-                    <a class="nav-link" href="009-li.php">Product List</a>
+                    <a class="nav-link" href="009-li.php">Li</a>
                 </li>
 
                 <!-- 019 Henry -->
-                <!-- TODO: FIX -->
                 <li class="nav-item  <?=$activeLi == 'henry' ? 'active' : ''?>">
-                    <a class="nav-link" href="019-henry-product-list.php">Henry</a>
+                    <a class="nav-link" href="019-henry.php">Henry</a>
                 </li>
 
                 <!-- 033 Leo -->
                 <li class="nav-item  <?=$activeLi == 'leo' ? 'active' : ''?>">
-                    <a class="nav-link" href="033-leo-stadium-list.php">Stadium</a>
+                    <a class="nav-link" href="033-leo.php">Leo</a>
                 </li>
 
             </ul>
@@ -50,19 +58,25 @@
                     <!----------- Tommy改的部分 -------------->
                     <li class="nav-item">
                         <a class="nav-link  <?=$activeLi == 'edit' ? 'active' : ''?>"
+                        href="profile-edit.php">編輯個人資料</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link  <?=$activeLi == 'edit' ? 'active' : ''?>" 
                         href="002-tommy_index.php">會員中心</a>
                     </li>
 
                     <!-- WARN the need of avatar?  -->
                     <li class="nav-item">
-                        <!-- FIX 刪掉? --by Joey-->
-
-                        <?php /* FIX NOTE 這是原本的 <?php if (empty($r['avatar'])): ?> --by Joey */?>
-                        <?php if (empty($_SESSION['user']['avatar'])): ?>
-                            <img class="Tommy_navbar_avatar" src="./imgs/default_avatar.jpeg" alt="">
-                        <?php else: ?>
-                            <img class="Tommy_navbar_avatar" src="imgs/<?=$_SESSION['user']['avatar']?>" alt="">
+                        <?php if (!empty($_SESSION['user']['avatar'])): ?>
+                            <!-- <img src="imgs/<?=$_SESSION['user']['avatar']?>" alt="" width="50px"> -->
+                            <!-- 這行會影響navbar頭貼，要註解掉 -->
                         <?php endif;?>
+
+                        <?php if (empty($r['avatar'])) : ?>
+                            <img class="Tommy_navbar_avatar" src="./imgs/default_avatar.jpeg" alt="">
+                        <?php else : ?>
+                            <img class="Tommy_navbar_avatar" src="imgs/<?= $_SESSION['user']['avatar'] ?>" alt="">
+                        <?php endif; ?>
                         <!----------- Tommy改的部分 -------------->
 
                     </li>
@@ -72,7 +86,7 @@
                         <a class="nav-link" href="logout.php">登出</a>
                     </li>
 
-                    <!-- NOTE TODO:temp if need, will show up after login -->
+                    <!-- NOTE temp if need, will show up after login -->
                     <li class="nav-item">
                         <a class="nav-link" href="#">example</a>
                     </li>
@@ -90,6 +104,12 @@
                         <a class="nav-link" href="login.php">登入</a>
                     </li>
 
+                    <!-- register -->
+                    <!-- WARN no link -->
+                    <!----------- Tommy改的部分 -------------->
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">註冊</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="002-tommy_signup.php">註冊</a>
                     </li>

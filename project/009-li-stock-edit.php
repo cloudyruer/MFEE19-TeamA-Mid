@@ -1,6 +1,8 @@
 <?php
 include __DIR__. '/partials/init.php';
 $title = '修改庫存資料';
+$activeLi = 'li';
+
 
 $sid = isset($_GET['sid']) ? intval($_GET['sid']) : 0;
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -29,11 +31,11 @@ $rStock = $pdo->query($sqlStock)->fetch();
         <div class="col-8">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title mt-3">產品鞋碼資料</h5>
+                    <h5 class="card-title mt-3">產品規格資料</h5>
                     <form name="formStockEdit" onsubmit="checkForm(); return false;">
                     <input type="hidden" name="id" value="<?= $id ?>">
                     <div class="form-group">
-                        <label for="size">鞋碼</label>
+                        <label for="size">規格</label>
                         <input type="text" class="form-control" id="size" name="size" value="<?= empty($rStock['size']) ? "無資料"  : htmlentities($rStock['size']) ; ?>">
                         <small class="form-text"></small>
                     </div>

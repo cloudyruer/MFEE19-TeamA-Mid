@@ -15,6 +15,9 @@ if (isset($_SESSION['user'])) {
             color: red;
             display: none;
         }
+        input {
+        box-shadow: 0 0 3px black;
+    }
     </style>
     <!-- NOTE change mt-3 -->
 <div class="container mt-3">
@@ -33,8 +36,9 @@ if (isset($_SESSION['user'])) {
                         </div>
                         <div class="form-group">
                             <label for="password">密碼</label>
-                            <input type="password" class="form-control" id="password" name="password">
+                            <input type="password" class="form-control mb-2" id="password" name="password">
                             <small class="form-text">請填寫密碼</small>
+                            <input type="checkbox" onclick="Password_Function()">   Show Password
                         </div>
 
                         <button type="submit" class="btn btn-primary">登入</button>
@@ -86,6 +90,15 @@ if (isset($_SESSION['user'])) {
             });
         }
 
+    }
+
+    function Password_Function() {
+        var x = document.querySelector("#password");
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
     }
 </script>
 <?php include __DIR__ . '/partials/html-foot.php';?>

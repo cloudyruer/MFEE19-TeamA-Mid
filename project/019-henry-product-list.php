@@ -67,12 +67,12 @@ if ($totalRows !== 0) {
     <a href="019-henry-product-list.php" id="btnMing" class="btn_pro-list">產品列表</a>
     <a href="019-henry-cargo.php" id="btnMing" class="btn_cargo">購物車 <span class="badge badge-pill badge-info cart-count"></span></a>
     <a href="019-henry-shop-list.php" id="btnMing" class="btn_shop-list">購物清單</a>
-    <?php if($_SESSION['user']['account']=='pikachu'):?>
-     <a href='019-henry-product-stock.php' id='btnMing' class='product_edit'>庫存商品</a>
-    <?php elseif($_SESSION['user']==''):?>
+    <?php if ($_SESSION['user']['account'] == 'pikachu') : ?>
+      <a href='019-henry-product-stock.php' id='btnMing' class='product_edit'>庫存商品</a>
+    <?php elseif ($_SESSION['user'] == '') : ?>
       <span>123</span>
     <?php endif; ?>
-    
+
 
     <div class="col">
       <form action="019-henry-product-list.php" class="form-inline my-2 my-lg-0 d-flex justify-content-end">
@@ -127,7 +127,10 @@ if ($totalRows !== 0) {
             <input type="text" class="qty text-center" width="20" value="0" size=5 id="productNumber<?= $r['sid'] ?>">
             <div class="add" id="btnMing" data-productNumber="productNumber<?= $r['sid'] ?>">+</div>
           </div>
-          <div id="tip_productNumber<?= $r['sid'] ?>" class="my-2 stock_tip <?php if ($r['stock'] != 0) {echo "visibilityHidden";} ?>">此商品已售罄，限量是殘酷的！</div>
+          <input name="prize" id="prize" type="text" value="<?= $r['product_price'] ?>">
+          <div id="tip_productNumber<?= $r['sid'] ?>" class="my-2 stock_tip <?php if ($r['stock'] != 0) {
+                                                                              echo "visibilityHidden";
+                                                                            } ?>">此商品已售罄，限量是殘酷的！</div>
           <button type="button" class="btn btn-primary add-to-cart-btn"><i class="fas fa-cart-plus"></i></button>
         </form>
       </div>
@@ -143,11 +146,11 @@ if ($totalRows !== 0) {
     if (!number.test(this.value)) this.value = "";
   });
 
-  let stock,stockId,input,inputId,tipId 
-  
+  let stock, stockId, input, inputId, tipId
+
   $(".minus").click(function minus() {
     inputId = this.dataset.productnumber
-    input = +$('#'+inputId).val()
+    input = +$('#' + inputId).val()
     if (input === 0) {
       //數量不能<0
       $("#" + inputId).val(input);
@@ -163,9 +166,9 @@ if ($totalRows !== 0) {
     inputId = this.dataset.productnumber
     stockId = 'stock_' + inputId
     tipId = 'tip_' + inputId
-    
-    stock = +$('#'+stockId).text()
-    input = +$('#'+inputId).val()
+
+    stock = +$('#' + stockId).text()
+    input = +$('#' + inputId).val()
     if (input === stock) {
       $("#" + inputId).val(input);
       stock_tip()
@@ -176,26 +179,26 @@ if ($totalRows !== 0) {
     }
   });
 
-  $("#"+inputId).on("input", function () {
-    if(+$("#productNumber11").val()>+$("#stock_productNumber11").text()) {
+  $("#" + inputId).on("input", function() {
+    if (+$("#productNumber11").val() > +$("#stock_productNumber11").text()) {
       $("#productNumber11").val($("#stock_productNumber11").text())
     } //無效
   });
 
-  $("#productNumber11").on("input", function () {
-    if(+$("#productNumber11").val()>+$("#stock_productNumber11").text()) {
+  $("#productNumber11").on("input", function() {
+    if (+$("#productNumber11").val() > +$("#stock_productNumber11").text()) {
       $("#productNumber11").val($("#stock_productNumber11").text())
     } //有效，但是寫死了
   });
-  
+
 
   function stock_tip() {
     if (stock === input) {
-      $('#'+tipId).removeClass('visibilityHidden')
-      $('#'+tipId).text('已達購買上限')
+      $('#' + tipId).removeClass('visibilityHidden')
+      $('#' + tipId).text('已達購買上限')
     } else {
-      $('#'+tipId).addClass('visibilityHidden')
-      $('#'+tipId).text('你看不到我')
+      $('#' + tipId).addClass('visibilityHidden')
+      $('#' + tipId).text('你看不到我')
     }
   }
   stock_tip()
@@ -207,10 +210,12 @@ if ($totalRows !== 0) {
 
     const sid = $(this).closest('.product-unit').attr('data-sid');
     const qty = $(this).closest('.product-unit').find('.qty').val();
-    
+    const prize = $(this).closest('.product-unit').find('#prize').val();
+
     $.get('019-henry-add-to-cart-api.php', {
       sid,
-      qty
+      qty,
+      prize
     }, function(data) {
       countCartObj(data);
     }, 'json');
