@@ -23,7 +23,6 @@ if(! empty($sid)){
         } else {
           $_SESSION['cart'][$sid] += $qty;
         }
-        
     } else {
         // 移除
         unset($_SESSION['cart'][$sid]);

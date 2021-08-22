@@ -128,6 +128,7 @@ if(!empty($pKeys)) {
                     </form>
                 </div>
             </div>
+            <?php echo json_encode($_SESSION['cart']) ?>;
             <?php if(!isset($_SESSION['user'])): ?>
                 <div class="alert alert-danger" role="alert">請先登入會員再結帳</div>
             <?php endif; ?>
