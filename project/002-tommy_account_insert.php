@@ -47,6 +47,8 @@ $stmt = $pdo->query($sql);
                             <label for="password">password</label>
                             <input type="password" class="form-control" id="password" name="password">
                             <small class="form-text"></small>
+                            <input type="checkbox" onclick="Password_Function()">   Show Password
+
                         </div>
                         <div class="form-group">
                             <label for="email">email *</label>
@@ -92,17 +94,20 @@ $stmt = $pdo->query($sql);
 </div>
 <?php include __DIR__. '/partials/scripts.php'; ?>
 <script>
+    const account_re = /^[a-zA-Z][a-zA-Z0-9_]{2,15}$/;
     const email_re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const mobile_re = /^09\d{2}-?\d{3}-?\d{3}$/;
     const password_re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,15}$/;
 
-
+    const account = document.querySelector('#account');
     const email = document.querySelector('#email');
     const mobile = document.querySelector('#mobile');
     const password = document.querySelector('#password');
 
     function checkForm(){
         // 欄位的外觀要回復原來的狀態
+        account.nextElementSibling.innerHTML = '';
+        account.style.border = '1px #CCCCCC solid';
         email.nextElementSibling.innerHTML = '';
         email.style.border = '1px #CCCCCC solid';
         mobile.nextElementSibling.innerHTML = '';
@@ -111,6 +116,13 @@ $stmt = $pdo->query($sql);
         password.style.border = '1px #CCCCCC solid';
 
         let isPass = true;
+
+        if (!account_re.test(account.value)) {
+            isPass = false;
+            account.nextElementSibling.innerHTML = '帳號需字母開頭，長度在2-15之間，允許字母數字下劃線';
+            account.style.border = '1px red solid';
+        }
+
         if (!email_re.test(email.value)) {
             isPass = false;
             email.nextElementSibling.innerHTML = '請填寫正確的 Email 格式';
@@ -147,7 +159,16 @@ $stmt = $pdo->query($sql);
                 })
                 .catch(error=>{
                     console.log('error:', error);
-                });
+                });     
+        }
+    }
+
+    function Password_Function() {
+        var x = document.querySelector("#password");
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
         }
     }
 </script>

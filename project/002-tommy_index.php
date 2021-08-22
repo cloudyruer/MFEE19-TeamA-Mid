@@ -45,15 +45,18 @@ if (empty($r)) {
     .basic_container {
         width: 100%;
     }
+
     .orders_amount {
         font-size: 2rem;
     }
+
     .ranking_img {
         width: 150px;
         height: 150px;
         border-radius: 50%;
         object-fit: cover
     }
+
     .ranking_text {
         font-size: 1.5rem;
     }
@@ -76,16 +79,25 @@ if (empty($r)) {
         width: 65%;
         border-radius: 10px;
     }
+
     .avatar {
 
         width: 200px;
         height: 200px;
         border-radius: 50%;
         object-fit: cover
-
     }
+
+    #avatar {
+        height: 45px;
+    }
+
     form .form-group small {
         color: red;
+    }
+
+    input {
+        box-shadow: 0 0 3px black;
     }
 </style>
 <!-- <li class="nav-item">
@@ -118,7 +130,6 @@ if (empty($r)) {
                                 <!-- 顯示原本的大頭貼 -->
                                 <img class="avatar mt-3" id="preview_img" src="imgs/<?=$r['avatar']?>" alt="" >
                             <?php endif;?>
-
                         </div>
                         <div class="form-group">
                             <!-- <label for="account">Account </label> -->
@@ -134,11 +145,15 @@ if (empty($r)) {
                             <label for="password_o">原密碼(密碼對了才能改檔案內容喔！)</label>
                             <input type="password" class="form-control" id="password_o" name="password_o">
                             <small class="form-text "></small>
+                            <input type="checkbox" onclick="Password_Function()">   Show Password
+
                         </div>
                         <div class="form-group">
                             <label for="password">新密碼(如沒有要更改密碼，請填原密碼)</label>
                             <input type="password" class="form-control" id="password" name="password">
                             <small class="form-text "></small>
+                            <input type="checkbox" onclick="Password_Function2()">   Show Password
+
                         </div>
                         <div class="form-group">
                             <!-- <label for="password">Password </label> -->
@@ -192,7 +207,6 @@ if (empty($r)) {
 <?php include __DIR__ . '/partials/scripts.php';?>
 
 <script>
-
     const email_re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const mobile_re = /^09\d{2}-?\d{3}-?\d{3}$/;
     const password_re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,15}$/;
@@ -296,6 +310,24 @@ if (empty($r)) {
 
         }
 
+    }
+
+    function Password_Function() {
+        var x = document.querySelector("#password_o");
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
+    }
+
+    function Password_Function2() {
+        var x = document.querySelector("#password");
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
     }
 
     // let file = document.querySelector('#avatar');
