@@ -53,6 +53,12 @@
                                    value="<?= htmlentities($r['nick_name']) ?>">
                             <small class="form-text "></small>
                         </div>
+                        <div class="form-group">
+                                <label for="images">文章預覽圖片*</label>
+                                <input type="file" class="form-control" id="images" name="images" accept="image/*" onchange="loadFile(event)">
+                                <img id="preview_img" class="w-50 mt-3"/>
+                                <small class="form-text"></small>
+                        </div>
                         
                         <div class="form-group">
                             <label for="title">標題 *</label>
@@ -65,6 +71,15 @@
                             <textarea class="form-control" id="content" name="content" cols="30" rows="10"
                                 ><?= htmlentities($r['content']) ?></textarea>
                             <small class="form-text "></small>
+                        </div>
+                        <div class="form-group">
+                                <label for="category">文章分類</label>
+                                <select class="form-control" id="category" name="category">
+                                <option disabled>請選擇</option>
+                                <option value="男鞋">男鞋</option>
+                                <option value="女鞋">女鞋</option>
+                                <option value="其他商品">其他商品</option>
+                                </select>
                         </div>
 
                         <button type="submit" class="btn btn-primary">修改</button>

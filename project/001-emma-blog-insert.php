@@ -12,7 +12,7 @@
     <div class="container">
         <div class="row">
             <div class="col my-3">
-                <button type="button" class="btn btn-secondary insert" onclick="location.href='001-emma-blog-list.php'">文章列表</button>
+                <button type="button" class="btn btn-secondary insert" onclick="location.href='001-emma-blog-list.php'">後台文章列表</button>
 
             </div>
             
@@ -37,6 +37,12 @@
                                 <small class="form-text "></small>
                             </div>
                             <div class="form-group">
+                                <label for="images">文章預覽圖片*</label>
+                                <input type="file" class="form-control" id="images" name="images" accept="image/*" onchange="loadFile(event)">
+                                <img id="preview_img" class="w-50 mt-3"/>
+                                <small class="form-text"></small>
+                            </div>
+                            <div class="form-group">
                                 <label for="title">標題 *</label>
                                 <input type="text" class="form-control" id="title" name="title">
                                 <small class="form-text "></small>
@@ -45,6 +51,15 @@
                                 <label for="content">內文 *</label>
                                 <textarea type="text-area" class="form-control" id="content" name="content" rows="10"></textarea>
                                 <small class="form-text "></small>
+                            </div>
+                            <div class="form-group">
+                                <label for="category">文章分類</label>
+                                <select class="form-control" id="category" name="category">
+                                <option disabled>請選擇</option>
+                                <option value="男鞋">男鞋</option>
+                                <option value="女鞋">女鞋</option>
+                                <option value="其他商品">其他商品</option>
+                                </select>
                             </div>
                             
                             <button type="submit" class="btn btn-primary">發佈</button>
@@ -64,6 +79,14 @@
     const author = document.querySelector('#author');
     const title = document.querySelector('#title');
     const content = document.querySelector('#content');
+
+    function loadFile(event) {
+        var preview_img = document.getElementById('preview_img');
+        preview_img.src = URL.createObjectURL(event.target.files[0]);
+        preview_img.onload = function() {
+            URL.revokeObjectURL(preview_img.src) // free memory
+        }
+    };
 
     function checkForm(){
         // 欄位的外觀要回復原來的狀態
