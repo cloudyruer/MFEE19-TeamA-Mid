@@ -35,15 +35,7 @@ $stmt->execute([
 
 $sid = $pdo->lastInsertId();
 
-$sqlStock = "INSERT INTO `stock`
-(`products_id`, `size`, `stock`) VALUES (?, ?, ?)";
 
-$stmtStock = $pdo->prepare($sqlStock);
-$stmtStock->execute([
-    $sid,
-    $_POST['size'],
-    $_POST['stock'],
-]);
 
 // $sqlImg = "INSERT INTO `images`
 // (`products_sid`, `fileName`) VALUES (?, ?)";
