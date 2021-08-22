@@ -18,7 +18,7 @@ if(! empty($sid)){
 
     if(!empty($qty)){
         // 新增或修改
-        if($_SESSION['cart'][$sid]=='undefined') {
+        if(!isset($_SESSION['cart'][$sid])) {
           $_SESSION['cart'][$sid] = $qty;
         } else {
           $_SESSION['cart'][$sid] += $qty;
