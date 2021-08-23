@@ -9,9 +9,9 @@ header("Content-Type: application/json"); //搭配postman
 // $data_ar = []; // dict
 
 // 有登入才能結帳
-if(! isset($_SESSION['user'])){
-    header('Location: 019-henry-product-list.php');
-    exit;
+if (!isset($_SESSION['user'])) {
+  header('Location: 019-henry-product-list.php');
+  exit;
 }
 
 
@@ -62,7 +62,7 @@ if (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
   exit();
 }
 
-if(!preg_match("/^09\d{2}-?\d{3}-?\d{3}$/", $_POST["mobile"])){
+if (!preg_match("/^09\d{2}-?\d{3}-?\d{3}$/", $_POST["mobile"])) {
   $output["error"] = "手機格式不對";
   $output["code"] = 430;
   echo json_encode($output);
@@ -73,7 +73,7 @@ if(!preg_match("/^09\d{2}-?\d{3}-?\d{3}$/", $_POST["mobile"])){
 
 //正確做法
 $sql = "INSERT INTO `order_list`(`user_id`, `total_price`,`order_status`,`user_name`,`user_phone`,`user_email`,`pickup_store`,`pickup_way`,`user_address`,`created_at`
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,NOW())"; 
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,NOW())";
 
 //prepare的缺點：看不到執行時sql的語法
 $stmt = $pdo->prepare($sql);
@@ -98,16 +98,19 @@ if ($stmt->rowCount() == 1) {
 
 $order_sid = $pdo->lastInsertId(); // 最近新增資料的 PK
 
-$od_sql = "INSERT INTO `order_details`(`order_sid`, `product_sid`, `price`, `quantity`) VALUES (?, ?, ?, ?)";
+$od_sql = "INSERT INTO `order_details`(`order_id`, `user_id`,`user_name`,`product_id`, `unit_price`, `quantity`, `total_price`) VALUES (?, ?, ?, ?,?,?,?)";
 $od_stmt = $pdo->prepare($od_sql);
 
-foreach($_SESSION['cart'] as $p_sid=>$qty){
-    $od_stmt->execute([
-        $order_sid,
-        $p_sid,
-        $data_ar[$p_sid]['price'],
-        $qty,
-    ]);
+foreach ($_SESSION['cart'] as $p_sid => $value) {
+  $od_stmt->execute([
+    $order_sid,
+    $_SESSION['user']['id'],
+    $_POST["name"],
+    $p_sid,
+    $value[1],
+    $value[0],
+    $value[0] * $value[1],
+  ]);
 }
 
 

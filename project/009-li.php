@@ -134,12 +134,6 @@ foreach($dict as $sid => $item){
       opacity: 0.3;
       position: relative;
     }
-    .op5::after{
-      content: '已下架';
-      position: absolute;
-      top: 0;
-      right: 0;
-    }
     .black{
       background-color: #222;
    }

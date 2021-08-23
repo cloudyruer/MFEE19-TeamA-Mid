@@ -8,7 +8,7 @@
     function countCartObj(data){
         let total = 0;
         for(let i in data){
-            total += data[i];
+            total += data[i][0];
         }
         $('.cart-count').text(total);
     }

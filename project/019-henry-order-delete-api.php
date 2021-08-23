@@ -11,7 +11,7 @@ $output = [
 
 //empty:測試是否為0或空字串或空陣列，yes→true，非空→false。此法如果是undefined不會提醒，直接判斷true
 if (!empty($sid)) {
-  $sql = "DELETE FROM `address_book` WHERE sid=$sid";
+  $sql = "DELETE FROM `order_list` WHERE sid=$sid";
   $stmt = $pdo->query($sql);
 
   if ($stmt->rowCount() == 1) {

@@ -90,7 +90,7 @@ $row = $pdo->query($sql1)->fetch();
   <div class="row mt-5">
         <div class="col-3 ">
             <div class="addData d-flex" >
-                <a class="nav-link d-flex justify-content-end" href="009-li-stock-insert.php?sid=<?= $sid ?>">＋新增鞋碼資料</a>
+                <a class="nav-link d-flex justify-content-end" href="009-li-stock-insert.php?sid=<?= $sid ?>">＋新增規格資料</a>
             </div>
         </div>
         <div class="col-3">
@@ -106,7 +106,7 @@ $row = $pdo->query($sql1)->fetch();
         <thead>
           <tr>
             <th scope="col">id</th>
-            <th scope="col">鞋碼</th>
+            <th scope="col">規格</th>
             <th scope="col">庫存</th>
             <th scope="col">編輯</th>
             <th scope="col">刪除</th>

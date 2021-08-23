@@ -1,6 +1,8 @@
 <?php
     include __DIR__. '/partials/init.php';
     $title = '新增資料';
+    $activeLi = 'li';
+
 
     $brands = $pdo->query("SELECT * FROM brands")->fetchAll();
 
