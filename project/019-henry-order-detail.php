@@ -5,13 +5,14 @@ if (!isset($_SESSION["user"])) {
   $login = 'no';
 }
 
-
+$orderSid = isset($_GET['sid']) ? intval($_GET['sid']) : 0;
 // -----------------------只能看到自己的訂單----------------------------//
 $sid = isset($_SESSION['user']['id']) ? intval($_SESSION['user']['id']) : 0;
-$sql = "SELECT * FROM `order_list` WHERE `user_id`= $sid";
+$sql = "SELECT * FROM `order_details` JOIN `product_list` ON `order_details`.`product_id`=`product_list`.`product_id` WHERE `order_id`=$orderSid";
+
 $rows = $pdo->query($sql)->fetchALL();
 
-
+echo json_encode($sid)
 ?>
 <script>
   let login = '<?= $login ?>';
@@ -46,29 +47,17 @@ $rows = $pdo->query($sql)->fetchALL();
     <table class="table table-striped table-bordered">
       <thead class="text-center">
         <tr>
-          <th scope="col">刪除訂單</i></th>
-          <th scope="col">訂單編號</i></th>
-          <th scope="col">訂購人姓名</th>
-          <th scope="col">金額</th>
-          <th scope="col">訂單狀態</th>
-          <th scope="col">取貨方式</th>
-          <th scope="col">取貨門市</th>
+          <th scope="col">商品圖片</th>
+          <th scope="col">品名</th>
+          <th scope="col">數量</th>
         </tr>
       </thead>
       <tbody class="text-center">
         <?php foreach ($rows as $r) : ?>
           <tr data-sid="<?= $r['sid'] ?>">
-            <td>
-              <button type="button" class="btn btn-outline-warning del1btn" data-toggle="modal" data-target="#exampleModal">
-                <i class="fas fa-trash-alt"></i>
-              </button>
-            </td>
-            <td> <a href="019-henry-order-detail.php?sid=<?= $r['sid'] ?>" id="btnMing" class="btn_order-detail"><?= $r['sid'] ?></a></td>
-            <td><?= htmlentities($r['user_name']) ?></td>
-            <td><?= htmlentities($r['total_price']) ?></td>
-            <td><?= htmlentities($r['order_status']) ?></td>
-            <td><?= htmlentities($r['pickup_way']) ?></td>
-            <td><?= htmlentities($r['pickup_store']) ?></td>
+            <td><img src="imgs/<?= htmlentities($r['product_img']) ?>" alt=""></td>
+            <td><?= htmlentities($r['product_name']) ?></td>
+            <td><?= htmlentities($r['quantity']) ?></td>
           </tr>
         <?php endforeach; ?>
       </tbody>
@@ -77,25 +66,7 @@ $rows = $pdo->query($sql)->fetchALL();
 </div>
 </div>
 
-<div class="modal fade modal1" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">退訂確認</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary modal-del-btn">忍痛放棄</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">我要保留</button>
-      </div>
-    </div>
-  </div>
-</div>
 <?php include __DIR__ . "/019-henry-scripts.php"; ?>
 <script>
   const myTable = document.querySelector('table');

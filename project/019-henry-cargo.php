@@ -16,6 +16,9 @@ if (!empty($pKeys)) {
 
 }
 
+$pickup_way = $pdo->query("SELECT * FROM `store` WHERE `parents_id` = 0")->fetchAll();
+// $pickup_store = $pdo->query("SELECT * FROM `store`")->fetchAll();
+echo json_encode($pickup_way)
 ?>
 <?php include __DIR__ . "/partials/html-head.php"; ?>
 <?php include __DIR__ . "/019-henry-css.php"; ?>
@@ -66,13 +69,11 @@ if (!empty($pKeys)) {
             <p>運費: <span id="shipping"></span> <span id="shipping-tip"></span></p>
             <p>總計: NT$ <span id="totalGrand"></span></p>
         </div>
-        <!-- <?php echo json_encode($_SESSION['cart']) ?> -->
-
+        
         <div class="card mb-3">
             <div class="card-body">
                 <h5 class="card-title">訂購人資料</h5>
                 <form name="form1" onsubmit="checkForm(); return false;">
-                    <!-- <input type="hidden" name="sid" value="<?= $rows['sid'] ?>"> -->
                     <div class="form-group">
                         <label for="name">姓名 <span class="star">*</span></label>
                         <input type="text" class="form-control" id="name" name="name" placeholder="王大明">
@@ -94,14 +95,6 @@ if (!empty($pKeys)) {
                         <small class="form-text"></small>
                     </div>
                     <div class="form-group">
-                        <label for="pickup_way">取件方式 <span class="star">*</span></label>
-                        <select class="form-control" id="pickup_way" name="pickup_way" required>
-                            <option value="" disabled selected>-- 請選擇 --</option>
-                            <option value="貨到付款">7-11取貨付款</option>
-                            <option value="宅配到府">宅配到府</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
                         <label for="order_status">付款方式 <span class="star">*</span></label>
                         <select class="form-control" id="order_status" name="order_status" required>
                             <option value="" disabled selected>-- 請選擇 --</option>
@@ -109,7 +102,16 @@ if (!empty($pKeys)) {
                             <option value="已經結帳">ATM轉帳</option>
                         </select>
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
+                        <label for="pickup_way">取件方式 <span class="star">*</span></label>
+                        <select class="form-control" id="pickup_way" name="pickup_way" required>
+                            <option value="" disabled selected>-- 請選擇 --</option>
+                            <option value="貨到付款">7-11取貨付款</option>
+                            <option value="宅配到府">宅配到府</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group d-none" id="store">
                         <label for="pickup_store">取貨門市 <span class="star">*</span></label>
                         <select class="form-control" id="pickup_store" name="pickup_store" required>
                             <option value="" disabled selected>-- 請選擇 --</option>
@@ -119,8 +121,43 @@ if (!empty($pKeys)) {
                             <option value="竹盈門市">竹盈門市</option>
                             <option value="景旭門市">景旭門市</option>
                         </select>
-                    </div>
+                    </div> -->
+
                     <div class="form-group">
+                        <label for="pickup_way">取貨門市</label>
+                        <select class="form-control" id="pickup_way" name="pickup_way">
+                        <option disabled selected>請選擇</option>
+                        <?php foreach($pickup_way as $cm) : ?>
+                        <option value="<?= $cm['sid'] ?>"><?= $cm['name'] ?></option>
+                        <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <!-- <div class="form-group">
+                        <label for="pickup_store">取貨門市</label>
+                        <select class="form-control" id="pickup_store" name="pickup_store">
+                        <option disabled selected>請選擇</option>
+                        <?php foreach($pickup_store as $cc) : ?>
+                        <option value="<?= $cc['sid'] ?>"><?= $cc['name'] ?></option>
+                        <?php endforeach; ?>
+                        </select>
+                    </div>    -->
+                    <div class="form-group">
+                        <label for="pickup_store">取貨門市</label>
+                        <select class="form-control" id="pickup_store" name="pickup_store">
+                        <option disabled selected>請選擇</option>
+                        </select>
+                    </div>
+
+                    
+                    <div class="form-group d-none" id="payment">
+                        <p class="text-success">
+                            匯款資訊<br>
+                            中華郵政 代碼 : 700<br>
+                            戶名 : 資策會<br>
+                            帳號 : 01234567898765<br>
+                        </p>
+                    </div>
+                    <div class="form-group d-none">
                         <label for="total_price">總金額</span></label>
                         <input type="text" class="form-control" id="total_price" name="total_price" value="">
                     </div>
@@ -137,6 +174,57 @@ if (!empty($pKeys)) {
 </div>
 <?php include __DIR__ . "/019-henry-scripts.php"; ?>
 <script>
+
+
+$(function() {
+        $('#pickup_way').change(function() {
+            //更動第一層時第二層清空
+            $('#pickup_store').empty().append("<option disabled value=''>請選擇</option>");
+            var i = 0;
+            $.ajax({
+                type: "GET",
+                url: "019-henry-store.php",
+                data: {
+                    lv: $('#pickup_way option:selected').val()
+                },
+                datatype: "json",
+                success: function(result) {
+                    //當第一層回到預設值時，第二層要如何顯示之前的預設值呢?
+                    if (result == "") {
+                        $("#pickup_way").append("<option value='" + result[i]['name'] + "'"  + ">" + result[i]['name'] + "</option>");
+                     
+                    }
+                    //依據第一層回傳的值去改變第二層的內容
+                    while (i < result.length) {
+                        $("#pickup_store").append("<option value='" + result[i]['name'] + "'"  + ">" + result[i]['name'] + "</option>");
+                        i++;
+                    }
+                },
+                error: function(xhr, status, msg) {
+                    console.error(xhr);
+                    console.error(msg);
+                }
+            });
+        });
+    });
+
+
+
+
+
+    
+
+
+    $('#order_status').click(function(){
+        if($('#order_status').val()==='已經結帳') {
+            $('#payment').removeClass('d-none')
+        } else {
+            $('#payment').addClass('d-none')
+        }
+    })
+    
+
+
     const dollarCommas = function(n) {
         return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
     };

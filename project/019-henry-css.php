@@ -39,4 +39,7 @@
     .visibilityHidden {
       visibility:hidden;
     }
+    .displayNone {
+      display: none;
+    }
 </style>

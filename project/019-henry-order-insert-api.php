@@ -98,7 +98,7 @@ if ($stmt->rowCount() == 1) {
 
 $order_sid = $pdo->lastInsertId(); // 最近新增資料的 PK
 
-$od_sql = "INSERT INTO `order_details`(`order_id`, `user_id`,`user_name`,`product_id`, `unit_price`, `quantity`, `total_price`) VALUES (?, ?, ?, ?,?,?,?)";
+$od_sql = "INSERT INTO `order_details`(`order_id`, `user_id`,`user_name`,`product_id`, `unit_price`, `quantity`, `sub_total`) VALUES (?, ?, ?, ?,?,?,?)";
 $od_stmt = $pdo->prepare($od_sql);
 
 foreach ($_SESSION['cart'] as $p_sid => $value) {
