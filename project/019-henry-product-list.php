@@ -182,18 +182,17 @@ if ($totalRows !== 0) {
       }
     }
   });
+  
 
-  // $("#" + inputId).on("input", function() {
-  //   if (+$("#productNumber11").val() > +$("#stock_productNumber11").text()) {
-  //     $("#productNumber11").val($("#stock_productNumber11").text())
-  //   } //無效
-  // });
-
-  $("#productNumber11").on("input", function() {
-    if (+$("#productNumber11").val() > +$("#stock_productNumber11").text()) {
-      $("#productNumber11").val($("#stock_productNumber11").text())
-    } //有效，但是寫死了
+  //輸入商品的購買量不能超過庫存量
+  $('input').on("input", function() {
+    inputID = this.id
+    if (+$("#"+inputID).val() > +$("#stock_"+inputID).text()) {
+      $("#"+inputID).val($("#stock_"+inputID).text())
+    } 
   });
+
+ 
 
 
   function stock_tip() {

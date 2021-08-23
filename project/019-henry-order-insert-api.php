@@ -113,22 +113,21 @@ foreach ($_SESSION['cart'] as $p_sid => $value) {
   ]);
 }
 
-//結帳時商品庫存會變動
-$stock_sql = "UPDATE `product_list` SET `stock`=? WHERE `product_list`.`stock` = ?";
-$stock_stmt = $pdo->prepare($stock_sql);
+
+//結帳時商品庫存會減少
 foreach ($_SESSION['cart'] as $p_sid => $value) {
-  $stock_stmt->execute([
+    $od_sql2 = "SELECT `stock` FROM `product_list` WHERE `sid`= $p_sid";
+    $objStmt = $pdo->query($od_sql2)->fetch();
+    $newStock= $objStmt["stock"]-$value[0];
     
-    
-  ]);
-}
+    $od_sql3 = "UPDATE `product_list` SET `stock`=$newStock   WHERE `sid`= $p_sid";
+    $pdo->query($od_sql3);
+};
+
 
 
 unset($_SESSION['cart']); // 清除購物車內容
 
-// echo json_encode([
-//   "rowCount" => $stmt->rowCount(), //新增的筆數。如果方法是select，是讀取的筆數
-//   "postData" => $_POST,
-// ]);
+
 
 echo json_encode($output);
