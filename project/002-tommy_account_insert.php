@@ -98,7 +98,7 @@ $r = $pdo->query($sql)->fetch();
                             <small class="form-text "></small>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">註冊</button>
+                        <button type="submit" class="btn btn-primary">新增資料</button>
                     </form>
 
 
