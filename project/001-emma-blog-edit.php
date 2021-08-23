@@ -100,6 +100,14 @@
     const title = document.querySelector('#title');
     const content = document.querySelector('#content');
 
+    function loadFile(event) {
+        var preview_img = document.getElementById('preview_img');
+        preview_img.src = URL.createObjectURL(event.target.files[0]);
+        preview_img.onload = function() {
+            URL.revokeObjectURL(preview_img.src) // free memory
+        }
+    };
+
     function checkForm(){
         // 欄位的外觀要回復原來的狀態
         author.nextElementSibling.innerHTML = '';

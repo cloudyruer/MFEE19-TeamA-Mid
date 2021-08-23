@@ -6,22 +6,24 @@
 
     $sql = sprintf("SELECT * FROM Blog WHERE id = %s", $id);
 
+
     $row = $pdo->query($sql)->fetch();
+    if(is_array($row)){
+        $row['view_count'] += 1;
+        $sql = "UPDATE `Blog` SET 
+                          `view_count`= ?
+                          WHERE `id`=?";
 
-    // echo $row;
-    $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
-
-
-    $where = ' WHERE 1 ';
-    if(! empty($keyword)){
-        // $where .= " AND `name` LIKE '%{$keyword}%' "; // sql injection 漏洞
-        $where .= sprintf(" AND ( `title` LIKE %s ", $pdo->quote('%'. $keyword. '%'));
-        $where .= sprintf(" OR `author` LIKE %s )", $pdo->quote('%'. $keyword. '%'));
-
-        $qs['keyword'] = $keyword;
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            $row['view_count'],
+            $row['id']
+        ]);
     }
 
-    
+    $top_rank_sql = "SELECT * FROM Blog WHERE 1 ORDER BY view_count DESC LIMIT 0, 6";
+    $top_rank_row = $pdo->query($top_rank_sql)->fetchAll();
+
 ?>
 <?php include __DIR__. '/partials/html-head.php'; ?>
 <?php include __DIR__. '/partials/navbar.php'; ?>
@@ -33,6 +35,22 @@
             max-width:90px;
 
         }
+
+        .article-img img{
+            max-width:600px;
+        }
+        .rank p{
+            font-size: 14px;
+        }
+
+        .rank .title p{
+            font-size: 14px;
+            margin-bottom: 0px;
+            min-height: 50px;
+            
+        }
+
+        
 
 
     </style>
@@ -47,7 +65,7 @@
            
             <form action="001-emma-blog-home.php" class="form-inline">
                 <input class="form-control mr-sm-2" type="search" name="keyword" placeholder="Search"
-                       value="<?= htmlentities($keyword) ?>"
+                       value=""
                        aria-label="Search">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
             </form>
@@ -64,6 +82,15 @@
         ?>
             <div class="article-title">
                 <h1><?=htmlentities($row['title'])?></h1>
+            </div>
+            <div class="article-detail d-flex justify-content-between">
+                <a href="001-emma-blog-author.php?nick_name=<?=$row['nick_name']?>"><?=$row['nick_name']?></a>
+                <div class="article-detail-date-count d-flex inline-block">
+                    <p><?=$row['created_at']?></p>
+
+                    <p>&nbsp  點擊數：<?=$row['view_count']?></p>
+                </div>
+                
             </div>
             <div class="article-img d-flex my-5 justify-content-center">
                 <img src="./imgs/<?=htmlentities($row['prvw_img_name'])?>" alt="">
@@ -90,20 +117,24 @@
                    <div class="hot-rank col-12 mb-3">
                        <h3>熱門排行</h3>
                    </div>
-                   <div class="rank col-8">
-                        <div class="title">
-                            <p><?=htmlentities($row['title'])?></p>
-                        </div>
-                        <div class="author">
-                            <p><?=htmlentities($row['nick_name'])?></p>
-                        </div>
+                   <?php foreach($top_rank_row as $r): ?>
+                   <a href="001-emma-blog-article.php?id=<?=$r['id']?>" class="row justify-content-center">
+                        <div class="rank col-8">
+                                <div class="title">
+                                    <p><?=htmlentities($r['title'])?></p>
+                                </div>
+                                <div class="author">
+                                    <p><?=htmlentities($r['nick_name'])?></p>
+                                </div>
 
-                   </div>
-                   <div class="rank-img col-4">
-                      
-                        <img src="./imgs/abc.jpg" alt="">
-                      
-                   </div>
+                        </div>
+                        <div class="rank-img col-4">
+                            
+                                <img src="./imgs/<?=$r['prvw_img_name']?>" alt="">
+                            
+                        </div>
+                   </a>
+                   <?php endforeach; ?>
                    
                </div>
            </div>

@@ -60,10 +60,10 @@ if(! empty($_FILES) and !empty($_FILES['images'])){
 
 $sql = "INSERT INTO `Blog`(
                `author`, `nick_name`, `prvw_img_name`, `title`,
-               `content`, `category` ,`created_at`,`last_modified`
+               `content`, `category` ,`created_at`,`last_modified`,`view_count`
                ) VALUES (
                     ?, ?, ?, ?, 
-                    ?, ?, NOW(), NOW()
+                    ?, ?, NOW(), NOW(), 0
                )";
 
 $stmt = $pdo->prepare($sql);

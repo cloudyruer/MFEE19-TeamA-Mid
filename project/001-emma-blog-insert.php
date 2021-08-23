@@ -32,7 +32,7 @@
                                 <small class="form-text "></small>
                             </div>
                             <div class="form-group">
-                                <label for="nick_name">暱稱</label>
+                                <label for="nick_name">暱稱 *</label>
                                 <input type="text" class="form-control" id="nick_name" name="nick_name">
                                 <small class="form-text "></small>
                             </div>
@@ -79,6 +79,7 @@
     const author = document.querySelector('#author');
     const title = document.querySelector('#title');
     const content = document.querySelector('#content');
+    const nick_name = document.querySelector('#nick_name');
 
     function loadFile(event) {
         var preview_img = document.getElementById('preview_img');
@@ -102,6 +103,11 @@
             isPass = false;
             author.nextElementSibling.innerHTML = '請填寫正確的姓名';
             author.style.border = '1px red solid';
+        }
+        if(nick_name.value.length <= 0){
+            isPass = false;
+            nick_name.nextElementSibling.innerHTML = '請填寫正確的姓名';
+            nick_name.style.border = '1px red solid';
         }
 
         if(title.value.length <= 0){

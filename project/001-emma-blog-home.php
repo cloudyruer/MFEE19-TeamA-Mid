@@ -19,11 +19,22 @@
 <?php include __DIR__. '/partials/html-head.php'; ?>
 <?php include __DIR__. '/partials/navbar.php'; ?>
 
+<style>
+    .card-title{
+        min-height: 100px;
+    }
+
+    .card{
+        margin-top: 100px;
+    }
+</style>
+
 <div class="container">
     <div class="row" >
         <div class="col d-flex justify-content-between my-3">
             <div class="buttons">
-                
+                <button type="button" class="btn btn-secondary insert" onclick="location.href='001-emma-blog-category.php?category=男鞋'">男鞋</button>
+                <button type="button" class="btn btn-secondary insert" onclick="location.href='001-emma-blog-category.php?category=女鞋'">女鞋</button>
                 <button type="button" class="btn btn-secondary insert" onclick="location.href='001-emma-blog-list.php'">後台編輯</button>
             </div>
            
@@ -59,7 +70,7 @@
     const myBlogCards = document.querySelector('.blog-card');
     const myCard = document.querySelector('.card');
     let addDiv = document.createElement('div');
-    let next_id = 4;
+    let next_id = 0;
 
     myLoadBtn.addEventListener('click', function(event){
     
@@ -82,7 +93,7 @@
                             </div>
                         </a>
                         <div class="card-link d-flex justify-content-between">
-                            <a href="#" class="card-link">${rows[i]['nick_name']}</a>
+                            <a href="001-emma-blog-author.php?nick_name=${rows[i]['nick_name']}" class="card-link">${rows[i]['nick_name']}</a>
                             <p>${rows[i]['created_at']}</p>
                         </div>
                     </div>`
