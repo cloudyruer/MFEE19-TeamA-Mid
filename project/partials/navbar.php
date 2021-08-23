@@ -67,20 +67,22 @@
 
                     </li>
 
+                    <!-- 004 Joey -->
+                    <li class="nav-item  <?=$activeLi == 'joey' ? 'active' : ''?>">
+                        <a class="nav-link" href="004-joey.php">舉辦活動</a>
+                    </li>
+
                     <!-- log out -->
                     <li class="nav-item">
                         <a class="nav-link" href="logout.php">登出</a>
                     </li>
 
                     <!-- NOTE TODO:temp if need, will show up after login -->
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link" href="#">example</a>
-                    </li>
+                    </li> -->
 
-                    <!-- 004 Joey -->
-                    <li class="nav-item  <?=$activeLi == 'joey' ? 'active' : ''?>">
-                        <a class="nav-link" href="004-joey.php">Joey</a>
-                    </li>
+
 
 
                 <?php else: ?>
