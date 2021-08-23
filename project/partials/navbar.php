@@ -11,9 +11,9 @@
             <!-- left side -->
             <ul class="navbar-nav mr-auto">
                 <!-- NOTE temp 需要的話複製就好 不要動這個 li-->
-                <li class="nav-item active">
+                <!-- <li class="nav-item active">
                     <a class="nav-link" href="#">Member : </a>
-                </li>
+                </li> -->
 
                 <!-- 001 Emma -->
                 <li class="nav-item  <?=$activeLi == 'emma' ? 'active' : ''?>">
@@ -28,7 +28,7 @@
                 <!-- 019 Henry -->
                 <!-- TODO: FIX -->
                 <li class="nav-item  <?=$activeLi == 'henry' ? 'active' : ''?>">
-                    <a class="nav-link" href="019-henry-product-list.php">Henry</a>
+                    <a class="nav-link" href="019-henry-product-list.php">Shopping Cart</a>
                 </li>
 
                 <!-- 033 Leo -->
@@ -42,17 +42,6 @@
             <ul class="navbar-nav">
                 <!-- after log in,  will show up after login -->
                 <?php if (isset($_SESSION['user'])): ?>
-                    <li class="nav-item active">
-                        <a class="nav-link" ><?=$_SESSION['user']['nickname']?></a>
-                    </li>
-
-                    <!-- NOTE  add $activeLi ternary-->
-                    <!----------- Tommy改的部分 -------------->
-                    <li class="nav-item">
-                        <a class="nav-link  <?=$activeLi == 'edit' ? 'active' : ''?>"
-                        href="002-tommy_index.php">會員中心</a>
-                    </li>
-
                     <!-- WARN the need of avatar?  -->
                     <li class="nav-item">
                         <!-- FIX 刪掉? --by Joey-->
@@ -64,12 +53,22 @@
                             <img class="Tommy_navbar_avatar" src="imgs/<?=$_SESSION['user']['avatar']?>" alt="">
                         <?php endif;?>
                         <!----------- Tommy改的部分 -------------->
+                    </li>
 
+                    <li class="nav-item active">
+                        <a class="nav-link" ><?=$_SESSION['user']['nickname']?></a>
+                    </li>
+
+                    <!-- NOTE  add $activeLi ternary-->
+                    <!----------- Tommy改的部分 -------------->
+                    <li class="nav-item">
+                        <a class="nav-link  <?=$activeLi == 'edit' ? 'active' : ''?>"
+                        href="002-tommy_index.php">會員中心</a>
                     </li>
 
                     <!-- 004 Joey -->
                     <li class="nav-item  <?=$activeLi == 'joey' ? 'active' : ''?>">
-                        <a class="nav-link" href="004-joey.php">舉辦活動</a>
+                        <a class="nav-link" href="004-joey.php">活動</a>
                     </li>
 
                     <!-- log out -->

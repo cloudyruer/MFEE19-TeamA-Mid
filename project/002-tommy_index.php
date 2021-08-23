@@ -1,6 +1,6 @@
 <?php
 include __DIR__ . '/partials/init.php';
-$title = 'Hi Tommy!!';
+$title = '會員中心';
 // FIX
 $activeLi = 'edit';
 

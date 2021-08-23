@@ -1,6 +1,6 @@
 <?php
 include __DIR__ . '/partials/init.php';
-$title = 'Hi Joey!!';
+$title = '活動';
 $activeLi = 'joey';
 
 // 若無登入 則返回登入葉面

@@ -1,4 +1,4 @@
-# Team A 期中專題 (上次總整合: 0823)
+# Team A 期中專題 (上次總整合: 0824)
 
 ## Database:
 
@@ -48,6 +48,7 @@ $pdo = new PDO($dsn, $db_user, $db_pass, $pdo_options);
 |   order_list    |   Henry   |  henry's table  |
 |  product_list   |   Henry   |  henry's table  |
 |  product_spec   |   Henry   |  henry's table  |
+|      store      |   Henry   |  henry's table  |
 
 ## members(table) - Structure:
 

@@ -1,6 +1,7 @@
 <?php
 include __DIR__ . "/partials/init.php";
 $title = "產品列表";
+$activeLi = "henry";
 //資料處理的部分盡量放前面
 //M、C放此區，V放下面
 

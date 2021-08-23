@@ -1,5 +1,5 @@
 <?php include __DIR__ . '/partials/init.php';
-$title = 'DataList';
+$title = '編輯活動';
 $activeLi = 'joey';if (!isset($_SESSION['user'])) {header('Location: ./login.php');exit;}
 $perPage = 5;
 $qs = [];

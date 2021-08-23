@@ -3,7 +3,7 @@
 
 <?php
 include __DIR__ . '/partials/init.php';
-$title = 'Hi Li!!';
+$title = '商品列表';
 $activeLi = 'li';
 
 
