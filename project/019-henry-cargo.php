@@ -16,9 +16,7 @@ if (!empty($pKeys)) {
 
 }
 
-$pickup_way = $pdo->query("SELECT * FROM `store` WHERE `parents_id` = 0")->fetchAll();
-// $pickup_store = $pdo->query("SELECT * FROM `store`")->fetchAll();
-echo json_encode($pickup_way)
+$pickup_way = $pdo->query("SELECT * FROM `store` WHERE `parents_id` = '0'")->fetchAll();
 ?>
 <?php include __DIR__ . "/partials/html-head.php"; ?>
 <?php include __DIR__ . "/019-henry-css.php"; ?>
@@ -124,23 +122,14 @@ echo json_encode($pickup_way)
                     </div> -->
 
                     <div class="form-group">
-                        <label for="pickup_way">取貨門市</label>
+                        <label for="pickup_way">取貨方式</label>
                         <select class="form-control" id="pickup_way" name="pickup_way">
                         <option disabled selected>請選擇</option>
                         <?php foreach($pickup_way as $cm) : ?>
-                        <option value="<?= $cm['sid'] ?>"><?= $cm['name'] ?></option>
+                        <option value="<?= $cm['name'] ?>"><?= $cm['name'] ?></option>
                         <?php endforeach; ?>
                         </select>
                     </div>
-                    <!-- <div class="form-group">
-                        <label for="pickup_store">取貨門市</label>
-                        <select class="form-control" id="pickup_store" name="pickup_store">
-                        <option disabled selected>請選擇</option>
-                        <?php foreach($pickup_store as $cc) : ?>
-                        <option value="<?= $cc['sid'] ?>"><?= $cc['name'] ?></option>
-                        <?php endforeach; ?>
-                        </select>
-                    </div>    -->
                     <div class="form-group">
                         <label for="pickup_store">取貨門市</label>
                         <select class="form-control" id="pickup_store" name="pickup_store">
@@ -175,38 +164,38 @@ echo json_encode($pickup_way)
 <?php include __DIR__ . "/019-henry-scripts.php"; ?>
 <script>
 
-
+//動態下拉式選單
 $(function() {
-        $('#pickup_way').change(function() {
-            //更動第一層時第二層清空
-            $('#pickup_store').empty().append("<option disabled value=''>請選擇</option>");
-            var i = 0;
-            $.ajax({
-                type: "GET",
-                url: "019-henry-store.php",
-                data: {
-                    lv: $('#pickup_way option:selected').val()
-                },
-                datatype: "json",
-                success: function(result) {
-                    //當第一層回到預設值時，第二層要如何顯示之前的預設值呢?
-                    if (result == "") {
-                        $("#pickup_way").append("<option value='" + result[i]['name'] + "'"  + ">" + result[i]['name'] + "</option>");
-                     
-                    }
-                    //依據第一層回傳的值去改變第二層的內容
-                    while (i < result.length) {
-                        $("#pickup_store").append("<option value='" + result[i]['name'] + "'"  + ">" + result[i]['name'] + "</option>");
-                        i++;
-                    }
-                },
-                error: function(xhr, status, msg) {
-                    console.error(xhr);
-                    console.error(msg);
+    $('#pickup_way').change(function() {
+        //更動第一層時第二層清空
+        $('#pickup_store').empty().append("<option disabled value=''>請選擇</option>");
+        var i = 0;
+        $.ajax({
+            type: "GET",
+            url: "019-henry-store.php",
+            data: {
+                lv: $('#pickup_way option:selected').val()
+            },
+            datatype: "json",
+            success: function(result) {
+                //當第一層回到預設值時，第二層要如何顯示之前的預設值呢?
+                if (result == "") {
+                    $("#pickup_way").append("<option value='" + result[i]['name'] + "'"  + ">" + result[i]['name'] + "</option>");
+
                 }
-            });
+                //依據第一層回傳的值去改變第二層的內容
+                while (i < result.length) {
+                    $("#pickup_store").append("<option value='" + result[i]['name'] + "'"  + ">" + result[i]['name'] + "</option>");
+                    i++;
+                }
+            },
+            error: function(xhr, status, msg) {
+                console.error(xhr);
+                console.error(msg);
+            }
         });
     });
+});
 
 
 
@@ -214,7 +203,7 @@ $(function() {
 
     
 
-
+    //匯款帳戶的顯示與否
     $('#order_status').click(function(){
         if($('#order_status').val()==='已經結帳') {
             $('#payment').removeClass('d-none')

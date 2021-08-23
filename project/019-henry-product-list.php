@@ -130,7 +130,7 @@ if ($totalRows !== 0) {
             <input type="text" class="qty text-center" width="20" value="0" size=5 id="productNumber<?= $r['sid'] ?>">
             <div class="add" id="btnMing" data-productNumber="productNumber<?= $r['sid'] ?>">+</div>
           </div>
-          <input name="price" id="price" type="text" value="<?= $r['product_price'] ?>">
+          <input class="d-none" name="price" id="price" type="text" value="<?= $r['product_price'] ?>">
           <div id="tip_productNumber<?= $r['sid'] ?>" class="my-2 stock_tip <?php if ($r['stock'] != 0) {echo "visibilityHidden";} ?>">此商品已售罄，限量是殘酷的！</div>
           <button type="button" class="btn btn-primary add-to-cart-btn"><i class="fas fa-cart-plus"></i></button>
         </form>

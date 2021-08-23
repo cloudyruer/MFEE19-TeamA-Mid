@@ -20,6 +20,8 @@ $sid = isset($_GET["sid"]) ? intval($_GET["sid"]) : 0;
 if (!empty($sid)) {
   $sql = "DELETE FROM `order_list` WHERE sid=$sid";
   $stmt = $pdo->query($sql);
+  $sql = "DELETE FROM `order_details` WHERE order_id=$sid";
+  $stmt = $pdo->query($sql);
 }
 
 
