@@ -68,7 +68,11 @@
 <div class="container">
     <div class="row" >
         <div class="col d-flex justify-content-between my-3">
-            <button type="button" class="btn btn-secondary insert" onclick="location.href='001-emma-blog-insert.php'">新增文章</button>
+            <div class="buttons">
+                <button type="button" class="btn btn-secondary insert" onclick="location.href='001-emma-blog-home.php'">文章首頁</button>
+                <button type="button" class="btn btn-secondary insert" onclick="location.href='001-emma-blog-insert.php'">新增文章</button>
+            </div>
+           
             <form action="001-emma-blog-list.php" class="form-inline">
                 <input class="form-control mr-sm-2" type="search" name="keyword" placeholder="Search"
                        value="<?= htmlentities($keyword) ?>"
@@ -86,8 +90,10 @@
                     <th scope="col">id</th>
                     <th scope="col">author</th>
                     <th scope="col">nick_name</th>
+                    <th scope="col">文章預覽圖片</th>
                     <th scope="col">title</th>
                     <th scope="col">content</th>
+                    <th scope="col">category</th>
                     <th scope="col">created_at</th>
                     <th scope="col">last_modified</th>
                     <th scope="col"><i class="fas fa-edit"></i></th>
@@ -101,8 +107,10 @@
                     <td><?= htmlentities($r['id']) ?></td>
                     <td><?= htmlentities($r['author']) ?></td>
                     <td><?= htmlentities($r['nick_name']) ?></td>
+                    <td><img  src="imgs/<?= $r['prvw_img_name'] == "" ? "abc.jpg" : $r['prvw_img_name']?>" style="max-width: 100px;"> </td>
                     <td><?= htmlentities($r['title']) ?></td>
                     <td><?= htmlentities($r['content']) ?></td>
+                    <td><?= htmlentities($r['category']) ?></td>
                     <td><?= $r['created_at'] ?></td>
                     <td><?= $r['last_modified'] ?></td>
 
