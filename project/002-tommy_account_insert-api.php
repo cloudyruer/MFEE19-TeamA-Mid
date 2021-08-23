@@ -53,6 +53,21 @@ $stmt->execute([
     $_POST['nickname'],
 ]);
 
+$sql2 = "INSERT INTO `account_ranking`(
+    `members_id`, `orders_amount`, `ranking`
+    ) VALUES (
+         ?, ?, ?
+    )";
+
+$members_id = ($_POST['members_id'] + '1');
+
+$stmt2 = $pdo->prepare($sql2);
+$stmt2->execute([
+$members_id,
+$_POST['orders_amount'],
+$_POST['ranking'],
+]);
+
 $output['rowCount'] = $stmt->rowCount(); // 新增的筆數
 if($stmt->rowCount()==1){
     $output['success'] = true;

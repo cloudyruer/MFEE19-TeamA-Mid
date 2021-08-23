@@ -21,6 +21,8 @@ $sql = "INSERT INTO `address_book`(
 
 $stmt = $pdo->query($sql);
 */
+$sql = "SELECT * FROM `members`  ORDER BY id DESC LIMIT 0 , 1";
+$r = $pdo->query($sql)->fetch();
 
 ?>
 <?php include __DIR__. '/partials/html-head.php'; ?>
@@ -78,6 +80,21 @@ $stmt = $pdo->query($sql);
                         <div class="form-group">
                             <label for="nickname">nickname</label>
                             <input type="text" class="form-control" id="nickname" name="nickname">
+                            <small class="form-text "></small>
+                        </div>
+                        <div class="form-group">
+                            <!-- <label for="mem">nickname</label> -->
+                            <input type="hidden" class="form-control" id="members_id" name="members_id" value="<?= htmlentities($r['id']) ?>">
+                            <small class="form-text "></small>
+                        </div>
+                        <div class="form-group">
+                            <!-- <label for="mem">nickname</label> -->
+                            <input type="hidden" class="form-control" id="orders_amount" name="orders_amount" value="0">
+                            <small class="form-text "></small>
+                        </div>
+                        <div class="form-group">
+                            <!-- <label for="mem">nickname</label> -->
+                            <input type="hidden" class="form-control" id="ranking" name="ranking" value="1">
                             <small class="form-text "></small>
                         </div>
 
